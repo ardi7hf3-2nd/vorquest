@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VorQuest – Bank Soal 4 Pilar MPR RI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/api/config"></script>
+<script src="questions.js"></script>
+<style>
+:root {
+  --bg: #0a0e1a;
+  --surface: #111827;
+  --surface2: #1a2235;
+  --border: #1e2d45;
+  --accent: #3b82f6;
+  --accent2: #06b6d4;
+  --gold: #f59e0b;
+  --red: #ef4444;
+  --green: #22c55e;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #475569;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── GRID BG ── */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: linear-gradient(rgba(59,130,246,0.03) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(59,130,246,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none; z-index: 0;
+}
+
+/* ── PAGES ── */
+.page { display: none; min-height: 100vh; position: relative; z-index: 1; }
+.page.active { display: flex; flex-direction: column; }
+
+/* ── NAV ── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 32px;
+  background: rgba(17,24,39,0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.nav-brand .logo {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-radius: 8px;
+  display: grid; place-items: center;
+  font-size: 18px; font-weight: 800; color: #fff;
+}
+.nav-brand span { font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+.nav-brand span em { color: var(--accent); font-style: normal; }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-user {
+  font-size: 13px; color: var(--text2);
+  display: flex; align-items: center; gap: 8px;
+}
+.nav-role {
+  font-size: 11px; font-weight: 600; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 20px; text-transform: uppercase;
+}
+.nav-role.admin { background: rgba(245,158,11,0.15); color: var(--gold); border: 1px solid rgba(245,158,11,0.3); }
+.nav-role.peserta { background: rgba(59,130,246,0.15); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+
+/* ── BUTTONS ── */
+.btn {
+  padding: 10px 20px; border-radius: var(--radius);
+  border: none; cursor: pointer; font-family: 'Sora', sans-serif;
+  font-size: 14px; font-weight: 600; transition: all 0.2s; display: inline-flex;
+  align-items: center; gap: 8px;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: #2563eb; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(59,130,246,0.4); }
+.btn-ghost { background: transparent; color: var(--text2); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+.btn-danger { background: rgba(239,68,68,0.1); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+.btn-danger:hover { background: var(--red); color: #fff; }
+.btn-gold { background: var(--gold); color: #000; }
+.btn-gold:hover { background: #d97706; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-full { width: 100%; justify-content: center; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+
+/* ── CARD ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom: 18px; }
+.form-label { display: block; font-size: 13px; font-weight: 500; color: var(--text2); margin-bottom: 8px; }
+.form-input {
+  width: 100%; padding: 12px 16px;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text);
+  font-family: 'Sora', sans-serif; font-size: 14px;
+  transition: border-color 0.2s;
+}
+.form-input:focus { outline: none; border-color: var(--accent); }
+.form-input::placeholder { color: var(--text3); }
+select.form-input { cursor: pointer; }
+textarea.form-input { resize: vertical; min-height: 100px; }
+
+/* ── AUTH PAGE ── */
+#page-auth {
+  align-items: center; justify-content: center;
+  padding: 40px 20px;
+}
+.auth-wrap {
+  width: 100%; max-width: 420px;
+}
+.auth-header { text-align: center; margin-bottom: 40px; }
+.auth-logo {
+  width: 64px; height: 64px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: grid; place-items: center; font-size: 28px; font-weight: 900;
+  color: #fff; margin: 0 auto 20px; box-shadow: 0 8px 32px rgba(59,130,246,0.3);
+}
+.auth-header h1 { font-size: 28px; font-weight: 800; letter-spacing: -1px; }
+.auth-header h1 em { color: var(--accent); font-style: normal; }
+.auth-header p { color: var(--text2); font-size: 14px; margin-top: 8px; }
+.auth-tabs { display: flex; gap: 4px; margin-bottom: 24px; background: var(--surface2); padding: 4px; border-radius: 10px; }
+.auth-tab {
+  flex: 1; padding: 10px; text-align: center; border-radius: 8px;
+  cursor: pointer; font-size: 14px; font-weight: 600;
+  color: var(--text2); transition: all 0.2s;
+}
+.auth-tab.active { background: var(--accent); color: #fff; }
+.auth-error {
+  background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3);
+  color: var(--red); padding: 12px 16px; border-radius: var(--radius);
+  font-size: 13px; margin-bottom: 16px; display: none;
+}
+.auth-error.show { display: block; }
+
+/* ── DASHBOARD ── */
+#page-dashboard { padding: 0; }
+.dash-content { flex: 1; padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.dash-hero {
+  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(6,182,212,0.05));
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 16px; padding: 32px; margin-bottom: 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  position: relative; overflow: hidden;
+}
+.dash-hero::after {
+  content: '⚡';
+  position: absolute; right: -10px; top: -10px;
+  font-size: 120px; opacity: 0.05; line-height: 1;
+}
+.dash-hero h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.dash-hero p { color: var(--text2); font-size: 14px; }
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 32px; }
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+}
+.stat-card .stat-num { font-size: 28px; font-weight: 800; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+.stat-card .stat-label { font-size: 12px; color: var(--text2); margin-top: 4px; }
+.section-title { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text2); margin-bottom: 16px; }
+.paket-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.paket-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px;
+  cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden;
+}
+.paket-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(59,130,246,0.15); }
+.paket-card.done { border-color: rgba(34,197,94,0.3); }
+.paket-card.done::after { content: '✓'; position: absolute; top: 16px; right: 16px; width: 24px; height: 24px; background: var(--green); color: #fff; border-radius: 50%; display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+.paket-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--accent); font-weight: 500; margin-bottom: 8px;
+}
+.paket-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; }
+.paket-card p { font-size: 12px; color: var(--text2); }
+.topic-badge {
+  display: inline-block; font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px; margin-top: 10px;
+  letter-spacing: 0.5px;
+}
+.topic-pancasila { background: rgba(245,158,11,0.1); color: var(--gold); border: 1px solid rgba(245,158,11,0.2); }
+.topic-uud { background: rgba(59,130,246,0.1); color: var(--accent); border: 1px solid rgba(59,130,246,0.2); }
+.topic-nkri { background: rgba(34,197,94,0.1); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+.topic-bti { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
+.topic-mix { background: rgba(6,182,212,0.1); color: var(--accent2); border: 1px solid rgba(6,182,212,0.2); }
+
+/* ── QUIZ PAGE ── */
+#page-quiz { padding: 0; }
+.quiz-content { flex: 1; display: flex; flex-direction: column; max-width: 800px; margin: 0 auto; width: 100%; padding: 32px; }
+.quiz-header-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px;
+}
+.quiz-paket-label { font-size: 13px; color: var(--text2); }
+.quiz-paket-label strong { color: var(--text); }
+.quiz-progress-wrap { margin-bottom: 24px; }
+.quiz-progress-info { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 8px; }
+.quiz-progress-bar { height: 4px; background: var(--border); border-radius: 2px; }
+.quiz-progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); border-radius: 2px; transition: width 0.4s ease; }
+.question-type-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 20px; margin-bottom: 12px;
+}
+.type-pg { background: rgba(59,130,246,0.1); color: var(--accent); border: 1px solid rgba(59,130,246,0.2); }
+.type-essay { background: rgba(245,158,11,0.1); color: var(--gold); border: 1px solid rgba(245,158,11,0.2); }
+.question-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px; padding: 28px; margin-bottom: 20px; flex: 1;
+}
+.question-text { font-size: 17px; font-weight: 500; line-height: 1.6; margin-bottom: 24px; }
+.options-list { display: flex; flex-direction: column; gap: 10px; }
+.option-btn {
+  width: 100%; text-align: left; padding: 14px 18px;
+  background: var(--surface2); border: 1.5px solid var(--border);
+  border-radius: var(--radius); color: var(--text); cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 14px; font-weight: 400;
+  transition: all 0.15s; display: flex; align-items: center; gap: 12px;
+}
+.option-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(59,130,246,0.05); }
+.option-btn.selected { border-color: var(--accent); background: rgba(59,130,246,0.1); color: var(--accent); }
+.option-btn.correct { border-color: var(--green) !important; background: rgba(34,197,94,0.1) !important; color: var(--green) !important; }
+.option-btn.wrong { border-color: var(--red) !important; background: rgba(239,68,68,0.1) !important; color: var(--red) !important; }
+.option-letter {
+  width: 28px; height: 28px; border-radius: 6px; background: var(--border);
+  display: grid; place-items: center; font-size: 12px; font-weight: 700;
+  flex-shrink: 0; transition: all 0.15s;
+  font-family: 'JetBrains Mono', monospace;
+}
+.option-btn.selected .option-letter { background: var(--accent); color: #fff; }
+.option-btn.correct .option-letter { background: var(--green); color: #fff; }
+.option-btn.wrong .option-letter { background: var(--red); color: #fff; }
+.essay-area { width: 100%; padding: 16px; background: var(--surface2); border: 1.5px solid var(--border); border-radius: var(--radius); color: var(--text); font-family: 'Sora', sans-serif; font-size: 14px; min-height: 180px; resize: vertical; transition: border-color 0.2s; }
+.essay-area:focus { outline: none; border-color: var(--accent); }
+.essay-area::placeholder { color: var(--text3); }
+.essay-hint { font-size: 12px; color: var(--text2); margin-top: 10px; display: flex; align-items: center; gap: 6px; }
+.feedback-box {
+  padding: 14px 18px; border-radius: var(--radius); margin-top: 16px;
+  font-size: 13px; line-height: 1.5; display: none;
+}
+.feedback-box.show { display: block; }
+.feedback-box.correct { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+.feedback-box.wrong { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); color: var(--red); }
+.feedback-box.essay { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: var(--gold); }
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; }
+.question-dots { display: flex; gap: 6px; flex-wrap: wrap; }
+.question-dot { width: 10px; height: 10px; border-radius: 3px; background: var(--border); transition: all 0.2s; cursor: pointer; }
+.question-dot.current { background: var(--accent); transform: scale(1.3); }
+.question-dot.answered-pg { background: var(--green); }
+.question-dot.answered-essay { background: var(--gold); }
+.question-dot.wrong { background: var(--red); }
+
+/* ── RESULT PAGE ── */
+#page-result { padding: 0; }
+.result-content { flex: 1; max-width: 600px; margin: 0 auto; padding: 40px 32px; text-align: center; }
+.result-circle {
+  width: 140px; height: 140px; border-radius: 50%;
+  background: conic-gradient(var(--accent) var(--pct,0%), var(--border) 0%);
+  margin: 0 auto 28px;
+  display: grid; place-items: center;
+  position: relative;
+}
+.result-circle::before {
+  content: '';
+  width: 110px; height: 110px; border-radius: 50%;
+  background: var(--surface); position: absolute;
+}
+.result-score-inner { position: relative; z-index: 1; text-align: center; }
+.result-score-inner span { display: block; }
+.result-score-inner .score-num { font-size: 32px; font-weight: 800; font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+.result-score-inner .score-total { font-size: 12px; color: var(--text2); }
+.result-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.result-subtitle { color: var(--text2); font-size: 14px; margin-bottom: 32px; }
+.result-breakdown { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 32px; }
+.breakdown-item { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.breakdown-item .b-num { font-size: 22px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+.breakdown-item .b-label { font-size: 11px; color: var(--text2); margin-top: 4px; }
+.result-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+/* ── ADMIN PAGE ── */
+#page-admin { padding: 0; }
+.admin-content { flex: 1; padding: 32px; max-width: 1200px; margin: 0 auto; width: 100%; }
+.admin-tabs { display: flex; gap: 4px; background: var(--surface2); padding: 4px; border-radius: 12px; margin-bottom: 28px; width: fit-content; }
+.admin-tab {
+  padding: 10px 20px; border-radius: 8px; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: var(--text2); transition: all 0.2s;
+}
+.admin-tab.active { background: var(--accent); color: #fff; }
+.admin-panel { display: none; }
+.admin-panel.active { display: block; }
+.table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--surface2); padding: 12px 16px; text-align: left; font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.5px; text-transform: uppercase; }
+td { padding: 12px 16px; border-top: 1px solid var(--border); font-size: 13px; vertical-align: top; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.essay-answer-cell { max-width: 300px; white-space: pre-wrap; word-break: break-word; color: var(--text2); font-size: 12px; }
+.grade-input { width: 70px; padding: 6px 10px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text); font-family: 'Sora', sans-serif; font-size: 13px; }
+.empty-state { text-align: center; padding: 60px 20px; color: var(--text2); font-size: 14px; }
+.empty-state .emoji { font-size: 40px; display: block; margin-bottom: 12px; }
+
+/* ── ADD QUESTION FORM ── */
+.add-question-wrap { max-width: 640px; }
+
+/* ── MODAL ── */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(4px); z-index: 200; align-items: center; justify-content: center; padding: 20px; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; }
+.modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.modal p { font-size: 13px; color: var(--text2); margin-bottom: 24px; }
+
+/* ── TOAST ── */
+#toast {
+  position: fixed; bottom: 28px; right: 28px; z-index: 300;
+  background: var(--surface2); border: 1px solid var(--border);
+  padding: 14px 20px; border-radius: var(--radius);
+  font-size: 13px; font-weight: 500; transform: translateY(80px);
+  transition: transform 0.3s; box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 10px;
+}
+#toast.show { transform: translateY(0); }
+#toast.success { border-color: rgba(34,197,94,0.4); color: var(--green); }
+#toast.error { border-color: rgba(239,68,68,0.4); color: var(--red); }
+
+/* ── LOADING ── */
+.spinner {
+  width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); border-top-color: var(--accent);
+  animation: spin 0.7s linear infinite; display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-page {
+  position: fixed; inset: 0; background: var(--bg);
+  display: grid; place-items: center; z-index: 500;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  nav { padding: 12px 16px; }
+  .dash-content, .quiz-content, .admin-content, .result-content { padding: 20px 16px; }
+  .dash-hero { flex-direction: column; gap: 16px; text-align: center; }
+  .result-breakdown { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-page" id="loading">
+  <div style="text-align:center">
+    <div class="spinner" style="width:40px;height:40px;border-width:3px;margin:0 auto 16px"></div>
+    <p style="color:var(--text2);font-size:14px">Memuat VorQuest...</p>
+  </div>
+</div>
+
+<!-- AUTH PAGE -->
+<div class="page" id="page-auth">
+  <div class="auth-wrap">
+    <div class="auth-header">
+      <div class="auth-logo">V</div>
+      <h1>Vor<em>Quest</em></h1>
+      <p>Bank Soal 4 Pilar MPR RI</p>
+    </div>
+    <div class="auth-tabs">
+      <div class="auth-tab active" onclick="switchAuthTab('login')">Masuk</div>
+      <div class="auth-tab" onclick="switchAuthTab('register')">Daftar</div>
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <div id="form-login">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="login-email" placeholder="email@contoh.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="login-pass" placeholder="Password">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="handleLogin()" id="btn-login">
+        <span id="login-text">Masuk</span>
+      </button>
+    </div>
+    <div id="form-register" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Nama Lengkap</label>
+        <input type="text" class="form-input" id="reg-name" placeholder="Nama kamu">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="reg-email" placeholder="email@contoh.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" id="reg-pass" placeholder="Min. 6 karakter">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="handleRegister()" id="btn-register">
+        <span id="register-text">Daftar Sekarang</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD PAGE -->
+<div class="page" id="page-dashboard">
+  <nav>
+    <div class="nav-brand" onclick="goTo('dashboard')">
+      <div class="logo">V</div>
+      <span>Vor<em>Quest</em></span>
+    </div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <span id="nav-username">—</span>
+        <span class="nav-role" id="nav-role-badge"></span>
+      </div>
+      <button class="btn btn-ghost btn-sm" id="btn-admin-link" onclick="goTo('admin')" style="display:none">⚙ Admin</button>
+      <button class="btn btn-ghost btn-sm" onclick="handleLogout()">Keluar</button>
+    </div>
+  </nav>
+  <div class="dash-content">
+    <div class="dash-hero">
+      <div>
+        <h2>Selamat datang, <span id="dash-name">—</span>! 👋</h2>
+        <p>Uji pemahamanmu tentang 4 Pilar MPR RI — Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika</p>
+      </div>
+      <button class="btn btn-primary" onclick="startRandomPaket()">Mulai Acak ⚡</button>
+    </div>
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card"><div class="stat-num" id="stat-done">0</div><div class="stat-label">Paket Selesai</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-avg">-</div><div class="stat-label">Rata-rata Nilai</div></div>
+      <div class="stat-card"><div class="stat-num">10</div><div class="stat-label">Total Paket</div></div>
+      <div class="stat-card"><div class="stat-num">100</div><div class="stat-label">Total Soal</div></div>
+    </div>
+    <div class="section-title">Pilih Paket Soal</div>
+    <div class="paket-grid" id="paket-grid"></div>
+  </div>
+</div>
+
+<!-- QUIZ PAGE -->
+<div class="page" id="page-quiz">
+  <nav>
+    <div class="nav-brand" onclick="confirmExitQuiz()">
+      <div class="logo">V</div>
+      <span>Vor<em>Quest</em></span>
+    </div>
+    <div class="nav-right">
+      <span style="font-size:13px;color:var(--text2)" id="quiz-timer-label">⏱ <span id="quiz-timer">00:00</span></span>
+      <button class="btn btn-danger btn-sm" onclick="confirmExitQuiz()">✕ Keluar</button>
+    </div>
+  </nav>
+  <div class="quiz-content">
+    <div class="quiz-header-bar">
+      <div>
+        <div class="quiz-paket-label">Paket <strong id="quiz-paket-num">—</strong></div>
+        <div style="font-size:15px;font-weight:600;margin-top:2px" id="quiz-paket-title">—</div>
+      </div>
+      <div class="question-dots" id="question-dots"></div>
+    </div>
+    <div class="quiz-progress-wrap">
+      <div class="quiz-progress-info">
+        <span>Soal <span id="q-current">1</span> dari <span id="q-total">10</span></span>
+        <span id="q-type-label">Pilihan Ganda</span>
+      </div>
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="progress-fill" style="width:10%"></div></div>
+    </div>
+    <div class="question-card">
+      <div class="question-type-badge type-pg" id="q-type-badge">📝 Pilihan Ganda</div>
+      <div class="question-text" id="q-text">—</div>
+      <div class="options-list" id="options-list"></div>
+      <div class="feedback-box" id="feedback-box"></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn btn-ghost" id="btn-prev" onclick="prevQuestion()">← Prev</button>
+      <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT PAGE -->
+<div class="page" id="page-result">
+  <nav>
+    <div class="nav-brand" onclick="goTo('dashboard')">
+      <div class="logo">V</div>
+      <span>Vor<em>Quest</em></span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-user"><span id="res-username">—</span></span>
+    </div>
+  </nav>
+  <div class="result-content">
+    <div class="result-circle" id="result-circle">
+      <div class="result-score-inner">
+        <span class="score-num" id="result-score">0</span>
+        <span class="score-total" id="result-total">/9</span>
+      </div>
+    </div>
+    <div class="result-title" id="result-title">—</div>
+    <div class="result-subtitle" id="result-sub">—</div>
+    <div class="result-breakdown">
+      <div class="breakdown-item"><div class="b-num" id="rb-correct" style="color:var(--green)">0</div><div class="b-label">Benar PG</div></div>
+      <div class="breakdown-item"><div class="b-num" id="rb-wrong" style="color:var(--red)">0</div><div class="b-label">Salah PG</div></div>
+      <div class="breakdown-item"><div class="b-num" id="rb-essay" style="color:var(--gold)">-</div><div class="b-label">Essay (dinilai admin)</div></div>
+    </div>
+    <div class="result-actions">
+      <button class="btn btn-ghost" onclick="goTo('dashboard')">← Kembali ke Dashboard</button>
+      <button class="btn btn-primary" onclick="replayCurrentPaket()">🔄 Ulangi Paket</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <nav>
+    <div class="nav-brand" onclick="goTo('dashboard')">
+      <div class="logo">V</div>
+      <span>Vor<em>Quest</em></span>
+    </div>
+    <div class="nav-right">
+      <span class="nav-role admin">Admin</span>
+      <button class="btn btn-ghost btn-sm" onclick="goTo('dashboard')">← Dashboard</button>
+    </div>
+  </nav>
+  <div class="admin-content">
+    <div style="margin-bottom:24px">
+      <h2 style="font-size:20px;font-weight:700">Panel Admin</h2>
+      <p style="color:var(--text2);font-size:13px;margin-top:4px">Kelola soal, nilai essay, dan user</p>
+    </div>
+    <div class="admin-tabs">
+      <div class="admin-tab active" onclick="switchAdminTab('essay')">📝 Nilai Essay</div>
+      <div class="admin-tab" onclick="switchAdminTab('users')">👥 Users</div>
+      <div class="admin-tab" onclick="switchAdminTab('addsoal')">➕ Tambah Soal</div>
+      <div class="admin-tab" onclick="switchAdminTab('soallist')">📋 Daftar Soal</div>
+    </div>
+
+    <!-- ESSAY PANEL -->
+    <div class="admin-panel active" id="panel-essay">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div class="section-title" style="margin:0">Jawaban Essay Peserta</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadEssayAnswers()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Peserta</th><th>Paket</th><th>Soal Essay</th><th>Jawaban</th><th>Nilai (0-100)</th><th>Aksi</th></tr></thead>
+          <tbody id="essay-table-body"><tr><td colspan="6" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- USERS PANEL -->
+    <div class="admin-panel" id="panel-users">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div class="section-title" style="margin:0">Daftar Pengguna</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadUsers()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Nama</th><th>Email</th><th>Role</th><th>Bergabung</th><th>Ubah Role</th></tr></thead>
+          <tbody id="users-table-body"><tr><td colspan="5" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADD SOAL PANEL -->
+    <div class="admin-panel" id="panel-addsoal">
+      <div class="add-question-wrap">
+        <div class="section-title" style="margin-bottom:20px">Tambah Soal Baru</div>
+        <div class="form-group">
+          <label class="form-label">Tipe Soal</label>
+          <select class="form-input" id="add-type" onchange="toggleAddOptions()">
+            <option value="pg">Pilihan Ganda (PG)</option>
+            <option value="essay">Essay</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Paket</label>
+          <select class="form-input" id="add-paket">
+            <option value="1">Paket 1 – Sejarah Perumusan Pancasila</option>
+            <option value="2">Paket 2 – Pancasila sebagai Ideologi & Dasar Negara</option>
+            <option value="3">Paket 3 – UUD NRI 1945: Sejarah & Perubahan</option>
+            <option value="4">Paket 4 – Lembaga-Lembaga Negara</option>
+            <option value="5">Paket 5 – NKRI: Bentuk & Dasar Negara</option>
+            <option value="6">Paket 6 – Bhinneka Tunggal Ika: Asal Usul & Makna</option>
+            <option value="7">Paket 7 – Bhinneka Tunggal Ika dalam Kehidupan</option>
+            <option value="8">Paket 8 – HAM dan Kewarganegaraan</option>
+            <option value="9">Paket 9 – Sistem Pemerintahan & Demokrasi</option>
+            <option value="10">Paket 10 – Soal Campuran 4 Pilar</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Pertanyaan</label>
+          <textarea class="form-input" id="add-question" placeholder="Tulis pertanyaan di sini..."></textarea>
+        </div>
+        <div id="pg-options-wrap">
+          <div class="form-group"><label class="form-label">Pilihan A</label><input type="text" class="form-input" id="add-opt-a" placeholder="Pilihan A"></div>
+          <div class="form-group"><label class="form-label">Pilihan B</label><input type="text" class="form-input" id="add-opt-b" placeholder="Pilihan B"></div>
+          <div class="form-group"><label class="form-label">Pilihan C</label><input type="text" class="form-input" id="add-opt-c" placeholder="Pilihan C"></div>
+          <div class="form-group"><label class="form-label">Pilihan D</label><input type="text" class="form-input" id="add-opt-d" placeholder="Pilihan D"></div>
+          <div class="form-group">
+            <label class="form-label">Jawaban Benar</label>
+            <select class="form-input" id="add-answer">
+              <option value="A">A</option><option value="B">B</option>
+              <option value="C">C</option><option value="D">D</option>
+            </select>
+          </div>
+        </div>
+        <div id="essay-rubrik-wrap" style="display:none">
+          <div class="form-group">
+            <label class="form-label">Rubrik / Kunci Jawaban (untuk admin)</label>
+            <textarea class="form-input" id="add-rubrik" placeholder="Rubrik penilaian..."></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="submitNewSoal()">✓ Simpan Soal</button>
+      </div>
+    </div>
+
+    <!-- SOAL LIST PANEL -->
+    <div class="admin-panel" id="panel-soallist">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div class="section-title" style="margin:0">Soal dari Database</div>
+        <button class="btn btn-ghost btn-sm" onclick="loadSoalList()">🔄 Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Paket</th><th>Tipe</th><th>Pertanyaan</th><th>Aksi</th></tr></thead>
+          <tbody id="soal-table-body"><tr><td colspan="4" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL EXIT QUIZ -->
+<div class="modal-overlay" id="modal-exit">
+  <div class="modal">
+    <h3>⚠️ Keluar dari Quiz?</h3>
+    <p>Progres kamu akan hilang dan tidak tersimpan. Yakin ingin keluar?</p>
+    <div style="display:flex;gap:12px">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-exit')">Lanjutkan Quiz</button>
+      <button class="btn btn-danger" style="flex:1" onclick="exitQuiz()">Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// SUPABASE CONFIG — dari /api/config (env variable Vercel)
+// ═══════════════════════════════════════════
+const sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+// ═══════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════
+let currentUser = null;
+let userProfile = null;
+let quizState = {
+  paketId: null,
+  questions: [],  // merged PG + essay
+  current: 0,
+  answers: {},    // { idx: { selected, correct } }
+  answered: {},   // set of answered idx
+  startTime: null,
+  timerInterval: null,
+};
+let currentPaketId = null;
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    currentUser = session.user;
+    await loadProfile();
+    goTo('dashboard');
+  } else {
+    goTo('auth');
+  }
+  document.getElementById('loading').style.display = 'none';
+}
+
+async function loadProfile() {
+  const { data } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  userProfile = data;
+  updateNavUser();
+}
+
+function updateNavUser() {
+  if (!userProfile) return;
+  document.getElementById('nav-username').textContent = userProfile.name || currentUser.email;
+  document.getElementById('dash-name').textContent = (userProfile.name || currentUser.email).split(' ')[0];
+  document.getElementById('res-username').textContent = userProfile.name || currentUser.email;
+  const badge = document.getElementById('nav-role-badge');
+  const isAdmin = userProfile.role === 'admin';
+  badge.textContent = isAdmin ? 'Admin' : 'Peserta';
+  badge.className = 'nav-role ' + (isAdmin ? 'admin' : 'peserta');
+  document.getElementById('btn-admin-link').style.display = isAdmin ? 'inline-flex' : 'none';
+}
+
+// ═══════════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════════
+function switchAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => t.classList.toggle('active', (i===0 && tab==='login') || (i===1 && tab==='register')));
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'block' : 'none';
+  document.getElementById('auth-error').classList.remove('show');
+}
+
+function showAuthError(msg) {
+  const el = document.getElementById('auth-error');
+  el.textContent = msg; el.classList.add('show');
+}
+
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass = document.getElementById('login-pass').value;
+  if (!email || !pass) return showAuthError('Email dan password wajib diisi.');
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  document.getElementById('login-text').innerHTML = '<span class="spinner"></span> Memproses...';
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  btn.disabled = false;
+  document.getElementById('login-text').textContent = 'Masuk';
+  if (error) return showAuthError(error.message);
+  currentUser = data.user;
+  await loadProfile();
+  goTo('dashboard');
+}
+
+async function handleRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass = document.getElementById('reg-pass').value;
+  if (!name || !email || !pass) return showAuthError('Semua field wajib diisi.');
+  if (pass.length < 6) return showAuthError('Password minimal 6 karakter.');
+  const btn = document.getElementById('btn-register');
+  btn.disabled = true;
+  document.getElementById('register-text').innerHTML = '<span class="spinner"></span> Mendaftar...';
+  const { data, error } = await sb.auth.signUp({ email, password: pass, options: { data: { name } } });
+  btn.disabled = false;
+  document.getElementById('register-text').textContent = 'Daftar Sekarang';
+  if (error) return showAuthError(error.message);
+  // Upsert profile
+  await sb.from('profiles').upsert({ id: data.user.id, name, email, role: 'peserta' });
+  currentUser = data.user;
+  userProfile = { name, email, role: 'peserta' };
+  updateNavUser();
+  goTo('dashboard');
+  showToast('Akun berhasil dibuat! Selamat datang 🎉', 'success');
+}
+
+async function handleLogout() {
+  await sb.auth.signOut();
+  currentUser = null; userProfile = null;
+  goTo('auth');
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+function goTo(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + page)?.classList.add('active');
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'admin') {
+    if (userProfile?.role !== 'admin') { goTo('dashboard'); return; }
+    loadEssayAnswers();
+    loadUsers();
+    loadSoalList();
+  }
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+async function renderDashboard() {
+  // Load hasil dari DB
+  let results = {};
+  if (currentUser) {
+    const { data } = await sb.from('quiz_results').select('*').eq('user_id', currentUser.id);
+    if (data) data.forEach(r => { results[r.paket_id] = r; });
+  }
+
+  // Stats
+  const done = Object.keys(results).length;
+  document.getElementById('stat-done').textContent = done;
+  if (done > 0) {
+    const avg = Math.round(Object.values(results).reduce((s,r) => s + (r.score||0), 0) / done);
+    document.getElementById('stat-avg').textContent = avg;
+  } else {
+    document.getElementById('stat-avg').textContent = '-';
+  }
+
+  // Paket grid
+  const grid = document.getElementById('paket-grid');
+  grid.innerHTML = '';
+  PAKETS.forEach(p => {
+    const res = results[p.id];
+    const topicClass = {
+      'Pancasila': 'topic-pancasila',
+      'UUD NRI 1945': 'topic-uud',
+      'NKRI': 'topic-nkri',
+      'Bhinneka Tunggal Ika': 'topic-bti',
+      'Campuran': 'topic-mix',
+    }[p.topic] || 'topic-mix';
+    const scoreInfo = res ? `<div style="margin-top:8px;font-size:12px;color:var(--text2)">Nilai PG: <b style="color:var(--green)">${res.score}</b>/9</div>` : '';
+    grid.innerHTML += `
+      <div class="paket-card ${res ? 'done' : ''}" onclick="startPaket(${p.id})">
+        <div class="paket-num">PAKET ${String(p.id).padStart(2,'0')}</div>
+        <h3>${p.title.replace(/Paket \d+ – /, '')}</h3>
+        <p>9 PG + 1 Essay</p>
+        <span class="topic-badge ${topicClass}">${p.topic}</span>
+        ${scoreInfo}
+      </div>`;
+  });
+}
+
+function startRandomPaket() {
+  const id = Math.floor(Math.random() * 10) + 1;
+  startPaket(id);
+}
+
+// ═══════════════════════════════════════════
+// QUIZ ENGINE
+// ═══════════════════════════════════════════
+function startPaket(paketId) {
+  const paket = PAKETS.find(p => p.id === paketId);
+  if (!paket) return;
+  currentPaketId = paketId;
+  // Build question list: 9 PG + 1 essay
+  const questions = [
+    ...paket.pg.map((q, i) => ({ ...q, type: 'pg', num: i + 1 })),
+    { ...paket.essay, type: 'essay', num: paket.pg.length + 1 }
+  ];
+  quizState = {
+    paketId, questions, current: 0,
+    answers: {}, answered: new Set(),
+    startTime: Date.now(), timerInterval: null,
+  };
+  document.getElementById('quiz-paket-num').textContent = paketId;
+  document.getElementById('quiz-paket-title').textContent = paket.title.replace(/Paket \d+ – /, '');
+  document.getElementById('q-total').textContent = questions.length;
+  renderDots();
+  renderQuestion();
+  startTimer();
+  goTo('quiz');
+}
+
+function renderDots() {
+  const wrap = document.getElementById('question-dots');
+  wrap.innerHTML = '';
+  quizState.questions.forEach((q, i) => {
+    const d = document.createElement('div');
+    d.className = 'question-dot' + (i === quizState.current ? ' current' : '');
+    d.title = `Soal ${i + 1}`;
+    d.onclick = () => jumpToQuestion(i);
+    if (quizState.answered.has(i)) {
+      if (q.type === 'essay') d.classList.add('answered-essay');
+      else if (quizState.answers[i]?.correct) d.classList.add('answered-pg');
+      else d.classList.add('wrong');
+    }
+    wrap.appendChild(d);
+  });
+}
+
+function renderQuestion() {
+  const { questions, current, answers } = quizState;
+  const q = questions[current];
+  const total = questions.length;
+  document.getElementById('q-current').textContent = current + 1;
+  document.getElementById('progress-fill').style.width = ((current + 1) / total * 100) + '%';
+
+  const isPG = q.type === 'pg';
+  document.getElementById('q-type-label').textContent = isPG ? 'Pilihan Ganda' : 'Essay';
+  const badge = document.getElementById('q-type-badge');
+  badge.textContent = isPG ? '📝 Pilihan Ganda' : '✏️ Essay';
+  badge.className = 'question-type-badge ' + (isPG ? 'type-pg' : 'type-essay');
+  document.getElementById('q-text').textContent = q.q;
+
+  const optWrap = document.getElementById('options-list');
+  const feedbackBox = document.getElementById('feedback-box');
+  feedbackBox.className = 'feedback-box';
+  feedbackBox.textContent = '';
+  optWrap.innerHTML = '';
+
+  const answered = quizState.answered.has(current);
+  const ans = answers[current];
+
+  if (isPG) {
+    q.options.forEach((opt, idx) => {
+      const letter = ['A','B','C','D'][idx];
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      if (answered) {
+        if (letter === q.answer) btn.classList.add('correct');
+        else if (ans?.selected === letter) btn.classList.add('wrong');
+        btn.disabled = true;
+      }
+      btn.innerHTML = `<span class="option-letter">${letter}</span><span>${opt.slice(3)}</span>`;
+      btn.onclick = () => selectOption(letter, q.answer);
+      optWrap.appendChild(btn);
+    });
+    if (answered) {
+      feedbackBox.className = 'feedback-box show ' + (ans?.correct ? 'correct' : 'wrong');
+      feedbackBox.textContent = ans?.correct ? '✓ Jawaban benar!' : `✗ Jawaban salah. Jawaban yang benar: ${q.answer}`;
+    }
+  } else {
+    // Essay
+    const ta = document.createElement('textarea');
+    ta.className = 'essay-area';
+    ta.placeholder = 'Tulis jawabanmu di sini...';
+    ta.id = 'essay-input';
+    if (ans?.text) ta.value = ans.text;
+    if (answered) ta.disabled = true;
+    optWrap.appendChild(ta);
+    const hint = document.createElement('div');
+    hint.className = 'essay-hint';
+    hint.innerHTML = answered
+      ? '✓ Jawaban terkirim — akan dinilai oleh admin'
+      : '💡 Tulis jawaban selengkap mungkin. Jawaban akan dinilai oleh admin.';
+    optWrap.appendChild(hint);
+    if (answered) {
+      feedbackBox.className = 'feedback-box show essay';
+      feedbackBox.textContent = '✓ Jawaban essaymu telah tersimpan dan menunggu penilaian admin.';
+    }
+  }
+
+  // Nav buttons
+  document.getElementById('btn-prev').disabled = current === 0;
+  const isLast = current === total - 1;
+  const btnNext = document.getElementById('btn-next');
+  if (isLast) {
+    btnNext.textContent = '🏁 Selesai';
+    btnNext.onclick = finishQuiz;
+  } else {
+    btnNext.textContent = 'Next →';
+    btnNext.onclick = nextQuestion;
+  }
+  renderDots();
+}
+
+function selectOption(selected, correct) {
+  if (quizState.answered.has(quizState.current)) return;
+  const isCorrect = selected === correct;
+  quizState.answers[quizState.current] = { selected, correct: isCorrect };
+  quizState.answered.add(quizState.current);
+  renderQuestion();
+}
+
+function prevQuestion() {
+  if (quizState.current > 0) { quizState.current--; renderQuestion(); }
+}
+
+function nextQuestion() {
+  // Save essay before moving
+  saveEssayIfNeeded();
+  if (quizState.current < quizState.questions.length - 1) { quizState.current++; renderQuestion(); }
+}
+
+function jumpToQuestion(i) {
+  saveEssayIfNeeded();
+  quizState.current = i; renderQuestion();
+}
+
+function saveEssayIfNeeded() {
+  const q = quizState.questions[quizState.current];
+  if (q.type === 'essay' && !quizState.answered.has(quizState.current)) {
+    const ta = document.getElementById('essay-input');
+    if (ta && ta.value.trim()) {
+      quizState.answers[quizState.current] = { text: ta.value.trim() };
+      quizState.answered.add(quizState.current);
+    }
+  }
+}
+
+function startTimer() {
+  clearInterval(quizState.timerInterval);
+  quizState.timerInterval = setInterval(() => {
+    const elapsed = Math.floor((Date.now() - quizState.startTime) / 1000);
+    const m = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const s = String(elapsed % 60).padStart(2, '0');
+    document.getElementById('quiz-timer').textContent = `${m}:${s}`;
+  }, 1000);
+}
+
+async function finishQuiz() {
+  saveEssayIfNeeded();
+  clearInterval(quizState.timerInterval);
+  const { questions, answers } = quizState;
+
+  // Hitung skor PG
+  let correct = 0, wrong = 0;
+  let essayText = null;
+  questions.forEach((q, i) => {
+    if (q.type === 'pg') {
+      if (answers[i]?.correct) correct++; else wrong++;
+    } else {
+      essayText = answers[i]?.text || '';
+    }
+  });
+
+  // Simpan ke Supabase
+  if (currentUser) {
+    // Quiz result
+    await sb.from('quiz_results').upsert({
+      user_id: currentUser.id,
+      paket_id: quizState.paketId,
+      score: correct,
+      correct, wrong,
+      duration: Math.floor((Date.now() - quizState.startTime) / 1000),
+      completed_at: new Date().toISOString(),
+    });
+    // Essay answer
+    if (essayText) {
+      const essayQ = questions.find(q => q.type === 'essay');
+      await sb.from('essay_answers').upsert({
+        user_id: currentUser.id,
+        user_name: userProfile?.name || currentUser.email,
+        paket_id: quizState.paketId,
+        question: essayQ?.q || '',
+        answer: essayText,
+        rubrik: essayQ?.rubrik || '',
+        grade: null,
+        submitted_at: new Date().toISOString(),
+      }, { onConflict: 'user_id,paket_id' });
+    }
+  }
+
+  showResult(correct, wrong, questions.filter(q => q.type === 'pg').length);
+}
+
+function showResult(correct, wrong, totalPG) {
+  const pct = Math.round(correct / totalPG * 100);
+  const circle = document.getElementById('result-circle');
+  circle.style.setProperty('--pct', pct + '%');
+  document.getElementById('result-score').textContent = correct;
+  document.getElementById('result-total').textContent = `/${totalPG}`;
+  document.getElementById('rb-correct').textContent = correct;
+  document.getElementById('rb-wrong').textContent = wrong;
+  document.getElementById('rb-essay').textContent = 'Diperiksa';
+
+  let title, sub;
+  if (pct >= 80) { title = '🏆 Luar Biasa!'; sub = 'Kamu menguasai materi ini dengan sangat baik.'; }
+  else if (pct >= 60) { title = '👍 Bagus!'; sub = 'Hampir sempurna! Ayo perkuat yang masih kurang.'; }
+  else { title = '💪 Terus Berlatih!'; sub = 'Jangan menyerah! Ulangi dan kamu pasti bisa.'; }
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-sub').textContent = sub;
+  goTo('result');
+}
+
+function replayCurrentPaket() { if (currentPaketId) startPaket(currentPaketId); }
+
+function confirmExitQuiz() { document.getElementById('modal-exit').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function exitQuiz() { clearInterval(quizState.timerInterval); closeModal('modal-exit'); goTo('dashboard'); }
+
+// ═══════════════════════════════════════════
+// ADMIN
+// ═══════════════════════════════════════════
+function switchAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach((t,i) => {
+    const tabs = ['essay','users','addsoal','soallist'];
+    t.classList.toggle('active', tabs[i] === tab);
+  });
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + tab)?.classList.add('active');
+}
+
+async function loadEssayAnswers() {
+  const tbody = document.getElementById('essay-table-body');
+  tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr>';
+  const { data, error } = await sb.from('essay_answers').select('*').order('submitted_at', { ascending: false });
+  if (error || !data?.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><span class="emoji">📭</span>Belum ada jawaban essay.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td>${row.user_name || '-'}</td>
+      <td>Paket ${row.paket_id}</td>
+      <td style="max-width:200px;font-size:12px;color:var(--text2)">${row.question?.slice(0,80)}...</td>
+      <td class="essay-answer-cell">${row.answer || '-'}</td>
+      <td><input type="number" class="grade-input" min="0" max="100" value="${row.grade ?? ''}" id="grade-${row.id}" placeholder="0-100"></td>
+      <td><button class="btn btn-primary btn-sm" onclick="saveGrade('${row.id}')">Simpan</button></td>
+    </tr>
+  `).join('');
+}
+
+async function saveGrade(id) {
+  const val = document.getElementById('grade-' + id).value;
+  const grade = parseInt(val);
+  if (isNaN(grade) || grade < 0 || grade > 100) return showToast('Nilai harus antara 0-100', 'error');
+  const { error } = await sb.from('essay_answers').update({ grade }).eq('id', id);
+  if (error) return showToast('Gagal menyimpan nilai', 'error');
+  showToast('Nilai berhasil disimpan ✓', 'success');
+}
+
+async function loadUsers() {
+  const tbody = document.getElementById('users-table-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr>';
+  const { data, error } = await sb.from('profiles').select('*').order('created_at', { ascending: false });
+  if (error || !data?.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state"><span class="emoji">👻</span>Belum ada pengguna.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(u => `
+    <tr>
+      <td>${u.name || '-'}</td>
+      <td style="color:var(--text2)">${u.email || '-'}</td>
+      <td><span class="nav-role ${u.role === 'admin' ? 'admin' : 'peserta'}">${u.role || 'peserta'}</span></td>
+      <td style="color:var(--text2);font-size:12px">${u.created_at ? new Date(u.created_at).toLocaleDateString('id-ID') : '-'}</td>
+      <td>
+        <select class="form-input" style="padding:6px 10px;font-size:12px;width:110px" id="role-select-${u.id}" onchange="changeRole('${u.id}', this.value)">
+          <option value="peserta" ${u.role === 'peserta' ? 'selected' : ''}>Peserta</option>
+          <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+async function changeRole(userId, newRole) {
+  const { error } = await sb.from('profiles').update({ role: newRole }).eq('id', userId);
+  if (error) return showToast('Gagal mengubah role', 'error');
+  showToast(`Role berhasil diubah ke ${newRole} ✓`, 'success');
+  if (userId === currentUser?.id) { userProfile.role = newRole; updateNavUser(); }
+}
+
+function toggleAddOptions() {
+  const type = document.getElementById('add-type').value;
+  document.getElementById('pg-options-wrap').style.display = type === 'pg' ? 'block' : 'none';
+  document.getElementById('essay-rubrik-wrap').style.display = type === 'essay' ? 'block' : 'none';
+}
+
+async function submitNewSoal() {
+  const type = document.getElementById('add-type').value;
+  const paket = document.getElementById('add-paket').value;
+  const question = document.getElementById('add-question').value.trim();
+  if (!question) return showToast('Pertanyaan tidak boleh kosong', 'error');
+
+  let payload = { type, paket_id: parseInt(paket), question, created_by: currentUser?.id };
+  if (type === 'pg') {
+    const optA = document.getElementById('add-opt-a').value.trim();
+    const optB = document.getElementById('add-opt-b').value.trim();
+    const optC = document.getElementById('add-opt-c').value.trim();
+    const optD = document.getElementById('add-opt-d').value.trim();
+    const answer = document.getElementById('add-answer').value;
+    if (!optA || !optB || !optC || !optD) return showToast('Semua pilihan jawaban wajib diisi', 'error');
+    payload = { ...payload, options: JSON.stringify([`A. ${optA}`,`B. ${optB}`,`C. ${optC}`,`D. ${optD}`]), answer };
+  } else {
+    payload.rubrik = document.getElementById('add-rubrik').value.trim();
+  }
+
+  const { error } = await sb.from('soal_tambahan').insert(payload);
+  if (error) return showToast('Gagal menyimpan soal: ' + error.message, 'error');
+  showToast('Soal berhasil disimpan ✓', 'success');
+  document.getElementById('add-question').value = '';
+  loadSoalList();
+}
+
+async function loadSoalList() {
+  const tbody = document.getElementById('soal-table-body');
+  tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><span class="emoji">⏳</span>Memuat...</td></tr>';
+  const { data, error } = await sb.from('soal_tambahan').select('*').order('created_at', { ascending: false });
+  if (error || !data?.length) {
+    tbody.innerHTML = '<tr><td colspan="4" class="empty-state"><span class="emoji">📭</span>Belum ada soal tambahan.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = data.map(s => `
+    <tr>
+      <td>Paket ${s.paket_id}</td>
+      <td><span class="question-type-badge ${s.type === 'pg' ? 'type-pg' : 'type-essay'}">${s.type.toUpperCase()}</span></td>
+      <td style="font-size:13px">${s.question?.slice(0,100)}...</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteSoal('${s.id}')">Hapus</button></td>
+    </tr>
+  `).join('');
+}
+
+async function deleteSoal(id) {
+  if (!confirm('Hapus soal ini?')) return;
+  const { error } = await sb.from('soal_tambahan').delete().eq('id', id);
+  if (error) return showToast('Gagal menghapus', 'error');
+  showToast('Soal dihapus ✓', 'success');
+  loadSoalList();
+}
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✓ ' : '✗ ') + msg;
+  t.className = 'show ' + type;
+  setTimeout(() => { t.className = ''; }, 3000);
+}
+
+// ═══════════════════════════════════════════
+// ENTER KEY
+// ═══════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('page-auth').classList.contains('active')) {
+      const isLogin = document.getElementById('form-login').style.display !== 'none';
+      if (isLogin) handleLogin(); else handleRegister();
+    }
+  }
+});
+
+// ═══════════════════════════════════════════
+// START
+// ═══════════════════════════════════════════
+init();
+</script>
+
+<!-- ══════════════════════════════════════════════════
+  PETUNJUK SETUP SUPABASE
+  
+  1. Buat project di supabase.com
+  2. Ganti SUPABASE_URL dan SUPABASE_KEY di atas
+  3. Jalankan SQL berikut di Supabase SQL Editor:
+
+  -- Tabel profiles
+  CREATE TABLE profiles (
+    id UUID PRIMARY KEY REFERENCES auth.users(id),
+    name TEXT,
+    email TEXT,
+    role TEXT DEFAULT 'peserta',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+  );
+
+  -- Tabel quiz_results
+  CREATE TABLE quiz_results (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id),
+    paket_id INTEGER,
+    score INTEGER,
+    correct INTEGER,
+    wrong INTEGER,
+    duration INTEGER,
+    completed_at TIMESTAMPTZ,
+    UNIQUE(user_id, paket_id)
+  );
+
+  -- Tabel essay_answers
+  CREATE TABLE essay_answers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id),
+    user_name TEXT,
+    paket_id INTEGER,
+    question TEXT,
+    answer TEXT,
+    rubrik TEXT,
+    grade INTEGER,
+    submitted_at TIMESTAMPTZ,
+    UNIQUE(user_id, paket_id)
+  );
+
+  -- Tabel soal_tambahan (dari admin)
+  CREATE TABLE soal_tambahan (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    type TEXT,
+    paket_id INTEGER,
+    question TEXT,
+    options TEXT,
+    answer TEXT,
+    rubrik TEXT,
+    created_by UUID REFERENCES auth.users(id),
+    created_at TIMESTAMPTZ DEFAULT NOW()
+  );
+
+  -- Trigger auto-insert profile saat user baru daftar
+  CREATE OR REPLACE FUNCTION handle_new_user()
+  RETURNS TRIGGER AS $$
+  BEGIN
+    INSERT INTO profiles (id, name, email, role)
+    VALUES (NEW.id, NEW.raw_user_meta_data->>'name', NEW.email, 'peserta')
+    ON CONFLICT (id) DO NOTHING;
+    RETURN NEW;
+  END;
+  $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+  CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE PROCEDURE handle_new_user();
+
+  -- RLS Policies
+  ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE quiz_results ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE essay_answers ENABLE ROW LEVEL SECURITY;
+  ALTER TABLE soal_tambahan ENABLE ROW LEVEL SECURITY;
+
+  CREATE POLICY "Users can view own profile" ON profiles FOR SELECT USING (auth.uid() = id);
+  CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
+  CREATE POLICY "Admin can view all profiles" ON profiles FOR SELECT USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+  CREATE POLICY "Admin can update all profiles" ON profiles FOR UPDATE USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+  CREATE POLICY "Users manage own results" ON quiz_results FOR ALL USING (auth.uid() = user_id);
+  CREATE POLICY "Admin can view all results" ON quiz_results FOR SELECT USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+  CREATE POLICY "Users manage own essays" ON essay_answers FOR ALL USING (auth.uid() = user_id);
+  CREATE POLICY "Admin can view all essays" ON essay_answers FOR SELECT USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+  CREATE POLICY "Admin can update essays" ON essay_answers FOR UPDATE USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+  CREATE POLICY "Anyone can read soal" ON soal_tambahan FOR SELECT TO authenticated USING (true);
+  CREATE POLICY "Admin can manage soal" ON soal_tambahan FOR ALL USING (EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'));
+
+══════════════════════════════════════════════ -->
+</body>
+</html>
