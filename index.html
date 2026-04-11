@@ -1405,9 +1405,15 @@ function confirmDeleteLog(id,name,paket){
 }
 async function deleteSingleLog(id){
   closeModal('modal-delete-log');
-  const{error}=await sb.from('quiz_results').delete().eq('id',id);
-  if(error) return showToast('Gagal menghapus log','error');
-  showToast('Log berhasil dihapus','success'); loadTryoutLogs();
+  const{error,data}=await sb.from('quiz_results').delete().eq('id',id).select();
+  if(error){ console.error('Delete error:',error); return showToast('Gagal: '+error.message,'error'); }
+  if(!data||data.length===0){ return showToast('Gagal: Tidak ada izin hapus (cek RLS Supabase)','error'); }
+  // Hapus essay_answers yang sesuai user_id + paket_id
+  const row=data[0];
+  if(row?.user_id&&row?.paket_id){
+    await sb.from('essay_answers').delete().eq('user_id',row.user_id).eq('paket_id',row.paket_id);
+  }
+  showToast('Log & essay berhasil dihapus','success'); loadTryoutLogs();
 }
 function confirmDeleteAllLogs(){
   _pendingDeleteId='__all__';
@@ -1418,9 +1424,12 @@ function confirmDeleteAllLogs(){
 }
 async function deleteAllLogs(){
   closeModal('modal-delete-log');
-  const{error}=await sb.from('quiz_results').delete().neq('id','00000000-0000-0000-0000-000000000000');
-  if(error) return showToast('Gagal menghapus semua log: '+error.message,'error');
-  showToast('Semua log berhasil dihapus','success'); loadTryoutLogs();
+  const{error,data}=await sb.from('quiz_results').delete().neq('id','00000000-0000-0000-0000-000000000000').select();
+  if(error){ console.error('Delete all error:',error); return showToast('Gagal: '+error.message,'error'); }
+  if(!data||data.length===0){ return showToast('Gagal: Tidak ada izin hapus (cek RLS Supabase)','error'); }
+  // Hapus semua essay_answers sekalian
+  await sb.from('essay_answers').delete().neq('id','00000000-0000-0000-0000-000000000000');
+  showToast('Semua log & essay berhasil dihapus','success'); loadTryoutLogs();
 }
 
 /* ── Users ── */
