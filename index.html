@@ -633,6 +633,11 @@ tr:hover td { background:rgba(75,130,245,.03) }
   .result-breakdown { grid-template-columns:1fr 1fr }
   .result-breakdown .breakdown-item:last-child { grid-column:span 2 }
   .admin-tabs { flex-wrap:wrap; width:100% }
+  /* Navbar mobile: sembunyikan username agar tombol tidak terpotong */
+  .nav-username { display:none }
+  .nav-user { padding:4px 8px; gap:6px }
+  .nav-right { gap:6px }
+  .btn.btn-sm { padding:7px 10px; font-size:12px }
 }
 </style>
 </head>
@@ -831,7 +836,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
     <div class="result-breakdown">
       <div class="breakdown-item"><div class="breakdown-icon green"><i class="fi fi-sr-check-circle"></i></div><div class="b-num" id="rb-correct" style="color:var(--green)">0</div><div class="b-label">Jawaban Benar</div></div>
       <div class="breakdown-item"><div class="breakdown-icon red"><i class="fi fi-sr-cross-circle"></i></div><div class="b-num" id="rb-wrong" style="color:var(--red)">0</div><div class="b-label">Jawaban Salah</div></div>
-      <div class="breakdown-item"><div class="breakdown-icon gold"><i class="fi fi-sr-pen-field"></i></div><div class="b-num" id="rb-essay" style="color:var(--gold)">—</div><div class="b-label">Essay (admin)</div></div>
+      <div class="breakdown-item"><div class="breakdown-icon gold"><i class="fi fi-sr-pen-field"></i></div><div class="b-num" id="rb-essay" style="color:var(--gold)">—</div><div class="b-label" id="rb-essay-label">Nilai Essay</div></div>
     </div>
     <div class="result-actions">
       <button class="btn btn-ghost" onclick="goTo('dashboard')"><i class="fi fi-rr-arrow-left"></i> Kembali</button>
@@ -1083,9 +1088,12 @@ function goTo(page){
 
 async function renderDashboard(){
   let results={};
+  let essayGrades={};
   if(currentUser){
     const{data}=await sb.from('quiz_results').select('*').eq('user_id',currentUser.id);
     if(data) data.forEach(r=>{ results[r.paket_id]=r; });
+    const{data:essayData}=await sb.from('essay_answers').select('paket_id,grade').eq('user_id',currentUser.id);
+    if(essayData) essayData.forEach(e=>{ essayGrades[e.paket_id]=e.grade; });
   }
   const done=Object.keys(results).length;
   document.getElementById('stat-done').textContent=done;
@@ -1096,7 +1104,16 @@ async function renderDashboard(){
     const res=results[p.id];
     const tc=topicMap[p.topic]||'topic-mix';
     const statusBadge=res?`<div class="paket-status-badge done"><i class="fi fi-sr-check-circle"></i> Selesai</div>`:'';
-    const footer=res?`<div class="paket-card-footer"><i class="fi fi-sr-star"></i><div class="paket-score-text">Nilai PG: <strong>${res.score}/9</strong> &nbsp;·&nbsp; ${Math.round(res.score/9*100)}%</div></div>`:'';
+    let essayBadge='';
+    if(res){
+      const grade=essayGrades[p.id];
+      if(grade!==undefined&&grade!==null){
+        essayBadge=`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(245,192,48,.13);color:var(--gold);border:1px solid rgba(245,192,48,.3);border-radius:6px;padding:2px 8px;font-size:11px;font-family:var(--mono);font-weight:700;"><i class="fi fi-sr-pen-field" style="font-size:10px"></i>${grade}</span>`;
+      } else {
+        essayBadge=`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(148,163,184,.1);color:var(--text3);border:1px solid rgba(148,163,184,.2);border-radius:6px;padding:2px 8px;font-size:11px;font-family:var(--mono);"><i class="fi fi-rr-clock" style="font-size:10px"></i>Essay: -</span>`;
+      }
+    }
+    const footer=res?`<div class="paket-card-footer"><i class="fi fi-sr-star"></i><div class="paket-score-text" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">Nilai PG: <strong>${res.score}/9</strong> &nbsp;·&nbsp; ${Math.round(res.score/9*100)}% &nbsp; ${essayBadge}</div></div>`:'';
     grid.innerHTML+=`<div class="paket-card ${res?'done':''}" onclick="startPaket(${p.id})">
       <div class="paket-card-accent"></div>
       <div class="paket-card-body">
@@ -1216,16 +1233,32 @@ async function finishQuiz(){
       await sb.from('essay_answers').upsert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question:essayQ?.q||'',answer:essayText,rubrik:essayQ?.rubrik||'',grade:null,submitted_at:new Date().toISOString()},{onConflict:'user_id,paket_id'});
     }
   }
-  showResult(correct,wrong,questions.filter(q=>q.type==='pg').length);
+  await showResult(correct,wrong,questions.filter(q=>q.type==='pg').length,quizState.paketId);
 }
-function showResult(correct,wrong,totalPG){
+async function showResult(correct,wrong,totalPG,paketId){
   const pct=Math.round(correct/totalPG*100);
   document.getElementById('result-circle').style.setProperty('--pct',pct+'%');
   document.getElementById('result-score').textContent=correct;
   document.getElementById('result-total').textContent=`/${totalPG}`;
   document.getElementById('rb-correct').textContent=correct;
   document.getElementById('rb-wrong').textContent=wrong;
-  document.getElementById('rb-essay').textContent='Pending';
+  // Cek grade essay dari DB
+  const essayEl=document.getElementById('rb-essay');
+  const essayLabelEl=document.getElementById('rb-essay-label');
+  essayEl.textContent='—'; essayEl.style.color='var(--gold)';
+  if(currentUser&&paketId){
+    const{data:ea}=await sb.from('essay_answers').select('grade').eq('user_id',currentUser.id).eq('paket_id',paketId).maybeSingle();
+    if(ea&&ea.grade!==null&&ea.grade!==undefined){
+      essayEl.textContent=ea.grade; essayEl.style.color='var(--gold)';
+      if(essayLabelEl) essayLabelEl.textContent='Nilai Essay';
+    } else {
+      essayEl.textContent='-'; essayEl.style.color='var(--text3)';
+      if(essayLabelEl) essayLabelEl.textContent='Essay (menunggu admin)';
+    }
+  } else {
+    essayEl.textContent='-'; essayEl.style.color='var(--text3)';
+    if(essayLabelEl) essayLabelEl.textContent='Essay (menunggu admin)';
+  }
   const badge=document.getElementById('result-badge');
   let title,sub,badgeClass,badgeText,iconClass;
   if(pct>=80){ title='Luar Biasa!'; sub='Kamu menguasai materi ini dengan sangat baik. Pertahankan!'; badgeClass='great'; badgeText='Nilai Tinggi'; iconClass='fi-sr-trophy-star'; }
@@ -1287,11 +1320,19 @@ async function loadTryoutLogs(){
   const tbody=document.getElementById('logs-table-body');
   tbody.innerHTML=emptyRow(8,'Memuat...','fi-rr-time-past');
   const{data,error}=await sb.from('quiz_results')
-    .select('*, profiles(name,email)')
+    .select('*')
     .order('completed_at',{ascending:false});
   if(error||!data?.length){ tbody.innerHTML=emptyRow(8,'Belum ada log pengerjaan.','fi-rr-list-timeline'); return; }
+  // Fetch profiles separately to avoid FK join issues
+  const userIds=[...new Set(data.map(r=>r.user_id).filter(Boolean))];
+  let profileMap={};
+  if(userIds.length){
+    const{data:profs}=await sb.from('profiles').select('id,name,email').in('id',userIds);
+    if(profs) profs.forEach(p=>{ profileMap[p.id]=p; });
+  }
   tbody.innerHTML=data.map(row=>{
-    const name=row.profiles?.name||row.profiles?.email||row.user_id?.slice(0,8)||'-';
+    const prof=profileMap[row.user_id];
+    const name=prof?.name||prof?.email||row.user_id?.slice(0,8)||'-';
     const dur=row.duration?`${Math.floor(row.duration/60)}m ${row.duration%60}s`:'-';
     const date=row.completed_at?new Date(row.completed_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-';
     const pct=row.correct!=null&&row.score!=null?Math.round(row.score/9*100):null;
