@@ -1440,10 +1440,11 @@ function confirmDeleteAllLogs(){
 }
 async function deleteAllLogs(){
   closeModal('modal-delete-log');
-  const{error,data}=await sb.from('quiz_results').delete().neq('id','00000000-0000-0000-0000-000000000000').select();
+  // Cek dulu apakah ada data
+  const{data:existing}=await sb.from('quiz_results').select('id').limit(1);
+  if(!existing||existing.length===0){ return showToast('Tidak ada log untuk dihapus','error'); }
+  const{error}=await sb.from('quiz_results').delete().neq('id','00000000-0000-0000-0000-000000000000');
   if(error){ console.error('Delete all error:',error); return showToast('Gagal: '+error.message,'error'); }
-  if(!data||data.length===0){ return showToast('Gagal: Tidak ada izin hapus (cek RLS Supabase)','error'); }
-  // Hapus semua essay_answers sekalian
   await sb.from('essay_answers').delete().neq('id','00000000-0000-0000-0000-000000000000');
   showToast('Semua log & essay berhasil dihapus','success'); loadTryoutLogs();
 }
