@@ -1024,9 +1024,14 @@ let currentUser=null, userProfile=null, currentPaketId=null;
 let quizState = { paketId:null,questions:[],current:0,answers:{},answered:new Set(),startTime:null,timerInterval:null };
 
 async function init(){
+  const startTime=Date.now();
   const{data:{session}}=await sb.auth.getSession();
   if(session?.user){ currentUser=session.user; await loadProfile(); goTo('dashboard'); }
   else goTo('auth');
+  // Splash minimal 1.8 detik
+  const elapsed=Date.now()-startTime;
+  const remaining=Math.max(0, 1800-elapsed);
+  await new Promise(r=>setTimeout(r, remaining));
   const loadEl=document.getElementById('loading');
   loadEl.classList.add('hide');
   setTimeout(()=>{ loadEl.style.display='none'; }, 400);
