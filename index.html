@@ -1141,8 +1141,7 @@ async function renderDashboard(){
     if(essayData) essayData.forEach(e=>{ essayGrades[e.paket_id]=e.grade; });
   }
   const done=Object.keys(results).length;
-  document.getElementById('stat-done').textContent=done;
-  document.getElementById('stat-avg').textContent=done>0?Math.round(Object.values(results).reduce((s,r)=>s+(r.score||0),0)/done):'—';
+
   const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix'};
   const grid=document.getElementById('paket-grid'); grid.innerHTML='';
   PAKETS.forEach(p=>{
