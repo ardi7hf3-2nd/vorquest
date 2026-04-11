@@ -883,8 +883,8 @@ tr:hover td { background:rgba(75,130,245,.03) }
         <button class="btn btn-ghost btn-sm" onclick="loadEssayAnswers()"><i class="fi fi-rr-refresh"></i> Refresh</button>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>Peserta</th><th>Paket</th><th>Soal</th><th>Jawaban</th><th>Nilai</th><th>Aksi</th></tr></thead>
-        <tbody id="essay-table-body"><tr><td colspan="6"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
+        <thead><tr><th>Peserta</th><th>Paket</th><th>Soal</th><th>Jawaban</th><th>Nilai</th><th>Aksi</th><th>Hapus</th></tr></thead>
+        <tbody id="essay-table-body"><tr><td colspan="7"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
       </table></div>
     </div>
 
@@ -1331,9 +1331,9 @@ const emptyRow=(cols,msg,icon='fi-rr-inbox')=>`<tr><td colspan="${cols}"><div cl
 /* ── Essay ── */
 async function loadEssayAnswers(){
   const tbody=document.getElementById('essay-table-body');
-  tbody.innerHTML=emptyRow(6,'Memuat...','fi-rr-time-past');
+  tbody.innerHTML=emptyRow(7,'Memuat...','fi-rr-time-past');
   const{data,error}=await sb.from('essay_answers').select('*').order('submitted_at',{ascending:false});
-  if(error||!data?.length){ tbody.innerHTML=emptyRow(6,'Belum ada jawaban essay.'); return; }
+  if(error||!data?.length){ tbody.innerHTML=emptyRow(7,'Belum ada jawaban essay.'); return; }
   tbody.innerHTML=data.map(row=>`<tr>
     <td><div class="user-cell"><div class="user-mini-avatar">${getInitials(row.user_name)}</div><strong>${row.user_name||'-'}</strong></div></td>
     <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${row.paket_id}</span></td>
@@ -1344,6 +1344,7 @@ async function loadEssayAnswers(){
       ?`<button class="btn btn-ghost btn-sm" onclick="resetGrade('${row.id}')"><i class="fi fi-rr-edit"></i> Edit</button>`
       :`<button class="btn btn-primary btn-sm" onclick="saveGrade('${row.id}')"><i class="fi fi-rr-disk"></i> Simpan</button>`
     }</div></td>
+    <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteEssay('${row.id}','${(row.user_name||'').replace(/'/g,'')}','${row.paket_id}')"><i class="fi fi-rr-trash"></i></button></td>
   </tr>`).join('');
 }
 async function saveGrade(id){
@@ -1357,6 +1358,21 @@ async function resetGrade(id){
   const{error}=await sb.from('essay_answers').update({grade:null,graded_at:null}).eq('id',id);
   if(error) return showToast('Gagal mereset nilai','error');
   showToast('Nilai direset','success'); loadEssayAnswers();
+}
+let _pendingDeleteEssayId=null;
+function confirmDeleteEssay(id,name,paketId){
+  _pendingDeleteEssayId=id;
+  document.getElementById('modal-delete-log-title').textContent=`Hapus Jawaban Essay "${name}" – P${paketId}?`;
+  document.getElementById('modal-delete-log-desc').textContent='Jawaban essay ini akan dihapus permanen beserta nilainya. Tindakan ini tidak dapat dibatalkan.';
+  document.getElementById('modal-delete-log-confirm').onclick=deleteEssay;
+  document.getElementById('modal-delete-log').classList.add('open');
+}
+async function deleteEssay(){
+  closeModal('modal-delete-log');
+  const{error,data}=await sb.from('essay_answers').delete().eq('id',_pendingDeleteEssayId).select();
+  if(error){ console.error('Delete essay error:',error); return showToast('Gagal: '+error.message,'error'); }
+  if(!data||data.length===0){ return showToast('Gagal: Tidak ada izin hapus (cek RLS Supabase)','error'); }
+  showToast('Jawaban essay berhasil dihapus','success'); loadEssayAnswers();
 }
 
 /* ── Log Tryout (NEW) ── */
