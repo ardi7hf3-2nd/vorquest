@@ -609,7 +609,9 @@ tr:hover td { background:rgba(75,130,245,.03) }
   position:fixed; inset:0; z-index:500;
   background:var(--bg);
   display:grid; place-items:center;
+  transition:opacity .4s ease;
 }
+.loading-page.hide { opacity:0; pointer-events:none }
 .loading-inner { text-align:center; animation:splash-in .6s cubic-bezier(.22,1,.36,1) both }
 @keyframes splash-in { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 .splash-title {
@@ -1025,7 +1027,9 @@ async function init(){
   const{data:{session}}=await sb.auth.getSession();
   if(session?.user){ currentUser=session.user; await loadProfile(); goTo('dashboard'); }
   else goTo('auth');
-  document.getElementById('loading').style.display='none';
+  const loadEl=document.getElementById('loading');
+  loadEl.classList.add('hide');
+  setTimeout(()=>{ loadEl.style.display='none'; }, 400);
 }
 async function loadProfile(){
   const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
@@ -1507,7 +1511,13 @@ document.addEventListener('keydown',e=>{
     if(isLogin) handleLogin(); else handleRegister();
   }
 });
-init();
+window.addEventListener('load', ()=>{
+  if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
+    document.querySelector('.splash-sub').textContent='Gagal memuat konfigurasi. Coba refresh.';
+    return;
+  }
+  init();
+});
 </script>
 </body>
 </html>
