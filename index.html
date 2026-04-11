@@ -1020,7 +1020,16 @@ async function init(){
 }
 async function loadProfile(){
   const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-  userProfile=data; updateNavUser();
+  if(data){ userProfile=data; }
+  else {
+    // User baru selesai konfirmasi email, profile belum ada → buat sekarang
+    const meta=currentUser.user_metadata||{};
+    const name=meta.name||currentUser.email.split('@')[0];
+    const email=currentUser.email;
+    await sb.from('profiles').upsert({id:currentUser.id,name,email,role:'peserta'});
+    userProfile={name,email,role:'peserta'};
+  }
+  updateNavUser();
 }
 function getInitials(n){ if(!n)return'?'; return n.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() }
 function updateNavUser(){
@@ -1070,9 +1079,32 @@ async function handleRegister(){
   btn.disabled=false;
   document.getElementById('register-content').innerHTML='<i class="fi fi-rr-user-add"></i> Buat Akun';
   if(error)return showAuthError(error.message);
+  // Jika session null → Supabase mengirim email konfirmasi dulu
+  if(!data.session){
+    showRegisterSuccess(email);
+    return;
+  }
+  // Jika email confirmation dimatikan di Supabase → langsung login
   await sb.from('profiles').upsert({id:data.user.id,name,email,role:'peserta'});
   currentUser=data.user; userProfile={name,email,role:'peserta'};
   updateNavUser(); goTo('dashboard'); showToast('Akun berhasil dibuat! Selamat datang','success');
+}
+function showRegisterSuccess(email){
+  const form=document.getElementById('form-register');
+  form.innerHTML=`<div style="text-align:center;padding:24px 8px">
+    <div style="width:56px;height:56px;border-radius:16px;background:rgba(45,212,191,.12);border:1px solid rgba(45,212,191,.3);display:grid;place-items:center;margin:0 auto 16px">
+      <i class="fi fi-sr-envelope" style="font-size:24px;color:var(--green)"></i>
+    </div>
+    <div style="font-size:16px;font-weight:800;margin-bottom:8px;letter-spacing:-.3px">Cek Email Kamu!</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">
+      Link konfirmasi sudah dikirim ke<br>
+      <strong style="color:var(--text)">${email}</strong><br><br>
+      Klik link di email tersebut untuk mengaktifkan akun, lalu masuk di sini.
+    </div>
+    <button class="btn btn-secondary btn-full" onclick="switchAuthTab('login')">
+      <i class="fi fi-rr-sign-in-alt"></i> Ke Halaman Masuk
+    </button>
+  </div>`;
 }
 async function handleLogout(){ await sb.auth.signOut(); currentUser=null; userProfile=null; goTo('auth'); }
 
