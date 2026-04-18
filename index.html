@@ -642,6 +642,13 @@ tr:hover td { background:rgba(75,130,245,.03) }
   background:var(--surface); border:1px solid var(--border);
   border-radius:var(--radius-lg); padding:26px;
 }
+.question-type-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:11px; font-weight:700; letter-spacing:.4px;
+  padding:3px 9px; border-radius:6px; text-transform:uppercase;
+}
+.type-pg    { background:rgba(75,130,245,.1);  color:var(--accent); border:1px solid rgba(75,130,245,.2) }
+.type-essay { background:rgba(245,192,48,.1);  color:var(--gold);   border:1px solid rgba(245,192,48,.2) }
 
 /* Log panel info box */
 .log-info-box {
@@ -1040,52 +1047,120 @@ tr:hover td { background:rgba(75,130,245,.03) }
     <!-- Tab: Tambah Soal -->
     <div class="admin-panel" id="panel-addsoal">
       <div class="panel-toolbar" style="margin-bottom:18px">
-        <div class="panel-title"><i class="fi fi-rr-plus-small"></i> Tambah Soal Baru</div>
+        <div class="panel-title"><i class="fi fi-rr-plus-small"></i> Buat Paket Soal Baru</div>
       </div>
-      <div class="add-question-wrap"><div class="card">
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-tags"></i> Tipe Soal</label>
-          <select class="form-input" id="add-type" onchange="toggleAddOptions()">
-            <option value="pg">Pilihan Ganda (PG)</option><option value="essay">Essay</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-layers"></i> Paket</label>
-          <select class="form-input" id="add-paket">
-            <option value="1">Paket 1 – Sejarah Perumusan Pancasila</option>
-            <option value="2">Paket 2 – Pancasila sebagai Ideologi & Dasar Negara</option>
-            <option value="3">Paket 3 – UUD NRI 1945: Sejarah & Perubahan</option>
-            <option value="4">Paket 4 – Lembaga-Lembaga Negara</option>
-            <option value="5">Paket 5 – NKRI: Bentuk & Dasar Negara</option>
-            <option value="6">Paket 6 – Bhinneka Tunggal Ika: Asal Usul & Makna</option>
-            <option value="7">Paket 7 – Bhinneka Tunggal Ika dalam Kehidupan</option>
-            <option value="8">Paket 8 – HAM dan Kewarganegaraan</option>
-            <option value="9">Paket 9 – Sistem Pemerintahan & Demokrasi</option>
-            <option value="10">Paket 10 – Soal Campuran 4 Pilar</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-interrogation"></i> Pertanyaan</label>
-          <textarea class="form-input" id="add-question" placeholder="Tulis pertanyaan di sini..."></textarea>
-        </div>
-        <div id="pg-options-wrap">
-          <div class="form-group"><label class="form-label">Pilihan A</label><input type="text" class="form-input" id="add-opt-a" placeholder="Pilihan A"></div>
-          <div class="form-group"><label class="form-label">Pilihan B</label><input type="text" class="form-input" id="add-opt-b" placeholder="Pilihan B"></div>
-          <div class="form-group"><label class="form-label">Pilihan C</label><input type="text" class="form-input" id="add-opt-c" placeholder="Pilihan C"></div>
-          <div class="form-group"><label class="form-label">Pilihan D</label><input type="text" class="form-input" id="add-opt-d" placeholder="Pilihan D"></div>
-          <div class="form-group">
-            <label class="form-label"><i class="fi fi-rr-check"></i> Jawaban Benar</label>
-            <select class="form-input" id="add-answer"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+      <div class="add-question-wrap">
+
+        <!-- Step 1: Nama Paket -->
+        <div class="card" id="paket-name-card" style="margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <div style="width:26px;height:26px;border-radius:7px;background:var(--accent-g);display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;font-family:var(--mono);flex-shrink:0">1</div>
+            <div style="font-size:14px;font-weight:700">Nama Paket Baru</div>
           </div>
-        </div>
-        <div id="essay-rubrik-wrap" style="display:none">
-          <div class="form-group">
-            <label class="form-label"><i class="fi fi-rr-key"></i> Rubrik / Kunci Jawaban</label>
-            <textarea class="form-input" id="add-rubrik" placeholder="Rubrik penilaian untuk admin..."></textarea>
+          <div class="form-group" style="margin-bottom:12px">
+            <label class="form-label"><i class="fi fi-rr-layers"></i> Nama Paket</label>
+            <input type="text" class="form-input" id="new-paket-name" placeholder="Contoh: Paket 11 – Sejarah Pancasila" oninput="onPaketNameInput()">
+            <div style="font-size:11.5px;color:var(--text2);margin-top:6px"><i class="fi fi-rr-info" style="font-size:11px"></i> Nama paket harus unik dan berbeda dari paket yang sudah ada.</div>
           </div>
+          <button class="btn btn-primary" id="btn-set-paket-name" onclick="setPaketName()" disabled>
+            <i class="fi fi-rr-arrow-right"></i> Mulai Isi Soal
+          </button>
         </div>
-        <button class="btn btn-primary" onclick="submitNewSoal()"><i class="fi fi-rr-disk"></i> Simpan Soal</button>
-      </div></div>
+
+        <!-- Step 2: Isi Soal + Progress -->
+        <div id="paket-builder-wrap" style="display:none">
+
+          <!-- Progress bar -->
+          <div class="card" style="margin-bottom:16px;padding:18px 22px">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+              <div>
+                <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase;margin-bottom:3px">Paket Sedang Dibuat</div>
+                <div style="font-size:15px;font-weight:700;color:var(--text)" id="builder-paket-label">—</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" onclick="resetPaketBuilder()"><i class="fi fi-rr-rotate-left"></i> Mulai Ulang</button>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+                <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px"><i class="fi fi-rr-list" style="font-size:10px"></i> Pilihan Ganda</div>
+                <div style="display:flex;align-items:baseline;gap:4px">
+                  <span style="font-size:22px;font-weight:800;font-family:var(--mono);color:var(--accent)" id="counter-pg">0</span>
+                  <span style="font-size:13px;color:var(--text3);font-family:var(--mono)">/9</span>
+                </div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden">
+                  <div id="bar-pg" style="height:100%;background:var(--accent-g);border-radius:2px;width:0%;transition:width .3s"></div>
+                </div>
+              </div>
+              <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px">
+                <div style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px"><i class="fi fi-rr-pen-field" style="font-size:10px"></i> Essay</div>
+                <div style="display:flex;align-items:baseline;gap:4px">
+                  <span style="font-size:22px;font-weight:800;font-family:var(--mono);color:var(--gold)" id="counter-essay">0</span>
+                  <span style="font-size:13px;color:var(--text3);font-family:var(--mono)">/1</span>
+                </div>
+                <div style="height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden">
+                  <div id="bar-essay" style="height:100%;background:var(--gold-g);border-radius:2px;width:0%;transition:width .3s"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Buffer list -->
+            <div id="buffer-list-wrap" style="display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px">
+              <div style="font-size:11px;font-weight:700;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:8px">Soal yang sudah ditambahkan</div>
+              <div id="buffer-list" style="display:flex;flex-direction:column;gap:6px"></div>
+            </div>
+          </div>
+
+          <!-- Form tambah soal -->
+          <div class="card" id="add-soal-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+              <div style="width:26px;height:26px;border-radius:7px;background:var(--accent-g);display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff;font-family:var(--mono);flex-shrink:0">2</div>
+              <div style="font-size:14px;font-weight:700">Tambah Soal ke Paket</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><i class="fi fi-rr-tags"></i> Tipe Soal</label>
+              <select class="form-input" id="add-type" onchange="toggleAddOptions()">
+                <option value="pg">Pilihan Ganda (PG)</option>
+                <option value="essay">Essay</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label"><i class="fi fi-rr-interrogation"></i> Pertanyaan</label>
+              <textarea class="form-input" id="add-question" placeholder="Tulis pertanyaan di sini..."></textarea>
+            </div>
+            <div id="pg-options-wrap">
+              <div class="form-group"><label class="form-label">Pilihan A</label><input type="text" class="form-input" id="add-opt-a" placeholder="Pilihan A"></div>
+              <div class="form-group"><label class="form-label">Pilihan B</label><input type="text" class="form-input" id="add-opt-b" placeholder="Pilihan B"></div>
+              <div class="form-group"><label class="form-label">Pilihan C</label><input type="text" class="form-input" id="add-opt-c" placeholder="Pilihan C"></div>
+              <div class="form-group"><label class="form-label">Pilihan D</label><input type="text" class="form-input" id="add-opt-d" placeholder="Pilihan D"></div>
+              <div class="form-group">
+                <label class="form-label"><i class="fi fi-rr-check"></i> Jawaban Benar</label>
+                <select class="form-input" id="add-answer"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="D">D</option></select>
+              </div>
+            </div>
+            <div id="essay-rubrik-wrap" style="display:none">
+              <div class="form-group">
+                <label class="form-label"><i class="fi fi-rr-key"></i> Rubrik / Kunci Jawaban</label>
+                <textarea class="form-input" id="add-rubrik" placeholder="Rubrik penilaian untuk admin..."></textarea>
+              </div>
+            </div>
+            <div id="add-soal-quota-msg" style="display:none;margin-bottom:12px"></div>
+            <button class="btn btn-secondary" id="btn-add-to-buffer" onclick="addToBuffer()">
+              <i class="fi fi-rr-plus-small"></i> Tambah Soal ke Paket
+            </button>
+          </div>
+
+          <!-- Simpan Paket -->
+          <div class="card" style="margin-top:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px" id="save-paket-card">
+            <div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)" id="save-paket-status">Lengkapi 9 PG + 1 Essay untuk menyimpan paket.</div>
+              <div style="font-size:12px;color:var(--text2);margin-top:2px" id="save-paket-hint">Paket belum bisa disimpan.</div>
+            </div>
+            <button class="btn btn-primary" id="btn-save-paket" onclick="savePaket()" disabled>
+              <i class="fi fi-rr-disk"></i> Simpan Paket ke Database
+            </button>
+          </div>
+
+        </div>
+      </div>
     </div>
 
     <!-- Tab: Import Soal -->
@@ -1774,32 +1849,212 @@ async function changeRole(userId,newRole){
   loadUsers();
 }
 
-/* ── Soal ── */
+/* ══════════════════════════════════════
+   PAKET BUILDER — Tambah Soal Baru
+══════════════════════════════════════ */
+let _paketBuffer = [];         // array soal yang belum disimpan
+let _newPaketName = '';        // nama paket baru yang diinput
+let _newPaketId = null;        // ID paket yang akan diautoassign
+
 function toggleAddOptions(){
   const type=document.getElementById('add-type').value;
   document.getElementById('pg-options-wrap').style.display=type==='pg'?'block':'none';
   document.getElementById('essay-rubrik-wrap').style.display=type==='essay'?'block':'none';
+  _checkQuotaMsg();
 }
-async function submitNewSoal(){
+
+function onPaketNameInput(){
+  const val=(document.getElementById('new-paket-name').value||'').trim();
+  document.getElementById('btn-set-paket-name').disabled = val.length < 3;
+}
+
+async function setPaketName(){
+  const name=(document.getElementById('new-paket-name').value||'').trim();
+  if(name.length < 3){ showToast('Nama paket minimal 3 karakter','error'); return; }
+  const btn=document.getElementById('btn-set-paket-name');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Memeriksa...';
+
+  // Cari max paket_id dari soal_tambahan + pakets dari questions.js
+  let maxId = 10; // default minimal dari PAKETS hardcoded
+  try {
+    const { data } = await sb.from('soal_tambahan').select('paket_id').order('paket_id', { ascending:false }).limit(1);
+    if(data && data.length) maxId = Math.max(maxId, data[0].paket_id);
+  } catch(e){}
+
+  _newPaketId   = maxId + 1;
+  _newPaketName = name;
+  _paketBuffer  = [];
+
+  // Tampilkan builder
+  document.getElementById('paket-name-card').style.display='none';
+  document.getElementById('paket-builder-wrap').style.display='block';
+  document.getElementById('builder-paket-label').textContent=`${name}  ·  ID P${_newPaketId}`;
+  _updateBuilderUI();
+  btn.disabled=false; btn.innerHTML='<i class="fi fi-rr-arrow-right"></i> Mulai Isi Soal';
+}
+
+function resetPaketBuilder(){
+  _paketBuffer=[];
+  _newPaketName='';
+  _newPaketId=null;
+  document.getElementById('new-paket-name').value='';
+  document.getElementById('btn-set-paket-name').disabled=true;
+  document.getElementById('paket-builder-wrap').style.display='none';
+  document.getElementById('paket-name-card').style.display='block';
+  // Reset form soal
+  document.getElementById('add-question').value='';
+  ['add-opt-a','add-opt-b','add-opt-c','add-opt-d'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('add-rubrik').value='';
+  document.getElementById('add-type').value='pg';
+  toggleAddOptions();
+}
+
+function _countBuffer(){
+  const pg=_paketBuffer.filter(s=>s.type==='pg').length;
+  const essay=_paketBuffer.filter(s=>s.type==='essay').length;
+  return { pg, essay };
+}
+
+function _checkQuotaMsg(){
   const type=document.getElementById('add-type').value;
-  const paket=document.getElementById('add-paket').value;
+  const { pg, essay }=_countBuffer();
+  const msgEl=document.getElementById('add-soal-quota-msg');
+  if(!msgEl) return;
+  if(type==='pg' && pg>=9){
+    msgEl.style.display='flex';
+    msgEl.style.cssText='display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px';
+    msgEl.innerHTML='<i class="fi fi-rr-cross-circle"></i> Kuota PG sudah penuh (9/9). Tidak bisa menambah PG lagi.';
+    document.getElementById('btn-add-to-buffer').disabled=true;
+  } else if(type==='essay' && essay>=1){
+    msgEl.style.display='flex';
+    msgEl.style.cssText='display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px';
+    msgEl.innerHTML='<i class="fi fi-rr-cross-circle"></i> Kuota Essay sudah penuh (1/1). Tidak bisa menambah Essay lagi.';
+    document.getElementById('btn-add-to-buffer').disabled=true;
+  } else {
+    msgEl.style.display='none';
+    document.getElementById('btn-add-to-buffer').disabled=false;
+  }
+}
+
+function addToBuffer(){
+  if(!_newPaketId){ showToast('Tentukan nama paket dulu','error'); return; }
+  const type=document.getElementById('add-type').value;
   const question=document.getElementById('add-question').value.trim();
-  if(!question) return showToast('Pertanyaan tidak boleh kosong','error');
-  let payload={type,paket_id:parseInt(paket),question,created_by:currentUser?.id};
+  if(!question){ showToast('Pertanyaan tidak boleh kosong','error'); return; }
+
+  const { pg, essay }=_countBuffer();
+  if(type==='pg' && pg>=9){ showToast('Kuota PG sudah penuh (9/9)','error'); return; }
+  if(type==='essay' && essay>=1){ showToast('Kuota Essay sudah penuh (1/1)','error'); return; }
+
+  let soal={ type, question };
   if(type==='pg'){
     const optA=document.getElementById('add-opt-a').value.trim();
     const optB=document.getElementById('add-opt-b').value.trim();
     const optC=document.getElementById('add-opt-c').value.trim();
     const optD=document.getElementById('add-opt-d').value.trim();
     const answer=document.getElementById('add-answer').value;
-    if(!optA||!optB||!optC||!optD) return showToast('Semua pilihan wajib diisi','error');
-    payload={...payload,options:JSON.stringify([`A. ${optA}`,`B. ${optB}`,`C. ${optC}`,`D. ${optD}`]),answer};
-  } else { payload.rubrik=document.getElementById('add-rubrik').value.trim(); }
-  const{error}=await sb.from('soal_tambahan').insert(payload);
-  if(error) return showToast('Gagal: '+error.message,'error');
-  showToast('Soal berhasil disimpan','success');
-  document.getElementById('add-question').value=''; loadSoalList();
+    if(!optA||!optB||!optC||!optD){ showToast('Semua pilihan wajib diisi','error'); return; }
+    soal.options=JSON.stringify([`A. ${optA}`,`B. ${optB}`,`C. ${optC}`,`D. ${optD}`]);
+    soal.answer=answer;
+  } else {
+    soal.rubrik=document.getElementById('add-rubrik').value.trim();
+  }
+
+  _paketBuffer.push(soal);
+  // Reset fields
+  document.getElementById('add-question').value='';
+  ['add-opt-a','add-opt-b','add-opt-c','add-opt-d'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('add-rubrik').value='';
+
+  showToast(`Soal ${type.toUpperCase()} ke-${type==='pg'?pg+1:essay+1} ditambahkan ke buffer`,'success');
+  _updateBuilderUI();
 }
+
+function _updateBuilderUI(){
+  const { pg, essay }=_countBuffer();
+  // Counter
+  document.getElementById('counter-pg').textContent=pg;
+  document.getElementById('counter-essay').textContent=essay;
+  document.getElementById('bar-pg').style.width=(pg/9*100)+'%';
+  document.getElementById('bar-essay').style.width=(essay/1*100)+'%';
+
+  // Buffer list
+  const wrap=document.getElementById('buffer-list-wrap');
+  const list=document.getElementById('buffer-list');
+  if(_paketBuffer.length){
+    wrap.style.display='block';
+    list.innerHTML=_paketBuffer.map((s,i)=>{
+      const label=s.type==='pg'
+        ? `PG #${_paketBuffer.filter((x,xi)=>x.type==='pg'&&xi<=i).length} · Jwb: ${s.answer}`
+        : 'Essay';
+      return `<div style="display:flex;align-items:center;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px">
+        <span class="question-type-badge ${s.type==='pg'?'type-pg':'type-essay'}" style="font-size:10px;padding:2px 7px;flex-shrink:0">${s.type.toUpperCase()}</span>
+        <span style="font-size:12.5px;color:var(--text2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.question.slice(0,70)}${s.question.length>70?'…':''}</span>
+        <span style="font-size:11px;color:var(--text3);flex-shrink:0">${label}</span>
+        <button onclick="removeFromBuffer(${i})" style="background:none;border:none;cursor:pointer;color:var(--red);font-size:13px;padding:0;flex-shrink:0" title="Hapus"><i class="fi fi-rr-cross-small"></i></button>
+      </div>`;
+    }).join('');
+  } else {
+    wrap.style.display='none';
+  }
+
+  // Quota check
+  _checkQuotaMsg();
+
+  // Save paket status
+  const complete = (pg===9 && essay===1);
+  const btn=document.getElementById('btn-save-paket');
+  const statusEl=document.getElementById('save-paket-status');
+  const hintEl=document.getElementById('save-paket-hint');
+  if(complete){
+    btn.disabled=false;
+    statusEl.innerHTML='<i class="fi fi-sr-check-circle" style="color:var(--green)"></i> Paket lengkap! Siap disimpan ke database.';
+    hintEl.textContent='10 soal terkumpul: 9 Pilihan Ganda + 1 Essay.';
+    hintEl.style.color='var(--green)';
+  } else {
+    btn.disabled=true;
+    const missingPg=Math.max(0,9-pg), missingEs=Math.max(0,1-essay);
+    const parts=[];
+    if(missingPg>0) parts.push(`${missingPg} PG lagi`);
+    if(missingEs>0) parts.push(`${missingEs} Essay lagi`);
+    statusEl.textContent='Lengkapi 9 PG + 1 Essay untuk menyimpan paket.';
+    hintEl.textContent=`Dibutuhkan: ${parts.join(' · ')}.`;
+    hintEl.style.color='var(--text2)';
+  }
+}
+
+function removeFromBuffer(idx){
+  _paketBuffer.splice(idx,1);
+  _updateBuilderUI();
+}
+
+async function savePaket(){
+  const { pg, essay }=_countBuffer();
+  if(pg!==9||essay!==1){ showToast('Paket harus memiliki tepat 9 PG + 1 Essay','error'); return; }
+  const btn=document.getElementById('btn-save-paket');
+  btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Menyimpan...';
+
+  const payload=_paketBuffer.map(s=>({
+    type: s.type,
+    paket_id: _newPaketId,
+    question: s.question,
+    options: s.options||null,
+    answer: s.answer||null,
+    rubrik: s.rubrik||null,
+    created_by: currentUser?.id,
+  }));
+
+  const { error }=await sb.from('soal_tambahan').insert(payload);
+  btn.innerHTML='<i class="fi fi-rr-disk"></i> Simpan Paket ke Database';
+  if(error){ btn.disabled=false; return showToast('Gagal menyimpan: '+error.message,'error'); }
+
+  showToast(`Paket "${_newPaketName}" berhasil disimpan (${payload.length} soal)!`,'success');
+  resetPaketBuilder();
+  loadSoalList();
+}
+
+/* Deprecated: kept for import compatibility */
+async function submitNewSoal(){}
 async function loadSoalList(){
   const tbody=document.getElementById('soal-table-body');
   tbody.innerHTML=emptyRow(4,'Memuat...','fi-rr-time-past');
