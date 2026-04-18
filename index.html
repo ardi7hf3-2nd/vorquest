@@ -1231,7 +1231,10 @@ async function init(){
     if(loadEl){ loadEl.classList.add('hide'); setTimeout(()=>{ loadEl.style.display='none'; }, 400); }
   }
   try {
-    const{data:{session}}=await sb.auth.getSession();
+    // Timeout 8 detik — cegah splash stuck jika Supabase tidak dapat diakses
+    const sessionPromise = sb.auth.getSession();
+    const timeoutPromise = new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000));
+    const{data:{session}}=await Promise.race([sessionPromise, timeoutPromise]);
     if(session?.user){ currentUser=session.user; await loadProfile(); goTo('dashboard'); }
     else goTo('auth');
   } catch(e){ goTo('auth'); }
@@ -1805,7 +1808,10 @@ function resetImport() {
   document.getElementById('import-drop-label').textContent = 'Mendukung .js dan .docx';
 }
 
-window.addEventListener('load', ()=>{
+// FIX: Gunakan DOMContentLoaded agar boot tidak bergantung pada CDN eksternal.
+// window 'load' bisa stuck selamanya jika satu resource (font/CDN/icon) timeout.
+function _initPageReady() {
+  if (window._pageLoaded) return; // jangan double-init
   // Init drag-drop for import zone
   const zone = document.getElementById('import-drop-zone');
   if (zone) {
@@ -1819,7 +1825,19 @@ window.addEventListener('load', ()=>{
   }
   window._pageLoaded = true;
   window.tryBoot();
-});
+}
+document.addEventListener('DOMContentLoaded', _initPageReady);
+// Fallback: jika DOMContentLoaded sudah lewat (script di bawah body), langsung jalan
+if (document.readyState === 'interactive' || document.readyState === 'complete') {
+  _initPageReady();
+}
+// Fallback terakhir: paksa boot setelah 5 detik jika masih stuck
+setTimeout(function() {
+  if (!window._pageLoaded) {
+    console.warn('VorQuest: fallback boot triggered (DOMContentLoaded tidak fire)');
+    _initPageReady();
+  }
+}, 5000);
 
 window._doBoot = function(){
   if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
