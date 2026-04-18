@@ -10,8 +10,32 @@
 <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
-<script src="/api/config"></script>
 <script src="questions.js"></script>
+<script>
+// Koordinasi boot: tunggu page load DAN /api/config keduanya selesai
+window._configReady = false;
+window._pageLoaded  = false;
+window.tryBoot = function(){
+  if(!window._pageLoaded || !window._configReady) return;
+  window._doBoot();
+};
+// Load /api/config async — kegagalan tidak memblokir halaman
+(function(){
+  var s = document.createElement('script');
+  s.src = '/api/config?t=' + Date.now();
+  s.onload  = function(){ window._configReady = true; window.tryBoot(); };
+  s.onerror = function(){
+    console.warn('VorQuest: /api/config gagal dimuat.');
+    window._configReady = true;
+    window.tryBoot();
+  };
+  // Timeout 8 detik — jika server tidak merespons sama sekali
+  setTimeout(function(){
+    if(!window._configReady){ window._configReady = true; window.tryBoot(); }
+  }, 8000);
+  document.head.appendChild(s);
+})();
+</script>
 <style>
 :root {
   --bg:        #05080f;
@@ -1782,10 +1806,6 @@ function resetImport() {
 }
 
 window.addEventListener('load', ()=>{
-  if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
-    document.querySelector('.splash-sub').textContent='Gagal memuat konfigurasi. Coba refresh.';
-    return;
-  }
   // Init drag-drop for import zone
   const zone = document.getElementById('import-drop-zone');
   if (zone) {
@@ -1797,8 +1817,26 @@ window.addEventListener('load', ()=>{
       if (f) handleImportFile(f);
     });
   }
-  init();
+  window._pageLoaded = true;
+  window.tryBoot();
 });
+
+window._doBoot = function(){
+  if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
+    // Config gagal — dismiss splash, tampilkan pesan error di halaman auth
+    const loadEl = document.getElementById('loading');
+    if(loadEl){ loadEl.classList.add('hide'); setTimeout(()=>{ loadEl.style.display='none'; }, 400); }
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const authPage = document.getElementById('page-auth');
+    if(authPage) authPage.classList.add('active');
+    setTimeout(()=>{
+      const errEl = document.getElementById('login-error');
+      if(errEl){ errEl.textContent='Gagal memuat konfigurasi server. Coba refresh halaman.'; errEl.classList.add('show'); }
+    }, 450);
+    return;
+  }
+  init();
+}
 
 function handleImportFile(file) {
   if (!file) return;
