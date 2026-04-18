@@ -1570,6 +1570,15 @@ function switchAdminTab(tab){
 const emptyRow=(cols,msg,icon='fi-rr-inbox')=>`<tr><td colspan="${cols}"><div class="empty-state"><div class="empty-icon"><i class="fi ${icon}"></i></div><div>${msg}</div></div></td></tr>`;
 
 /* ── Essay ── */
+// Helper: baca data dari window._essayData berdasarkan id, panggil openEssayModal
+// Menghindari template literal di dalam HTML attribute (penyebab SyntaxError: Unexpected identifier '$')
+function openEssayFromRow(btn){
+  const id = btn.dataset.essayId;
+  const d = (window._essayData||{})[id];
+  if(!d) return;
+  openEssayModal(d.name, d.meta, d.question, d.answer);
+}
+
 function openEssayModal(name,meta,question,answer){
   document.getElementById('em-name').textContent=name;
   document.getElementById('em-meta').textContent=meta;
@@ -1590,16 +1599,23 @@ async function loadEssayAnswers(){
   tbody.innerHTML=data.map(row=>{
     const ans=row.answer||'-';
     const q=(row.question||'').slice(0,70)+(row.question?.length>70?'…':'');
-    const safeAns=ans.replace(/`/g,'\\`').replace(/\${/g,'\\${');
-    const safeName=(row.user_name||'-').replace(/`/g,'\\`').replace(/\${/g,'\\${');
-    const safeQ=(row.question||'').replace(/`/g,'\\`').replace(/\${/g,'\\${');
+    const metaDate=new Date(row.submitted_at||'').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
+    const rowId='essay-'+row.id;
+    // Simpan data di dataset agar tidak perlu escaping di onclick attribute
+    if(!window._essayData) window._essayData={};
+    window._essayData[row.id]={
+      name: row.user_name||'-',
+      meta: `P${row.paket_id} · ${metaDate}`,
+      question: row.question||'',
+      answer: row.answer||'-'
+    };
     return `<tr>
     <td><div class="user-cell"><div class="user-mini-avatar">${getInitials(row.user_name)}</div><strong>${row.user_name||'-'}</strong></div></td>
     <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${row.paket_id}</span></td>
     <td style="max-width:160px;font-size:12px;color:var(--text2)">${q}</td>
     <td class="essay-answer-cell">
       <div class="essay-answer-preview">${ans}</div>
-      <button class="essay-read-more" onclick='openEssayModal(`${safeName}`,`P${row.paket_id} · ${new Date(row.submitted_at||'').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}`,`${safeQ}`,`${safeAns}`)'><i class="fi fi-rr-expand"></i> Lihat</button>
+      <button class="essay-read-more" data-essay-id="${row.id}" onclick="openEssayFromRow(this)"><i class="fi fi-rr-expand"></i> Lihat</button>
     </td>
     <td>${row.grade!==null?`<span class="graded-badge"><i class="fi fi-sr-check"></i>${row.grade}</span>`:`<input type="number" class="grade-input" min="0" max="100" value="" id="grade-${row.id}" placeholder="0–100">`}</td>
     <td><div class="td-actions">${row.grade!==null
@@ -1607,7 +1623,8 @@ async function loadEssayAnswers(){
       :`<button class="btn btn-primary btn-sm" onclick="saveGrade('${row.id}')"><i class="fi fi-rr-disk"></i> Simpan</button>`
     }</div></td>
     <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteEssay('${row.id}','${(row.user_name||'').replace(/'/g,'')}','${row.paket_id}')"><i class="fi fi-rr-trash"></i></button></td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
 }
 async function saveGrade(id){
   const val=document.getElementById('grade-'+id)?.value; const grade=parseInt(val);
