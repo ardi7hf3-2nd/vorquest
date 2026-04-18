@@ -1220,7 +1220,7 @@ RUBRIK: Kriteria penilaian jawaban essay...</pre>
 <div id="toast"></div>
 
 <script>
-const sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+let sb = null; // dibuat di _doBoot setelah /api/config siap
 let currentUser=null, userProfile=null, currentPaketId=null;
 let quizState = { paketId:null,questions:[],current:0,answers:{},answered:new Set(),startTime:null,timerInterval:null };
 
@@ -1835,6 +1835,8 @@ window._doBoot = function(){
     }, 450);
     return;
   }
+  // Buat Supabase client setelah config siap
+  sb = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
   init();
 }
 
