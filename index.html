@@ -1202,16 +1202,20 @@ let quizState = { paketId:null,questions:[],current:0,answers:{},answered:new Se
 
 async function init(){
   const startTime=Date.now();
-  const{data:{session}}=await sb.auth.getSession();
-  if(session?.user){ currentUser=session.user; await loadProfile(); goTo('dashboard'); }
-  else goTo('auth');
+  function dismissSplash(){
+    const loadEl=document.getElementById('loading');
+    if(loadEl){ loadEl.classList.add('hide'); setTimeout(()=>{ loadEl.style.display='none'; }, 400); }
+  }
+  try {
+    const{data:{session}}=await sb.auth.getSession();
+    if(session?.user){ currentUser=session.user; await loadProfile(); goTo('dashboard'); }
+    else goTo('auth');
+  } catch(e){ goTo('auth'); }
   // Splash minimal 1.8 detik
   const elapsed=Date.now()-startTime;
   const remaining=Math.max(0, 1800-elapsed);
   await new Promise(r=>setTimeout(r, remaining));
-  const loadEl=document.getElementById('loading');
-  loadEl.classList.add('hide');
-  setTimeout(()=>{ loadEl.style.display='none'; }, 400);
+  dismissSplash();
 }
 async function loadProfile(){
   const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
@@ -1325,29 +1329,27 @@ async function renderDashboard(){
   // Ambil soal dari soal_tambahan dan gabung ke PAKETS virtual
   let allPakets=[...PAKETS];
   try {
-    const{data:soalDb}=await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
+    const _res = await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
+    const soalDb = _res && _res.data;
     if(soalDb && soalDb.length){
       const dbPaketMap={};
       soalDb.forEach(s=>{
         const pid=s.paket_id;
         if(!dbPaketMap[pid]){
-          // Cari paket_title dari kolom atau buat default
-          const titleFromDb=s.paket_title||`Paket ${pid}`;
-          dbPaketMap[pid]={ id:pid, title:titleFromDb, topic:'Campuran', pg:[], essay:null };
+          dbPaketMap[pid]={ id:pid, title:s.paket_title||('Paket '+pid), topic:'Campuran', pg:[], essay:null };
         }
         if(s.type==='pg'){
-          let opts=[]; try{ opts=JSON.parse(s.options||'[]'); }catch(e){}
+          let opts=[]; try{ opts=JSON.parse(s.options||'[]'); }catch(_){}
           dbPaketMap[pid].pg.push({ q:s.question, options:opts, answer:s.answer });
         } else if(s.type==='essay'){
           dbPaketMap[pid].essay={ q:s.question, rubrik:s.rubrik||'' };
         }
       });
-      // Gabungkan: paket dari DB yang belum ada di PAKETS lokal
       Object.values(dbPaketMap).forEach(dp=>{
         if(!allPakets.find(p=>p.id===dp.id)) allPakets.push(dp);
       });
     }
-  } catch(e){ /* soal_tambahan mungkin belum ada, abaikan */ }
+  } catch(_){}
 
   allPakets.sort((a,b)=>a.id-b.id);
   window._allPakets = allPakets;
