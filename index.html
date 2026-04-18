@@ -178,27 +178,10 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
   min-height:100vh; padding:0; position:relative; overflow:hidden;
 }
 
-/* Animated background orbs */
-.auth-orb {
-  position:absolute; border-radius:50%; pointer-events:none; filter:blur(80px); opacity:.18;
-  animation: auth-float 8s ease-in-out infinite;
-}
-.auth-orb-1 { width:500px; height:500px; background:var(--accent); top:-160px; left:-120px; animation-delay:0s }
-.auth-orb-2 { width:380px; height:380px; background:var(--accent2); bottom:-100px; right:-80px; animation-delay:-4s }
-.auth-orb-3 { width:260px; height:260px; background:var(--purple); top:40%; left:38%; animation-delay:-2s; opacity:.09 }
-@keyframes auth-float {
-  0%,100% { transform:translateY(0) scale(1) }
-  50%      { transform:translateY(-28px) scale(1.04) }
-}
+/* Animated background orbs — removed (caused lag on mobile) */
+.auth-orb { display:none }
 
-/* Grid overlay */
-#page-auth::before {
-  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
-  background-image:
-    linear-gradient(rgba(75,130,245,.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(75,130,245,.035) 1px, transparent 1px);
-  background-size:44px 44px;
-}
+/* Grid overlay — removed for performance */
 
 /* Card */
 .auth-card {
@@ -396,11 +379,22 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .auth-error.show { display:flex }
 .auth-error i { font-size:14px; flex-shrink:0 }
 
-/* Responsive */
+/* Responsive + keyboard fix */
 @media(max-width:760px){
   .auth-side { display:none }
   .auth-card  { max-width:440px; border-radius:22px }
   .auth-form  { padding:38px 28px }
+
+  /* Keyboard fix: halaman bisa di-scroll sehingga input tidak tertutup keyboard */
+  #page-auth {
+    align-items:flex-start;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding:24px 16px 40px;
+    min-height:100dvh;
+    min-height:-webkit-fill-available;
+  }
+  .auth-card { margin:auto; }
 }
 
 /* ══════════════════════════════════ DASHBOARD ══════════════════════════════════ */
@@ -2347,6 +2341,22 @@ function _initPageReady() {
   window.tryBoot();
 }
 document.addEventListener('DOMContentLoaded', _initPageReady);
+
+// ── Keyboard fix: scroll input ke atas agar tidak tertutup keyboard ──────────
+(function(){
+  function scrollInputIntoView(e){
+    var el = e.target;
+    if(el && (el.tagName==='INPUT' || el.tagName==='TEXTAREA')){
+      // Tunggu sedikit agar keyboard sudah muncul, lalu scroll
+      setTimeout(function(){
+        el.scrollIntoView({ behavior:'smooth', block:'center' });
+      }, 320);
+    }
+  }
+  document.addEventListener('focusin', scrollInputIntoView, true);
+})();
+// ─────────────────────────────────────────────────────────────────────────────
+
 // Fallback: jika DOMContentLoaded sudah lewat (script di bawah body), langsung jalan
 if (document.readyState === 'interactive' || document.readyState === 'complete') {
   _initPageReady();
