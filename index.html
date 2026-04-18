@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-solid-rounded/css/uicons-solid-rounded.css">
 <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 <script src="/api/config"></script>
 <script src="questions.js"></script>
 <style>
@@ -490,6 +491,35 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .admin-tab.active { background:var(--accent); color:#fff; box-shadow:0 2px 10px rgba(75,130,245,.35) }
 .admin-panel { display:none }
 .admin-panel.active { display:block }
+
+/* ── Import Soal Styles ── */
+.import-format-tabs { display:flex; gap:8px; margin-bottom:16px }
+.import-fmt-btn {
+  display:flex; align-items:center; gap:6px; padding:8px 16px;
+  border-radius:8px; border:1px solid var(--border); background:transparent;
+  color:var(--text2); font-size:13px; font-weight:600; cursor:pointer;
+  transition:all .2s;
+}
+.import-fmt-btn.active { background:var(--accent); color:#fff; border-color:var(--accent); box-shadow:0 2px 10px rgba(75,130,245,.3) }
+.import-fmt-btn:hover:not(.active) { background:var(--surface2); color:var(--text1) }
+.import-info-box { background:var(--surface2); border-radius:10px; margin-bottom:16px; overflow:hidden }
+.import-info-title { padding:10px 14px; font-weight:700; font-size:13px; display:flex; align-items:center; gap:7px; border-bottom:1px solid var(--border) }
+.import-info-body { padding:12px 14px; font-size:12.5px; color:var(--text2); line-height:1.6 }
+.import-code-preview {
+  font-family:var(--mono); font-size:11.5px; background:var(--surface1);
+  border:1px solid var(--border); border-radius:7px; padding:10px 12px;
+  margin-top:10px; overflow-x:auto; color:var(--text1); white-space:pre; line-height:1.5;
+}
+.import-drop-zone {
+  border:2px dashed var(--border); border-radius:12px; padding:32px 20px;
+  text-align:center; cursor:pointer; transition:all .2s; margin-bottom:0;
+}
+.import-drop-zone:hover, .import-drop-zone.drag-over {
+  border-color:var(--accent); background:rgba(75,130,245,.05);
+}
+.import-row-detail { font-size:11.5px; color:var(--text2); max-width:260px }
+.import-row-detail .opt { color:var(--text1); margin-bottom:2px }
+.import-err { color:var(--red); font-size:12px; margin-top:6px }
 .panel-toolbar {
   display:flex; justify-content:space-between; align-items:center;
   margin-bottom:14px; flex-wrap:wrap; gap:10px;
@@ -873,6 +903,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
       <div class="admin-tab" onclick="switchAdminTab('logs')"><i class="fi fi-rr-list-timeline"></i> Log Tryout</div>
       <div class="admin-tab" onclick="switchAdminTab('users')"><i class="fi fi-rr-users"></i> Users</div>
       <div class="admin-tab" onclick="switchAdminTab('addsoal')"><i class="fi fi-rr-plus-small"></i> Tambah Soal</div>
+      <div class="admin-tab" onclick="switchAdminTab('importsoal')"><i class="fi fi-rr-upload"></i> Import Soal</div>
       <div class="admin-tab" onclick="switchAdminTab('soallist')"><i class="fi fi-rr-list-check"></i> Daftar Soal</div>
     </div>
 
@@ -970,6 +1001,114 @@ tr:hover td { background:rgba(75,130,245,.03) }
         </div>
         <button class="btn btn-primary" onclick="submitNewSoal()"><i class="fi fi-rr-disk"></i> Simpan Soal</button>
       </div></div>
+    </div>
+
+    <!-- Tab: Import Soal -->
+    <div class="admin-panel" id="panel-importsoal">
+      <div class="panel-toolbar" style="margin-bottom:18px">
+        <div class="panel-title"><i class="fi fi-rr-upload"></i> Import Soal dari File</div>
+      </div>
+      <div class="add-question-wrap">
+        <!-- Format selector -->
+        <div class="card" style="margin-bottom:16px">
+          <div class="import-format-tabs">
+            <button class="import-fmt-btn active" id="fmt-btn-js" onclick="switchImportFmt('js')">
+              <i class="fi fi-rr-code-simple"></i> File JS
+            </button>
+            <button class="import-fmt-btn" id="fmt-btn-docx" onclick="switchImportFmt('docx')">
+              <i class="fi fi-rr-file-word"></i> File DOCX
+            </button>
+          </div>
+
+          <!-- JS format info -->
+          <div id="import-info-js" class="import-info-box">
+            <div class="import-info-title"><i class="fi fi-rr-info"></i> Format File JS</div>
+            <div class="import-info-body">Upload file <code>.js</code> dengan variabel <code>PAKETS</code> mengikuti struktur <code>questions.js</code> yang sudah ada. File baru akan di-merge dengan soal yang ada.
+            <br><br><strong>Contoh minimal:</strong>
+<pre class="import-code-preview">const PAKETS = [
+  {
+    id: 11,
+    title: 'Paket 11 – Judul Paket',
+    topic: 'Pancasila',
+    pg: [
+      {
+        q: 'Teks pertanyaan PG?',
+        options: ['A. Pilihan A','B. Pilihan B','C. Pilihan C','D. Pilihan D'],
+        answer: 'A',
+      },
+    ],
+    essay: {
+      q: 'Teks pertanyaan essay?',
+      rubrik: 'Rubrik penilaian...',
+    },
+  },
+];</pre>
+            </div>
+          </div>
+
+          <!-- DOCX format info -->
+          <div id="import-info-docx" class="import-info-box" style="display:none">
+            <div class="import-info-title"><i class="fi fi-rr-info"></i> Format File DOCX</div>
+            <div class="import-info-body">Buat file Word dengan format berikut untuk setiap soal. Pisahkan antar soal dengan baris kosong.
+<pre class="import-code-preview">PAKET: 1
+TIPE: PG
+PERTANYAAN: Teks pertanyaan di sini?
+A. Pilihan pertama
+B. Pilihan kedua
+C. Pilihan ketiga
+D. Pilihan keempat
+JAWABAN: B
+
+PAKET: 2
+TIPE: ESSAY
+PERTANYAAN: Teks pertanyaan essay?
+RUBRIK: Kriteria penilaian jawaban essay...</pre>
+            </div>
+          </div>
+
+          <!-- File input -->
+          <div class="import-drop-zone" id="import-drop-zone" onclick="document.getElementById('import-file-input').click()">
+            <i class="fi fi-rr-cloud-upload-alt" style="font-size:28px;color:var(--accent)"></i>
+            <div style="font-weight:600;margin-top:8px">Klik atau drag & drop file di sini</div>
+            <div id="import-drop-label" style="color:var(--text2);font-size:13px;margin-top:4px">Mendukung .js dan .docx</div>
+          </div>
+          <input type="file" id="import-file-input" accept=".js,.docx" style="display:none" onchange="handleImportFile(this.files[0])">
+        </div>
+
+        <!-- Preview area -->
+        <div id="import-preview-wrap" style="display:none">
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+              <div>
+                <div style="font-weight:700;font-size:15px" id="import-preview-title">Preview Soal</div>
+                <div style="font-size:12px;color:var(--text2)" id="import-preview-count"></div>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn btn-ghost btn-sm" onclick="resetImport()"><i class="fi fi-rr-rotate-left"></i> Reset</button>
+                <button class="btn btn-primary btn-sm" id="btn-do-import" onclick="doImportSoal()"><i class="fi fi-rr-disk"></i> Import Semua</button>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Paket</th><th>Tipe</th><th>Pertanyaan</th><th>Detail</th></tr></thead>
+                <tbody id="import-preview-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Import result -->
+        <div id="import-result-wrap" style="display:none" class="card">
+          <div style="text-align:center;padding:20px 0">
+            <i class="fi fi-sr-check-circle" style="font-size:36px;color:var(--green)"></i>
+            <div style="font-size:17px;font-weight:700;margin-top:10px" id="import-result-msg"></div>
+            <div style="margin-top:14px;display:flex;gap:8px;justify-content:center">
+              <button class="btn btn-ghost btn-sm" onclick="resetImport()"><i class="fi fi-rr-upload"></i> Import Lagi</button>
+              <button class="btn btn-secondary btn-sm" onclick="switchAdminTab('soallist');loadSoalList()"><i class="fi fi-rr-list-check"></i> Lihat Soal</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Tab: Daftar Soal -->
@@ -1321,7 +1460,7 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function exitQuiz(){ clearInterval(quizState.timerInterval); closeModal('modal-exit'); goTo('dashboard'); }
 
 function switchAdminTab(tab){
-  const tabs=['essay','logs','users','addsoal','soallist'];
+  const tabs=['essay','logs','users','addsoal','importsoal','soallist'];
   document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
   document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+tab)?.classList.add('active');
@@ -1522,6 +1661,256 @@ async function deleteSoal(id){
   showToast('Soal dihapus','success'); loadSoalList();
 }
 
+/* ══════════════════════════════════════
+   IMPORT SOAL — JS & DOCX
+══════════════════════════════════════ */
+let importedSoalList = [];
+let currentImportFmt = 'js';
+
+function switchImportFmt(fmt) {
+  currentImportFmt = fmt;
+  document.getElementById('fmt-btn-js').classList.toggle('active', fmt === 'js');
+  document.getElementById('fmt-btn-docx').classList.toggle('active', fmt === 'docx');
+  document.getElementById('import-info-js').style.display = fmt === 'js' ? 'block' : 'none';
+  document.getElementById('import-info-docx').style.display = fmt === 'docx' ? 'block' : 'none';
+  document.getElementById('import-file-input').accept = fmt === 'js' ? '.js' : '.docx';
+  resetImport();
+}
+
+function resetImport() {
+  importedSoalList = [];
+  document.getElementById('import-preview-wrap').style.display = 'none';
+  document.getElementById('import-result-wrap').style.display = 'none';
+  document.getElementById('import-file-input').value = '';
+  document.getElementById('import-drop-label').textContent = 'Mendukung .js dan .docx';
+}
+
+window.addEventListener('load', ()=>{
+  if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
+    document.querySelector('.splash-sub').textContent='Gagal memuat konfigurasi. Coba refresh.';
+    return;
+  }
+  // Init drag-drop for import zone
+  const zone = document.getElementById('import-drop-zone');
+  if (zone) {
+    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+    zone.addEventListener('drop', e => {
+      e.preventDefault(); zone.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0];
+      if (f) handleImportFile(f);
+    });
+  }
+  init();
+});
+
+function handleImportFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+  document.getElementById('import-drop-label').textContent = `📄 ${file.name}`;
+  if (ext === 'js') {
+    parseJsFile(file);
+  } else if (ext === 'docx') {
+    parseDocxFile(file);
+  } else {
+    showToast('Format tidak didukung. Gunakan .js atau .docx', 'error');
+  }
+}
+
+/* ── Parser: JS file ── */
+function parseJsFile(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const text = e.target.result;
+      // Extract the PAKETS array safely
+      const match = text.match(/(?:const|let|var)\s+PAKETS\s*=\s*(\[[\s\S]*?\]);?\s*$/m) ||
+                    text.match(/(?:const|let|var)\s+PAKETS\s*=\s*(\[[\s\S]*\])/);
+      if (!match) throw new Error('Variabel PAKETS tidak ditemukan dalam file.');
+      // Safe eval via Function
+      const pakets = Function('"use strict"; return ' + match[1])();
+      if (!Array.isArray(pakets)) throw new Error('PAKETS bukan array.');
+
+      const soalList = [];
+      for (const p of pakets) {
+        if (!p.id) continue;
+        // PG questions
+        if (Array.isArray(p.pg)) {
+          for (const s of p.pg) {
+            soalList.push({
+              type: 'pg',
+              paket_id: parseInt(p.id),
+              paket_title: p.title || `Paket ${p.id}`,
+              question: s.q,
+              options: JSON.stringify(s.options || []),
+              answer: s.answer,
+              rubrik: null,
+            });
+          }
+        }
+        // Essay
+        if (p.essay && p.essay.q) {
+          soalList.push({
+            type: 'essay',
+            paket_id: parseInt(p.id),
+            paket_title: p.title || `Paket ${p.id}`,
+            question: p.essay.q,
+            options: null,
+            answer: null,
+            rubrik: p.essay.rubrik || '',
+          });
+        }
+      }
+      if (!soalList.length) throw new Error('Tidak ada soal yang dapat diparsing dari file.');
+      showImportPreview(soalList);
+    } catch (err) {
+      showToast('Gagal parsing JS: ' + err.message, 'error');
+      resetImport();
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* ── Parser: DOCX file ── */
+function parseDocxFile(file) {
+  if (typeof mammoth === 'undefined') {
+    showToast('Library mammoth.js belum termuat. Coba refresh halaman.', 'error');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    mammoth.extractRawText({ arrayBuffer: e.target.result })
+      .then(result => {
+        try {
+          const text = result.value;
+          const soalList = parseDocxText(text);
+          if (!soalList.length) throw new Error('Tidak ada soal yang berhasil diparsing. Periksa format file.');
+          showImportPreview(soalList);
+        } catch (err) {
+          showToast('Gagal parsing DOCX: ' + err.message, 'error');
+          resetImport();
+        }
+      })
+      .catch(err => {
+        showToast('Gagal membaca DOCX: ' + err.message, 'error');
+        resetImport();
+      });
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function parseDocxText(text) {
+  // Split into blocks by blank lines
+  const blocks = text.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+  const soalList = [];
+
+  for (const block of blocks) {
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!lines.length) continue;
+
+    const get = (key) => {
+      const re = new RegExp(`^${key}\\s*:\\s*(.+)$`, 'i');
+      for (const l of lines) { const m = l.match(re); if (m) return m[1].trim(); }
+      return null;
+    };
+
+    const paketRaw = get('PAKET');
+    const tipe = (get('TIPE') || '').toLowerCase();
+    const pertanyaan = get('PERTANYAAN');
+
+    if (!paketRaw || !pertanyaan || !tipe) continue;
+    const paketId = parseInt(paketRaw);
+    if (isNaN(paketId)) continue;
+
+    if (tipe === 'pg') {
+      const optA = lines.find(l => /^A\./i.test(l));
+      const optB = lines.find(l => /^B\./i.test(l));
+      const optC = lines.find(l => /^C\./i.test(l));
+      const optD = lines.find(l => /^D\./i.test(l));
+      const jawaban = (get('JAWABAN') || '').toUpperCase();
+      if (!optA || !optB || !optC || !optD || !jawaban) continue;
+      soalList.push({
+        type: 'pg', paket_id: paketId, paket_title: `Paket ${paketId}`,
+        question: pertanyaan,
+        options: JSON.stringify([optA, optB, optC, optD]),
+        answer: jawaban, rubrik: null,
+      });
+    } else if (tipe === 'essay') {
+      const rubrik = get('RUBRIK') || '';
+      soalList.push({
+        type: 'essay', paket_id: paketId, paket_title: `Paket ${paketId}`,
+        question: pertanyaan, options: null, answer: null, rubrik,
+      });
+    }
+  }
+  return soalList;
+}
+
+/* ── Preview & Insert ── */
+function showImportPreview(soalList) {
+  importedSoalList = soalList;
+  const tbody = document.getElementById('import-preview-body');
+  const count = document.getElementById('import-preview-count');
+  count.textContent = `${soalList.length} soal siap diimport`;
+
+  tbody.innerHTML = soalList.map((s, i) => {
+    let detail = '';
+    if (s.type === 'pg') {
+      const opts = JSON.parse(s.options || '[]');
+      detail = `<div class="import-row-detail">
+        ${opts.map(o => `<div class="opt">${o}</div>`).join('')}
+        <div style="margin-top:4px;color:var(--green);font-weight:700">✓ ${s.answer}</div>
+      </div>`;
+    } else {
+      detail = `<div class="import-row-detail">${(s.rubrik||'').slice(0,80)}${s.rubrik?.length>80?'…':''}</div>`;
+    }
+    return `<tr>
+      <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${s.paket_id}</span>
+          <div style="font-size:10px;color:var(--text2)">${s.paket_title}</div>
+      </td>
+      <td><span class="question-type-badge ${s.type==='pg'?'type-pg':'type-essay'}" style="font-size:10px;padding:2px 7px">${s.type.toUpperCase()}</span></td>
+      <td style="font-size:13px;max-width:240px;color:var(--text2)">${(s.question||'').slice(0,80)}${s.question?.length>80?'…':''}</td>
+      <td>${detail}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('import-preview-wrap').style.display = 'block';
+  document.getElementById('import-result-wrap').style.display = 'none';
+  document.getElementById('import-preview-wrap').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+async function doImportSoal() {
+  if (!importedSoalList.length) return;
+  const btn = document.getElementById('btn-do-import');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fi fi-rr-loading"></i> Menyimpan...';
+
+  const payload = importedSoalList.map(s => ({
+    type: s.type,
+    paket_id: s.paket_id,
+    question: s.question,
+    options: s.options || null,
+    answer: s.answer || null,
+    rubrik: s.rubrik || null,
+    created_by: currentUser?.id,
+  }));
+
+  const { error } = await sb.from('soal_tambahan').insert(payload);
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fi fi-rr-disk"></i> Import Semua';
+
+  if (error) {
+    showToast('Gagal import: ' + error.message, 'error');
+    return;
+  }
+
+  document.getElementById('import-preview-wrap').style.display = 'none';
+  document.getElementById('import-result-wrap').style.display = 'block';
+  document.getElementById('import-result-msg').textContent =
+    `${importedSoalList.length} soal berhasil diimport ke database!`;
+  importedSoalList = [];
+}
+
 /* ── Toast ── */
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
@@ -1535,13 +1924,6 @@ document.addEventListener('keydown',e=>{
     const isLogin=document.getElementById('form-login').style.display!=='none';
     if(isLogin) handleLogin(); else handleRegister();
   }
-});
-window.addEventListener('load', ()=>{
-  if(!window.SUPABASE_URL || !window.SUPABASE_KEY){
-    document.querySelector('.splash-sub').textContent='Gagal memuat konfigurasi. Coba refresh.';
-    return;
-  }
-  init();
 });
 </script>
 </body>
