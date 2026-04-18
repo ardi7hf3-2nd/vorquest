@@ -1,819 +1,441 @@
-// questions.js — VorQuest Bank Soal 4 Pilar MPR RI
-// 10 Paket × (9 PG + 1 Essay) = 100 Soal
+// VorQuest — Bank Soal 4 Pilar MPR RI (GABUNGAN)
+// Sumber: questions-1.js + soal_import.js
+// Total: 27 paket, dikelompokkan per materi
+// Format per paket: pg[] (9 soal PG) + essay (1 soal essay)
 
 const PAKETS = [
-  // ══════════════════════════════════════════════
-  // PAKET 1 — Sejarah Perumusan Pancasila
-  // ══════════════════════════════════════════════
-  {
-    id: 1,
-    title: 'Paket 1 – Sejarah Perumusan Pancasila',
-    topic: 'Pancasila',
-    pg: [
-      {
-        q: 'Sidang pertama BPUPKI berlangsung pada tanggal...?',
-        options: ['A. 29 Mei – 1 Juni 1945', 'B. 10 – 16 Juli 1945', 'C. 18 Agustus 1945', 'D. 1 Maret 1945'],
-        answer: 'A',
-      },
-      {
-        q: 'Siapakah yang mengusulkan nama "Pancasila" pada sidang BPUPKI 1 Juni 1945?',
-        options: ['A. Muhammad Yamin', 'B. Soepomo', 'C. Soekarno', 'D. Hatta'],
-        answer: 'C',
-      },
-      {
-        q: 'Rumusan dasar negara yang diajukan Muhammad Yamin secara lisan pada 29 Mei 1945 berjumlah...',
-        options: ['A. 3 asas', 'B. 4 asas', 'C. 5 asas', 'D. 6 asas'],
-        answer: 'C',
-      },
-      {
-        q: 'Panitia Sembilan dibentuk untuk menyusun rumusan dasar negara dan diketuai oleh...',
-        options: ['A. Soepomo', 'B. Soekarno', 'C. Hatta', 'D. Radjiman Wedyodiningrat'],
-        answer: 'B',
-      },
-      {
-        q: 'Piagam Jakarta ditandatangani pada tanggal...',
-        options: ['A. 1 Juni 1945', 'B. 22 Juni 1945', 'C. 17 Agustus 1945', 'D. 18 Agustus 1945'],
-        answer: 'B',
-      },
-      {
-        q: 'Apa perbedaan utama Piagam Jakarta dengan Pancasila yang disahkan 18 Agustus 1945?',
-        options: [
-          'A. Sila pertama Piagam Jakarta berbunyi "Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya"',
-          'B. Piagam Jakarta tidak memiliki sila kemanusiaan',
-          'C. Piagam Jakarta hanya memuat 4 sila',
-          'D. Urutan sila dalam Piagam Jakarta terbalik',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'BPUPKI (Badan Penyelidik Usaha-usaha Persiapan Kemerdekaan Indonesia) dibentuk oleh...',
-        options: ['A. Belanda', 'B. Amerika Serikat', 'C. Jepang', 'D. Inggris'],
-        answer: 'C',
-      },
-      {
-        q: 'Ketua BPUPKI adalah...',
-        options: ['A. Soekarno', 'B. Hatta', 'C. Radjiman Wedyodiningrat', 'D. Ahmad Soebardjo'],
-        answer: 'C',
-      },
-      {
-        q: 'Sidang kedua BPUPKI membahas tentang...',
-        options: [
-          'A. Dasar negara',
-          'B. Rancangan UUD dan bentuk negara',
-          'C. Proklamasi kemerdekaan',
-          'D. Pembentukan kabinet',
-        ],
-        answer: 'B',
-      },
-    ],
-    essay: {
-      q: 'Jelaskan proses perumusan Pancasila dari sidang BPUPKI pertama hingga ditetapkannya Pancasila pada 18 Agustus 1945. Apa peran Panitia Sembilan dalam proses tersebut?',
-      rubrik: 'Jawaban mencakup: (1) Sidang BPUPKI I 29 Mei–1 Juni 1945 dan usulan dari Yamin, Soepomo, Soekarno; (2) Pembentukan Panitia Sembilan dan lahirnya Piagam Jakarta 22 Juni 1945; (3) Perubahan sila pertama pada 18 Agustus 1945 oleh PPKI; (4) Penetapan Pancasila sebagai dasar negara.',
-    },
-  },
 
   // ══════════════════════════════════════════════
-  // PAKET 2 — Pancasila sebagai Ideologi & Dasar Negara
+  // KELOMPOK: PANCASILA (Paket 1–4)
   // ══════════════════════════════════════════════
-  {
-    id: 2,
-    title: 'Paket 2 – Pancasila sebagai Ideologi & Dasar Negara',
-    topic: 'Pancasila',
-    pg: [
-      {
-        q: 'Pancasila sebagai dasar negara berarti Pancasila berfungsi sebagai...',
-        options: [
-          'A. Pedoman hidup sehari-hari',
-          'B. Sumber dari segala sumber hukum negara',
-          'C. Tujuan pembangunan nasional',
-          'D. Simbol persatuan bangsa',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Sila "Kemanusiaan yang Adil dan Beradab" tercermin dalam sikap...',
-        options: [
-          'A. Mengutamakan kepentingan golongan sendiri',
-          'B. Menghormati hak asasi manusia tanpa membeda-bedakan',
-          'C. Menjalankan ibadah dengan tekun',
-          'D. Mematuhi peraturan pemerintah',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Lambang sila "Persatuan Indonesia" adalah...',
-        options: ['A. Bintang', 'B. Rantai', 'C. Pohon Beringin', 'D. Kepala Banteng'],
-        answer: 'C',
-      },
-      {
-        q: 'Pancasila sebagai ideologi terbuka artinya...',
-        options: [
-          'A. Nilai-nilainya dapat diubah kapan saja',
-          'B. Nilainya relevan dan dapat dijabarkan sesuai perkembangan zaman',
-          'C. Terbuka untuk diganti ideologi lain',
-          'D. Semua orang boleh menafsirkan sesuai keinginan sendiri',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Nilai dasar Pancasila bersifat...',
-        options: ['A. Tetap dan tidak berubah', 'B. Fleksibel sesuai kebutuhan pemerintah', 'C. Berubah setiap periode kepemimpinan', 'D. Disesuaikan dengan budaya daerah'],
-        answer: 'A',
-      },
-      {
-        q: 'Sila kelima Pancasila berbunyi...',
-        options: [
-          'A. Persatuan Indonesia',
-          'B. Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan dalam Permusyawaratan/Perwakilan',
-          'C. Keadilan Sosial bagi Seluruh Rakyat Indonesia',
-          'D. Ketuhanan Yang Maha Esa',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Pancasila sebagai pandangan hidup (way of life) bangsa Indonesia berarti...',
-        options: [
-          'A. Pancasila mengatur seluruh aspek kehidupan bernegara secara teknis',
-          'B. Pancasila menjadi petunjuk dan arah dalam menjalani kehidupan bermasyarakat dan bernegara',
-          'C. Pancasila hanya berlaku bagi pejabat negara',
-          'D. Pancasila setara dengan konstitusi negara',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Lambang negara Indonesia yang di dalamnya memuat simbol-simbol sila Pancasila adalah...',
-        options: ['A. Garuda Pancasila', 'B. Bendera Merah Putih', 'C. Pita Bhinneka Tunggal Ika', 'D. Burung Cenderawasih'],
-        answer: 'A',
-      },
-      {
-        q: 'Contoh pengamalan sila "Keadilan Sosial bagi Seluruh Rakyat Indonesia" adalah...',
-        options: [
-          'A. Berdoa sebelum belajar',
-          'B. Menghargai pendapat orang lain dalam rapat',
-          'C. Tidak bersikap boros dan suka menghambur-hamburkan uang',
-          'D. Mengutamakan produk dalam negeri',
-        ],
-        answer: 'C',
-      },
+,
+
+  { id:1, title:"Paket 1 – Sejarah Perumusan Pancasila", topic:"Pancasila",
+    pg:[
+      {id:"1-1",q:"BPUPKI dibentuk pada tanggal...",options:["A. 17 Agustus 1945", "B. 29 April 1945", "C. 1 Juni 1945", "D. 22 Juni 1945"],answer:"B"},
+      {id:"1-2",q:"Ketua BPUPKI adalah...",options:["A. Ir. Soekarno", "B. Drs. Mohammad Hatta", "C. Dr. K.R.T Radjiman Wediodiningrat", "D. Mr. Mohammad Yamin"],answer:"C"},
+      {id:"1-3",q:"Ir. Soekarno pertama kali mengusulkan nama 'Pancasila' pada sidang BPUPKI tanggal...",options:["A. 29 Mei 1945", "B. 22 Juni 1945", "C. 1 Juni 1945", "D. 18 Agustus 1945"],answer:"C"},
+      {id:"1-4",q:"Piagam Jakarta ditandatangani pada tanggal...",options:["A. 1 Juni 1945", "B. 22 Juni 1945", "C. 18 Agustus 1945", "D. 29 April 1945"],answer:"B"},
+      {id:"1-5",q:"Pancasila ditetapkan secara resmi sebagai dasar negara oleh PPKI pada tanggal...",options:["A. 17 Agustus 1945", "B. 22 Juni 1945", "C. 18 Agustus 1945", "D. 1 Juni 1945"],answer:"C"},
+      {id:"1-6",q:"Sila pertama dalam Piagam Jakarta berbunyi...",options:["A. Ketuhanan Yang Maha Esa", "B. Ketuhanan dengan kewajiban menjalankan syariat Islam bagi pemeluk-pemeluknya", "C. Kebangsaan Indonesia", "D. Mufakat atau Demokrasi"],answer:"B"},
+      {id:"1-7",q:"Panitia Sembilan dalam proses perumusan Pancasila diketuai oleh...",options:["A. Drs. Mohammad Hatta", "B. Mr. Mohammad Yamin", "C. Ir. Soekarno", "D. K.H. Wachid Hasyim"],answer:"C"},
+      {id:"1-8",q:"Rumusan sila-sila Pancasila tercantum dalam Pembukaan UUD NRI Tahun 1945 pada alinea...",options:["A. Pertama", "B. Kedua", "C. Ketiga", "D. Keempat"],answer:"D"},
+      {id:"1-9",q:"Hari Lahir Pancasila diperingati setiap tanggal...",options:["A. 17 Agustus", "B. 22 Juni", "C. 1 Juni", "D. 18 Agustus"],answer:"C"},
     ],
-    essay: {
-      q: 'Apa yang dimaksud dengan Pancasila sebagai ideologi terbuka? Jelaskan perbedaannya dengan ideologi tertutup dan berikan contoh penerapan nilai Pancasila dalam kehidupan modern.',
-      rubrik: 'Jawaban mencakup: (1) Definisi ideologi terbuka—nilai dasar tetap, nilai instrumental dapat berkembang; (2) Perbandingan dengan ideologi tertutup yang kaku dan dogmatis; (3) Contoh konkret penerapan nilai Pancasila di era modern (misal toleransi di media sosial, gotong royong dalam bencana, dll).',
-    },
+    essay:{id:"1-e",q:"Jelaskan proses perumusan Pancasila mulai dari sidang BPUPKI hingga penetapannya tanggal 18 Agustus 1945!",rubrik:"Sidang BPUPKI I (29 Mei–1 Juni 1945) → Piagam Jakarta 22 Juni 1945 → PPKI 18 Agustus 1945 dengan perubahan sila pertama dari 'Ketuhanan dengan kewajiban menjalankan syariat Islam' menjadi 'Ketuhanan Yang Maha Esa'."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 3 — UUD NRI 1945: Sejarah & Perubahan
-  // ══════════════════════════════════════════════
-  {
-    id: 3,
-    title: 'Paket 3 – UUD NRI 1945: Sejarah & Perubahan',
-    topic: 'UUD NRI 1945',
-    pg: [
-      {
-        q: 'UUD 1945 pertama kali disahkan oleh...',
-        options: ['A. BPUPKI', 'B. PPKI', 'C. MPR', 'D. DPR'],
-        answer: 'B',
-      },
-      {
-        q: 'Berapa kali UUD 1945 telah diamandemen?',
-        options: ['A. 2 kali', 'B. 3 kali', 'C. 4 kali', 'D. 5 kali'],
-        answer: 'C',
-      },
-      {
-        q: 'Amandemen pertama UUD 1945 dilakukan pada tahun...',
-        options: ['A. 1998', 'B. 1999', 'C. 2000', 'D. 2001'],
-        answer: 'B',
-      },
-      {
-        q: 'Pasal 1 ayat 1 UUD 1945 menyatakan bahwa negara Indonesia adalah negara...',
-        options: ['A. Federasi', 'B. Kesatuan yang berbentuk Republik', 'C. Monarki konstitusional', 'D. Konfederasi'],
-        answer: 'B',
-      },
-      {
-        q: 'Amandemen UUD 1945 keempat dilaksanakan pada tahun...',
-        options: ['A. 2001', 'B. 2002', 'C. 2003', 'D. 2004'],
-        answer: 'B',
-      },
-      {
-        q: 'Salah satu perubahan penting dalam amandemen UUD 1945 adalah...',
-        options: [
-          'A. Penghapusan Mahkamah Agung',
-          'B. Pembentukan Mahkamah Konstitusi',
-          'C. Penghapusan MPR',
-          'D. Pembentukan DPD sebagai pengganti DPR',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Setelah amandemen, presiden dan wakil presiden dipilih secara langsung oleh...',
-        options: ['A. MPR', 'B. DPR', 'C. Rakyat', 'D. Partai politik'],
-        answer: 'C',
-      },
-      {
-        q: 'Masa jabatan presiden berdasarkan UUD 1945 setelah amandemen adalah...',
-        options: ['A. 4 tahun, maksimal 3 kali', 'B. 5 tahun, maksimal 2 kali', 'C. 6 tahun, maksimal 2 kali', 'D. 5 tahun, tidak terbatas'],
-        answer: 'B',
-      },
-      {
-        q: 'Pasal yang mengatur tentang pendidikan nasional dalam UUD 1945 adalah...',
-        options: ['A. Pasal 28', 'B. Pasal 30', 'C. Pasal 31', 'D. Pasal 33'],
-        answer: 'C',
-      },
+  { id:2, title:"Paket 2 – Pancasila sebagai Ideologi & Dasar Negara", topic:"Pancasila",
+    pg:[
+      {id:"2-1",q:"Pancasila sebagai dasar negara berarti Pancasila menjadi...",options:["A. Lambang negara Indonesia", "B. Dasar untuk mengatur penyelenggaraan negara dan seluruh warga negara", "C. Pedoman hidup pribadi", "D. Simbol pemersatu bangsa"],answer:"B"},
+      {id:"2-2",q:"Pancasila sebagai ideologi negara mencakup aspek kehidupan nasional, KECUALI...",options:["A. Etika/moral dan politik", "B. Ekonomi dan sosial budaya", "C. Pertahanan keamanan", "D. Kebijakan luar negeri negara asing"],answer:"D"},
+      {id:"2-3",q:"Konsep Empat Pilar Kehidupan Berbangsa dan Bernegara pertama kali dicetuskan oleh...",options:["A. Ir. Soekarno", "B. Taufiq Kiemas", "C. Drs. Mohammad Hatta", "D. Megawati Soekarnoputri"],answer:"B"},
+      {id:"2-4",q:"Posisi Pancasila dalam Empat Pilar ditempatkan sebagai...",options:["A. Setara dengan tiga pilar lainnya", "B. Nilai fundamental berbangsa dan bernegara", "C. Pilar pelengkap", "D. Pilar historis saja"],answer:"B"},
+      {id:"2-5",q:"Pancasila mengikat seluruh...",options:["A. Hanya lembaga pemerintahan", "B. Lembaga negara, lembaga masyarakat, dan setiap warga negara tanpa kecuali", "C. Hanya warga negara Indonesia asli", "D. Hanya aparatur sipil negara"],answer:"B"},
+      {id:"2-6",q:"Menurut TAP MPR No. VI Tahun 2001, tantangan kebangsaan mencakup, KECUALI...",options:["A. Lemahnya penghayatan dan pengamalan agama", "B. Kurangnya keteladanan pemimpin", "C. Meningkatnya Indeks Pembangunan Manusia", "D. Tidak berjalannya penegakan hukum"],answer:"C"},
+      {id:"2-7",q:"Pengaruh globalisasi menjadi tantangan kebangsaan karena...",options:["A. Memudahkan ekspor", "B. Membuat persaingan antar bangsa semakin tajam", "C. Meningkatkan pariwisata", "D. Memperkuat budaya lokal"],answer:"B"},
+      {id:"2-8",q:"Sila ke-3 Pancasila yang final berbunyi...",options:["A. Kemanusiaan yang Adil dan Beradab", "B. Persatuan Indonesia", "C. Kerakyatan yang Dipimpin oleh Hikmat Kebijaksanaan", "D. Keadilan Sosial"],answer:"B"},
+      {id:"2-9",q:"Dalam hierarki norma hukum Indonesia, Pancasila berkedudukan sebagai...",options:["A. Peraturan setingkat undang-undang", "B. Sumber dari segala sumber hukum", "C. Ketetapan MPR", "D. Peraturan pemerintah"],answer:"B"},
     ],
-    essay: {
-      q: 'Jelaskan alasan dan tujuan dilakukannya amandemen UUD 1945 setelah reformasi 1998. Apa saja perubahan mendasar yang terjadi dalam sistem pemerintahan Indonesia akibat amandemen tersebut?',
-      rubrik: 'Jawaban mencakup: (1) Latar belakang reformasi 1998 dan tuntutan demokratisasi; (2) Tujuan amandemen: membatasi kekuasaan eksekutif, memperkuat check and balance; (3) Perubahan: pemilihan presiden langsung, pembentukan MK dan KY, penguatan DPD, batas masa jabatan presiden, penghapusan Tap MPR sebagai sumber hukum.',
-    },
+    essay:{id:"2-e",q:"Jelaskan perbedaan antara Pancasila sebagai dasar negara dan Pancasila sebagai ideologi negara!",rubrik:"Dasar negara: fondasi mengatur penyelenggaraan negara, bersifat yuridis-konstitusional. Ideologi: sistem kehidupan nasional meliputi etika/moral, politik, ekonomi, sosial budaya, dan pertahanan keamanan dalam rangka pencapaian cita-cita bangsa."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 4 — Lembaga-Lembaga Negara
-  // ══════════════════════════════════════════════
-  {
-    id: 4,
-    title: 'Paket 4 – Lembaga-Lembaga Negara',
-    topic: 'UUD NRI 1945',
-    pg: [
-      {
-        q: 'Lembaga negara yang berwenang menguji undang-undang terhadap UUD 1945 adalah...',
-        options: ['A. Mahkamah Agung', 'B. Mahkamah Konstitusi', 'C. Komisi Yudisial', 'D. DPR'],
-        answer: 'B',
-      },
-      {
-        q: 'DPD (Dewan Perwakilan Daerah) terdiri dari wakil-wakil dari...',
-        options: ['A. Partai politik', 'B. Provinsi', 'C. Kabupaten/Kota', 'D. Organisasi masyarakat'],
-        answer: 'B',
-      },
-      {
-        q: 'MPR terdiri dari anggota DPR dan...',
-        options: ['A. Presiden', 'B. DPD', 'C. Mahkamah Agung', 'D. BPK'],
-        answer: 'B',
-      },
-      {
-        q: 'Lembaga yang bertugas memeriksa pengelolaan dan tanggung jawab keuangan negara adalah...',
-        options: ['A. Bank Indonesia', 'B. Kementerian Keuangan', 'C. BPK (Badan Pemeriksa Keuangan)', 'D. KPK'],
-        answer: 'C',
-      },
-      {
-        q: 'Komisi Yudisial (KY) memiliki kewenangan untuk...',
-        options: [
-          'A. Mengadili perkara pidana berat',
-          'B. Mengusulkan pengangkatan hakim agung dan menjaga kehormatan hakim',
-          'C. Membuat undang-undang bersama DPR',
-          'D. Melakukan audit keuangan negara',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Presiden sebagai kepala negara dan kepala pemerintahan dibantu oleh...',
-        options: ['A. DPR', 'B. MPR', 'C. Wakil Presiden dan menteri-menteri', 'D. BPK'],
-        answer: 'C',
-      },
-      {
-        q: 'Fungsi DPR yang meliputi pengawasan terhadap jalannya pemerintahan disebut fungsi...',
-        options: ['A. Legislasi', 'B. Anggaran', 'C. Pengawasan', 'D. Yudikasi'],
-        answer: 'C',
-      },
-      {
-        q: 'Jumlah anggota DPD dari setiap provinsi adalah...',
-        options: ['A. 2 orang', 'B. 3 orang', 'C. 4 orang', 'D. 5 orang'],
-        answer: 'C',
-      },
-      {
-        q: 'Mahkamah Agung memiliki kewenangan untuk...',
-        options: [
-          'A. Menguji UU terhadap UUD 1945',
-          'B. Mengadili pada tingkat kasasi dan menguji peraturan di bawah undang-undang',
-          'C. Membubarkan partai politik',
-          'D. Memilih anggota KPU',
-        ],
-        answer: 'B',
-      },
+  { id:3, title:"Paket 3 – Pancasila: Dasar Negara & Ideologi", topic:"Pancasila",
+    pg:[
+      {id:"3-1",q:"Negara Indonesia ialah Negara Kesatuan yang berbentuk Republik. Pernyataan ini adalah isi UUD 1945...",options:["A. Pasal 1 ayat 1", "B. Pasal 1 ayat 2", "C. Pasal 1 ayat 3", "D. Pasal 2 ayat 1"],answer:"A"},
+      {id:"3-2",q:"Sistem pendidikan nasional telah diatur dalam...",options:["A. UU No 20 tahun 2000", "B. UU No 20 tahun 2001", "C. UU No 20 tahun 2002", "D. UU No 20 tahun 2003"],answer:"D"},
+      {id:"3-3",q:"Majelis Permusyawaratan Rakyat terdiri atas anggota DPR dan anggota DPD yang dipilih melalui pemilihan umum. Hal ini adalah isi UUD 1945 amandemen...",options:["A. Pasal 1 ayat 2", "B. Pasal 1 ayat 3", "C. Pasal 2 ayat 1", "D. Pasal 2 ayat 2"],answer:"C"},
+      {id:"3-4",q:"Ketetapan MPR tentang penjaminan terhadap materi dan status hukum TAP MPRS/MPR adalah...",options:["A. TAP MPR RI No I/MPR/2003", "B. TAP MPR RI No II/MPR/2003", "C. TAP MPR RI No III/MPR/2003", "D. TAP MPR RI No IV/MPR/2003"],answer:"A"},
+      {id:"3-5",q:"Setiap produk hukum yang dihasilkan di negara Indonesia haruslah tidak bertentangan dengan Pancasila karena Pancasila merupakan sumber dari segala sumber hukum. Pernyataan ini termuat di dalam...",options:["A. TAP MPRS No XXV/1966", "B. TAP MPR No II/1978", "C. TAP MPR No IV/1973", "D. TAP MPRS No XX/1966"],answer:"D"},
+      {id:"3-6",q:"Penetapan anggota DPD yang dipilih dari setiap provinsi melalui pemilu diatur dalam...",options:["A. Pasal 22A ayat 1 UUD 1945", "B. Pasal 22B ayat 1 UUD 1945", "C. Pasal 22C ayat 1 UUD 1945", "D. Pasal 22D ayat 1 UUD 1945"],answer:"C"},
+      {id:"3-7",q:"Dalam kehidupan bernegara, Pancasila berperan sebagai...",options:["A. Dasar negara", "B. Dasar kenegaraan", "C. Dasar beragama", "D. Dasar ketatanegaraan"],answer:"A"},
+      {id:"3-8",q:"Rumusan Pancasila yang resmi dan sah terdapat dalam...",options:["A. Pidato Bung Karno 1 Juni 1945", "B. Proklamasi 17 Agustus 1945", "C. Pembukaan UUD 1945", "D. Piagam Jakarta"],answer:"C"},
+      {id:"3-9",q:"Tata cara mengucapkan Pancasila pada upacara-upacara resmi ditetapkan pada...",options:["A. TAP MPR RI No II/MPR/1978", "B. INPRES No 12 tahun 1968", "C. UU No 5 tahun 1985", "D. TAP MPR RI No 1/MPR/1983"],answer:"D"},
     ],
-    essay: {
-      q: 'Jelaskan sistem checks and balances antarlembaga negara di Indonesia. Bagaimana mekanisme saling mengawasi antara lembaga eksekutif, legislatif, dan yudikatif setelah amandemen UUD 1945?',
-      rubrik: 'Jawaban mencakup: (1) Pengertian checks and balances; (2) Kewenangan DPR mengawasi presiden, hak interpelasi/angket/menyatakan pendapat; (3) MK menguji UU terhadap UUD; (4) Presiden dapat memveto peraturan DPR; (5) BPK mengawasi keuangan eksekutif; (6) KY mengawasi hakim MA.',
-    },
+    essay:{id:"3-e",q:"Jelaskan makna yang terkandung dalam rumusan Pasal 1 ayat (2) UUD NRI Tahun 1945 yang menegaskan bahwa \"kedaulatan berada di tangan rakyat dan dilaksanakan menurut undang-undang dasar\". Apa implikasinya bagi sistem ketatanegaraan Indonesia?",rubrik:"Jawaban mencakup: (1) Penjabaran langsung paham kedaulatan rakyat dari Pembukaan UUD 1945 alinea IV; (2) Kedaulatan dijalankan melalui cara-cara dan lembaga yang ditentukan UUD 1945; (3) Mengubah sistem dari supremasi MPR kepada sistem kedaulatan rakyat; (4) Kedaulatan tidak dijalankan satu lembaga saja; (5) Implikasi: lembaga negara melaksanakan bagian-bagian dari kedaulatan sesuai aturan UUD 1945."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 5 — NKRI: Bentuk & Dasar Negara
-  // ══════════════════════════════════════════════
-  {
-    id: 5,
-    title: 'Paket 5 – NKRI: Bentuk & Dasar Negara',
-    topic: 'NKRI',
-    pg: [
-      {
-        q: 'NKRI adalah singkatan dari...',
-        options: [
-          'A. Negara Kesatuan Republik Indonesia',
-          'B. Negara Konstitusional Republik Indonesia',
-          'C. Negara Kesejahteraan Rakyat Indonesia',
-          'D. Negara Kesatuan Rakyat Indonesia',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Pasal UUD 1945 yang menyatakan bahwa bentuk NKRI tidak dapat diubah adalah...',
-        options: ['A. Pasal 1 ayat 1', 'B. Pasal 37 ayat 5', 'C. Pasal 28A', 'D. Pasal 25A'],
-        answer: 'B',
-      },
-      {
-        q: 'Wilayah NKRI membentang dari...',
-        options: [
-          'A. Sabang sampai Merauke',
-          'B. Banda Aceh sampai Jayapura',
-          'C. Sumatera sampai Papua',
-          'D. Sabang sampai Timor-Timur',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Indonesia memproklamasikan kemerdekaannya pada tanggal...',
-        options: ['A. 17 Agustus 1945', 'B. 18 Agustus 1945', 'C. 1 Juni 1945', 'D. 22 Juni 1945'],
-        answer: 'A',
-      },
-      {
-        q: 'Konsep Wawasan Nusantara merupakan cara pandang bangsa Indonesia terhadap...',
-        options: [
-          'A. Hubungan antarnegara ASEAN',
-          'B. Kesatuan wilayah darat, laut, dan udara Indonesia sebagai satu kesatuan',
-          'C. Pembagian wilayah berdasarkan suku bangsa',
-          'D. Perbatasan Indonesia dengan negara tetangga',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Deklarasi Djuanda (1957) menetapkan bahwa Indonesia menganut konsep...',
-        options: [
-          'A. Negara kepulauan (archipelagic state)',
-          'B. Negara pantai (coastal state)',
-          'C. Zona ekonomi eksklusif sepanjang 12 mil',
-          'D. Batas wilayah berdasarkan perjanjian kolonial',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Semboyan bangsa Indonesia yang mengandung makna persatuan dalam keberagaman adalah...',
-        options: ['A. Pancasila', 'B. Bhinneka Tunggal Ika', 'C. Garuda Pancasila', 'D. Merah Putih'],
-        answer: 'B',
-      },
-      {
-        q: 'Otonomi daerah di Indonesia diatur dalam UUD 1945 pasal...',
-        options: ['A. Pasal 17', 'B. Pasal 18', 'C. Pasal 22', 'D. Pasal 25'],
-        answer: 'B',
-      },
-      {
-        q: 'Yang dimaksud dengan integrasi nasional adalah...',
-        options: [
-          'A. Penyeragaman budaya seluruh daerah',
-          'B. Proses penyatuan berbagai perbedaan menjadi satu kesatuan bangsa yang utuh',
-          'C. Penggabungan wilayah-wilayah baru ke dalam NKRI',
-          'D. Proses penghapusan suku-suku bangsa yang ada',
-        ],
-        answer: 'B',
-      },
+  { id:4, title:"Paket 4 – Pancasila: Nilai & Pengamalan", topic:"Pancasila",
+    pg:[
+      {id:"4-1",q:"Hubungan sosial yang selaras dan seimbang antara individu dan masyarakat dijiwai oleh nilai-nilai Pancasila yaitu sila...",options:["A. Sila pertama", "B. Sila kedua", "C. Sila ketiga", "D. Sila keempat"],answer:"B"},
+      {id:"4-2",q:"Dengan dicabutnya Ketetapan MPR RI No II/MPR/1978 berarti...",options:["A. Bebas menafsirkan Pancasila", "B. Pancasila menjadi tidak bermakna", "C. Nilai-nilai dasar Pancasila tetap harus dilaksanakan", "D. Pancasila tinggal sejarah"],answer:"C"},
+      {id:"4-3",q:"Kekuatan Pancasila sebagai dasar negara yang tetap tegak walaupun mengalami berbagai cobaan terletak pada...",options:["A. Posisi negara kepulauan yang strategis", "B. Keyakinan bangsa Indonesia akan kebenaran Pancasila", "C. Pegawai Negeri Sipil yang menjaganya", "D. Kekuatan TNI dan Polri"],answer:"B"},
+      {id:"4-4",q:"Pedoman Penghayatan dan Pengamalan Pancasila (P4) ditetapkan pada tanggal...",options:["A. 2 Maret 1978", "B. 4 Maret 1978", "C. 12 Maret 1978", "D. 22 Maret 1978"],answer:"D"},
+      {id:"4-5",q:"Dalam membina rasa nasionalisme di kalangan masyarakat, hal yang TIDAK perlu dihindari adalah...",options:["A. Patriotisme", "B. Sukuisme", "C. Chauvinisme", "D. Ekstremisme"],answer:"A"},
+      {id:"4-6",q:"Pancasila sebagai dasar negara terdapat dalam Pembukaan UUD 1945 yang disahkan pada tanggal...",options:["A. 1 Juni 1945", "B. 22 Juni 1945", "C. 17 Agustus 1945", "D. 18 Agustus 1945"],answer:"D"},
+      {id:"4-7",q:"Presiden dibantu oleh menteri-menteri negara adalah isi UUD 1945...",options:["A. Pasal 17 ayat 1", "B. Pasal 17 ayat 2", "C. Pasal 17 ayat 3", "D. Pasal 17 ayat 4"],answer:"A"},
+      {id:"4-8",q:"Hak istimewa (prerogatif) Presiden dalam bidang yudikatif menurut UUD 1945, kecuali...",options:["A. Grasi", "B. Amnesti", "C. Abolisi", "D. Petisi"],answer:"D"},
+      {id:"4-9",q:"Landasan idiil negara Indonesia adalah...",options:["A. UUD 1945", "B. TAP MPR", "C. Pancasila", "D. Proklamasi Kemerdekaan"],answer:"C"},
     ],
-    essay: {
-      q: 'Mengapa bentuk negara kesatuan dianggap paling tepat bagi Indonesia? Jelaskan tantangan yang dihadapi NKRI dalam menjaga persatuan di tengah keberagaman yang luar biasa, dan solusi yang dapat diterapkan.',
-      rubrik: 'Jawaban mencakup: (1) Alasan historis dan geografis pilihan bentuk kesatuan; (2) Tantangan: separatisme, kesenjangan ekonomi antardaerah, konflik SARA; (3) Solusi: otonomi daerah, pembangunan merata, pendidikan kebangsaan, penegakan hukum, penguatan identitas nasional.',
-    },
+    essay:{id:"4-e",q:"Jelaskan kedudukan serta tugas dan wewenang MPR sebelum perubahan UUD NRI Tahun 1945! Apa perbedaan mendasar kedudukan MPR sebelum dan sesudah amandemen?",rubrik:"Jawaban mencakup sebelum amandemen: (1) MPR adalah penjelmaan seluruh rakyat dan lembaga tertinggi negara pemegang dan pelaksana kedaulatan; (2) Tugas: menetapkan dan mengubah UUD, menetapkan GBHN, memilih dan mengangkat Presiden dan Wapres; (3) Membuat putusan yang tidak dapat dibatalkan lembaga lain, meminta pertanggungjawaban Presiden, memberhentikan Presiden. Setelah amandemen: (4) MPR bukan lagi lembaga tertinggi; (5) Terdiri dari DPR dan DPD; (6) Kedaulatan berada di tangan rakyat dan dilaksanakan menurut UUD."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 6 — Bhinneka Tunggal Ika: Asal Usul & Makna
-  // ══════════════════════════════════════════════
-  {
-    id: 6,
-    title: 'Paket 6 – Bhinneka Tunggal Ika: Asal Usul & Makna',
-    topic: 'Bhinneka Tunggal Ika',
-    pg: [
-      {
-        q: 'Semboyan "Bhinneka Tunggal Ika" berasal dari kitab...',
-        options: ['A. Sutasoma', 'B. Negarakertagama', 'C. Pararaton', 'D. Mahabharata'],
-        answer: 'A',
-      },
-      {
-        q: 'Kitab yang memuat semboyan "Bhinneka Tunggal Ika" ditulis oleh...',
-        options: ['A. Prapanca', 'B. Tantular', 'C. Ranggawarsita', 'D. Ken Arok'],
-        answer: 'B',
-      },
-      {
-        q: 'Arti dari semboyan "Bhinneka Tunggal Ika" adalah...',
-        options: [
-          'A. Bersatu dalam perbedaan, berbeda dalam persatuan',
-          'B. Berbeda-beda tetapi tetap satu',
-          'C. Satu nusa, satu bangsa, satu bahasa',
-          'D. Persatuan dan kesatuan adalah kekuatan',
-        ],
-        answer: 'B',
-      },
-      {
-        q: '"Bhinneka Tunggal Ika" tercantum pada lambang negara yaitu...',
-        options: ['A. Perisai Garuda Pancasila', 'B. Pita yang dicengkeram Garuda Pancasila', 'C. Sayap Garuda Pancasila', 'D. Kepala Garuda Pancasila'],
-        answer: 'B',
-      },
-      {
-        q: 'Bhinneka Tunggal Ika berasal dari bahasa...',
-        options: ['A. Jawa Kuno', 'B. Melayu Kuno', 'C. Sansekerta', 'D. Kawi (Jawa Kuno)'],
-        answer: 'D',
-      },
-      {
-        q: 'Kitab Sutasoma ditulis pada masa kerajaan...',
-        options: ['A. Sriwijaya', 'B. Majapahit', 'C. Singasari', 'D. Mataram'],
-        answer: 'B',
-      },
-      {
-        q: 'Makna Bhinneka Tunggal Ika dalam konteks kebangsaan Indonesia mengandung prinsip...',
-        options: [
-          'A. Monokulturalisme',
-          'B. Multikulturalisme',
-          'C. Etnosentrisme',
-          'D. Nasionalisme sempit',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Unsur-unsur keberagaman yang terdapat dalam Bhinneka Tunggal Ika meliputi...',
-        options: [
-          'A. Suku, agama, ras, dan antargolongan (SARA)',
-          'B. Hanya suku dan agama',
-          'C. Hanya bahasa dan budaya',
-          'D. Hanya ras dan keturunan',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Dalam kitab Sutasoma, kalimat lengkap yang menjadi asal semboyan Bhinneka Tunggal Ika adalah...',
-        options: [
-          'A. "Bhinneka Tunggal Ika tan hana dharma mangrwa"',
-          'B. "Bhinneka Tunggal Ika nusantara jaya"',
-          'C. "Bhinneka Tunggal Ika dharma negara"',
-          'D. "Bhinneka Tunggal Ika bhumi nusantara"',
-        ],
-        answer: 'A',
-      },
-    ],
-    essay: {
-      q: 'Jelaskan makna filosofis "Bhinneka Tunggal Ika" dalam konteks masyarakat Indonesia yang beragam. Mengapa semboyan ini dipilih sebagai lambang persatuan bangsa, dan bagaimana relevansinya di era globalisasi saat ini?',
-      rubrik: 'Jawaban mencakup: (1) Asal-usul dari Kitab Sutasoma karya Mpu Tantular; (2) Makna: perbedaan agama/suku/budaya tidak menghalangi persatuan; (3) Alasan pemilihan: mencerminkan realitas keberagaman Indonesia; (4) Relevansi masa kini: tantangan intoleransi, hoaks, perpecahan di media sosial; pentingnya menghargai perbedaan.',
-    },
-  },
 
   // ══════════════════════════════════════════════
-  // PAKET 7 — Bhinneka Tunggal Ika dalam Kehidupan
+  // KELOMPOK: UUD NRI 1945 (Paket 5–17)
   // ══════════════════════════════════════════════
-  {
-    id: 7,
-    title: 'Paket 7 – Bhinneka Tunggal Ika dalam Kehidupan',
-    topic: 'Bhinneka Tunggal Ika',
-    pg: [
-      {
-        q: 'Sikap yang mencerminkan pengamalan Bhinneka Tunggal Ika dalam kehidupan sehari-hari adalah...',
-        options: [
-          'A. Hanya bergaul dengan orang yang satu suku',
-          'B. Menghormati dan menghargai perbedaan agama dan budaya teman',
-          'C. Menganggap budaya sendiri paling baik',
-          'D. Menolak tradisi daerah lain',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Sikap yang bertentangan dengan nilai Bhinneka Tunggal Ika adalah...',
-        options: [
-          'A. Toleransi antaragama',
-          'B. Gotong royong antar suku',
-          'C. Diskriminasi berdasarkan ras',
-          'D. Menghargai keberagaman budaya',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Prinsip toleransi dalam Bhinneka Tunggal Ika berarti...',
-        options: [
-          'A. Menyeragamkan semua perbedaan',
-          'B. Mengakui dan menghargai perbedaan tanpa memaksakan kehendak',
-          'C. Mencampuradukkan semua ajaran agama',
-          'D. Menghilangkan identitas budaya masing-masing',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Indonesia memiliki lebih dari 300 suku bangsa. Hal ini merupakan...',
-        options: [
-          'A. Ancaman bagi persatuan',
-          'B. Kelemahan bangsa Indonesia',
-          'C. Kekayaan dan kekuatan bangsa jika dikelola dengan baik',
-          'D. Hambatan dalam pembangunan nasional',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Hari Kebangkitan Nasional yang diperingati setiap tahun untuk mengingatkan persatuan bangsa jatuh pada...',
-        options: ['A. 17 Agustus', 'B. 20 Mei', 'C. 28 Oktober', 'D. 2 Mei'],
-        answer: 'B',
-      },
-      {
-        q: 'Sumpah Pemuda 28 Oktober 1928 menyatakan tekad satu nusa, satu bangsa, dan satu...',
-        options: ['A. Agama', 'B. Bahasa', 'C. Pemimpin', 'D. Hukum'],
-        answer: 'B',
-      },
-      {
-        q: 'Salah satu ancaman terhadap Bhinneka Tunggal Ika di era digital adalah...',
-        options: [
-          'A. Penggunaan teknologi untuk pembelajaran',
-          'B. Penyebaran hoaks dan ujaran kebencian berbasis SARA di media sosial',
-          'C. Globalisasi budaya yang memperkaya seni lokal',
-          'D. Kemudahan akses informasi antardaerah',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Pakaian adat dari berbagai daerah yang ditampilkan dalam acara nasional merupakan contoh...',
-        options: [
-          'A. Pemborosan anggaran negara',
-          'B. Perayaan keberagaman budaya dalam bingkai persatuan',
-          'C. Kompetisi antardaerah',
-          'D. Pelestarian budaya yang menghambat modernisasi',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Gerakan yang berupaya memecah belah persatuan Indonesia berdasarkan perbedaan suku disebut...',
-        options: ['A. Nasionalisme', 'B. Patriotisme', 'C. Separatisme', 'D. Globalisme'],
-        answer: 'C',
-      },
+,
+
+  { id:5, title:"Paket 5 – UUD NRI 1945: Sejarah & Perubahan", topic:"UUD NRI 1945",
+    pg:[
+      {id:"5-1",q:"UUD NRI Tahun 1945 pertama kali ditetapkan pada tanggal...",options:["A. 17 Agustus 1945", "B. 18 Agustus 1945", "C. 22 Agustus 1945", "D. 1 September 1945"],answer:"B"},
+      {id:"5-2",q:"UUD 1945 diberlakukan kembali melalui Dekrit Presiden pada tanggal...",options:["A. 17 Agustus 1959", "B. 5 Juli 1959", "C. 18 Agustus 1959", "D. 1 Maret 1960"],answer:"B"},
+      {id:"5-3",q:"Sebelum amandemen, batang tubuh UUD 1945 terdiri dari...",options:["A. 21 bab, 73 pasal, 170 ayat", "B. 16 bab, 37 pasal, 49 ayat", "C. 20 bab, 50 pasal, 100 ayat", "D. 18 bab, 45 pasal, 72 ayat"],answer:"B"},
+      {id:"5-4",q:"Setelah amandemen, batang tubuh UUD 1945 terdiri dari...",options:["A. 16 bab, 37 pasal, 49 ayat", "B. 21 bab, 73 pasal, 170 ayat", "C. 20 bab, 60 pasal, 120 ayat", "D. 25 bab, 80 pasal, 200 ayat"],answer:"B"},
+      {id:"5-5",q:"Lembaga yang berwenang mengubah dan menetapkan UUD adalah...",options:["A. DPR", "B. Presiden", "C. MPR", "D. Mahkamah Konstitusi"],answer:"C"},
+      {id:"5-6",q:"Usul perubahan UUD dapat diajukan oleh sekurang-kurangnya...",options:["A. 1/2 dari jumlah anggota MPR", "B. 1/3 dari jumlah anggota MPR", "C. 2/3 dari jumlah anggota MPR", "D. 3/4 dari jumlah anggota MPR"],answer:"B"},
+      {id:"5-7",q:"Yang TIDAK dapat dilakukan perubahan dalam UUD 1945 adalah...",options:["A. Pasal-pasal tentang lembaga negara", "B. Pembukaan UUD 1945 dan bentuk NKRI", "C. Pasal-pasal tentang HAM", "D. Pasal-pasal tentang pemerintahan daerah"],answer:"B"},
+      {id:"5-8",q:"Perubahan UUD 1945 dilakukan dengan cara...",options:["A. Mengganti seluruh UUD", "B. Adendum (naskah asli dipertahankan, naskah perubahan dilekatkan)", "C. Referendum nasional", "D. Keputusan Presiden"],answer:"B"},
+      {id:"5-9",q:"Perubahan (amandemen) UUD 1945 dilakukan sebanyak...",options:["A. 2 kali", "B. 3 kali", "C. 4 kali", "D. 5 kali"],answer:"C"},
     ],
-    essay: {
-      q: 'Bagaimana cara generasi muda Indonesia dapat memperkuat nilai-nilai Bhinneka Tunggal Ika di era digital dan globalisasi? Berikan minimal tiga contoh nyata yang dapat dilakukan.',
-      rubrik: 'Jawaban mencakup: (1) Pemahaman bahaya hoaks dan ujaran kebencian; (2) Cara konkret: melawan hoaks SARA dengan cek fakta, menampilkan konten budaya lokal di media sosial, mengikuti kegiatan lintas budaya, dll; (3) Pentingnya literasi digital untuk memperkuat persatuan; (4) Peran aktif pemuda sebagai agen persatuan.',
-    },
+    essay:{id:"5-e",q:"Jelaskan latar belakang dan 5 kesepakatan dasar yang menjadi landasan perubahan UUD 1945!",rubrik:"Latar belakang: kekuasaan tertinggi di MPR, kekuasaan besar Presiden, pasal terlalu luwes, kewenangan besar Presiden. Kesepakatan: 1) Tidak ubah Pembukaan, 2) Pertahankan NKRI, 3) Pertegas sistem presidensil, 4) Penjelasan normatif masuk pasal, 5) Cara adendum."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 8 — HAM dan Kewarganegaraan
-  // ══════════════════════════════════════════════
-  {
-    id: 8,
-    title: 'Paket 8 – HAM dan Kewarganegaraan',
-    topic: 'UUD NRI 1945',
-    pg: [
-      {
-        q: 'HAM (Hak Asasi Manusia) bersifat universal artinya...',
-        options: [
-          'A. Hanya berlaku di negara-negara maju',
-          'B. Berlaku untuk semua manusia tanpa terkecuali di mana pun berada',
-          'C. Diberikan oleh pemerintah kepada warganya',
-          'D. Dapat dicabut jika melanggar hukum',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Pasal 28 UUD 1945 (setelah amandemen) memuat tentang...',
-        options: [
-          'A. Pertahanan negara',
-          'B. Hak dan kebebasan dasar warga negara (HAM)',
-          'C. Kewajiban membayar pajak',
-          'D. Pendidikan nasional',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Deklarasi Universal HAM (DUHAM) ditetapkan oleh PBB pada tahun...',
-        options: ['A. 1945', 'B. 1948', 'C. 1950', 'D. 1966'],
-        answer: 'B',
-      },
-      {
-        q: 'Kewajiban warga negara Indonesia yang diatur dalam UUD 1945 meliputi...',
-        options: [
-          'A. Mendapatkan pekerjaan dan kehidupan layak',
-          'B. Membela negara dan membayar pajak',
-          'C. Mendapatkan pendidikan dan kesehatan',
-          'D. Mendapatkan perlindungan dari negara',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Lembaga yang menangani pelanggaran HAM di Indonesia adalah...',
-        options: ['A. KPK', 'B. Komnas HAM', 'C. BPK', 'D. Ombudsman'],
-        answer: 'B',
-      },
-      {
-        q: 'Hak yang tidak dapat dikurangi dalam keadaan apapun (non-derogable rights) meliputi...',
-        options: [
-          'A. Hak pilih dalam pemilu',
-          'B. Hak memiliki properti',
-          'C. Hak untuk hidup dan larangan penyiksaan',
-          'D. Hak bekerja dan mendapat upah',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Asas kewarganegaraan Indonesia berdasarkan UU No. 12 Tahun 2006 menggunakan asas...',
-        options: [
-          'A. Hanya ius soli (tempat lahir)',
-          'B. Hanya ius sanguinis (keturunan)',
-          'C. Kombinasi ius soli dan ius sanguinis',
-          'D. Naturalisasi penuh',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Seorang warga negara yang ingin mengajukan keberatan atas aturan hukum yang merugikan HAM-nya dapat mengajukan ke...',
-        options: ['A. Mahkamah Agung', 'B. Mahkamah Konstitusi', 'C. Komnas HAM', 'D. DPR'],
-        answer: 'B',
-      },
-      {
-        q: 'Hak mendapatkan pendidikan diatur dalam UUD 1945 pasal...',
-        options: ['A. Pasal 27', 'B. Pasal 28', 'C. Pasal 31', 'D. Pasal 34'],
-        answer: 'C',
-      },
+  { id:6, title:"Paket 6 – Lembaga-Lembaga Negara", topic:"UUD NRI 1945",
+    pg:[
+      {id:"6-1",q:"Setelah amandemen, MPR terdiri dari anggota...",options:["A. DPR dan utusan golongan", "B. DPR dan DPD", "C. DPR, DPD, dan utusan presiden", "D. DPR saja"],answer:"B"},
+      {id:"6-2",q:"Jumlah seluruh anggota DPD tidak lebih dari...",options:["A. 1/4 jumlah anggota DPR", "B. 1/3 jumlah anggota DPR", "C. 1/2 jumlah anggota DPR", "D. 2/3 jumlah anggota DPR"],answer:"B"},
+      {id:"6-3",q:"DPR memiliki fungsi legislasi, fungsi anggaran, dan fungsi pengawasan berdasarkan...",options:["A. Pasal 19", "B. Pasal 20A ayat (1)", "C. Pasal 21", "D. Pasal 22"],answer:"B"},
+      {id:"6-4",q:"Mahkamah Konstitusi terdiri dari...",options:["A. 7 orang hakim konstitusi", "B. 9 orang hakim konstitusi", "C. 11 orang hakim konstitusi", "D. 5 orang hakim konstitusi"],answer:"B"},
+      {id:"6-5",q:"Kewenangan Mahkamah Konstitusi, KECUALI...",options:["A. Menguji UU terhadap UUD", "B. Memutus sengketa kewenangan lembaga negara", "C. Mengadili pada tingkat kasasi", "D. Memutus pembubaran partai politik"],answer:"C"},
+      {id:"6-6",q:"Hakim agung diusulkan oleh Komisi Yudisial kepada DPR, kemudian ditetapkan oleh...",options:["A. MPR", "B. DPR", "C. Presiden", "D. Mahkamah Agung"],answer:"C"},
+      {id:"6-7",q:"Mekanisme pemakzulan Presiden melibatkan lembaga...",options:["A. DPR dan MPR", "B. DPR, MK, dan MPR", "C. MPR dan MK", "D. DPR, MA, dan MPR"],answer:"B"},
+      {id:"6-8",q:"Gubernur, Bupati, dan Walikota dipilih secara...",options:["A. Ditunjuk Presiden", "B. Demokratis", "C. Dipilih DPRD", "D. Rotasi jabatan"],answer:"B"},
+      {id:"6-9",q:"Presiden memegang kekuasaan tertinggi atas AD, AL, dan AU berdasarkan Pasal...",options:["A. Pasal 9", "B. Pasal 10", "C. Pasal 11", "D. Pasal 12"],answer:"B"},
     ],
-    essay: {
-      q: 'Jelaskan hubungan antara Hak Asasi Manusia (HAM) dan kewajiban warga negara dalam sistem hukum Indonesia. Berikan contoh kasus pelanggaran HAM dan bagaimana mekanisme penegakannya di Indonesia.',
-      rubrik: 'Jawaban mencakup: (1) Pengertian HAM dan kewajibannya yang berjalan seiring; (2) Dasar hukum HAM di Indonesia: Pasal 28A-J UUD 1945 dan UU No. 39/1999; (3) Contoh kasus pelanggaran HAM (misalnya kasus tragedi 1998); (4) Mekanisme: Komnas HAM → Pengadilan HAM Ad Hoc; (5) Peran masyarakat dalam pengawasan HAM.',
-    },
+    essay:{id:"6-e",q:"Jelaskan 4 kewenangan Mahkamah Konstitusi berdasarkan UUD 1945!",rubrik:"1) Menguji UU terhadap UUD, 2) Memutus sengketa kewenangan lembaga negara, 3) Memutus pembubaran partai politik, 4) Memutus perselisihan hasil pemilu; ditambah memutus pendapat DPR tentang pemakzulan Presiden."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 9 — Sistem Pemerintahan & Demokrasi
-  // ══════════════════════════════════════════════
-  {
-    id: 9,
-    title: 'Paket 9 – Sistem Pemerintahan & Demokrasi',
-    topic: 'NKRI',
-    pg: [
-      {
-        q: 'Indonesia menganut sistem pemerintahan...',
-        options: ['A. Parlementer', 'B. Presidensial', 'C. Monarki', 'D. Semi-presidensial'],
-        answer: 'B',
-      },
-      {
-        q: 'Dalam sistem presidensial, presiden bertanggung jawab kepada...',
-        options: ['A. Parlemen/DPR', 'B. MPR', 'C. Rakyat', 'D. Mahkamah Agung'],
-        answer: 'C',
-      },
-      {
-        q: 'Pemilihan Umum (Pemilu) di Indonesia diselenggarakan untuk memilih...',
-        options: [
-          'A. Presiden dan Wakil Presiden saja',
-          'B. Anggota DPR saja',
-          'C. Presiden/Wapres, DPR, DPD, DPRD',
-          'D. Hanya kepala daerah',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Asas pemilu di Indonesia dikenal dengan singkatan LUBER JURDIL, yang berarti...',
-        options: [
-          'A. Langsung, Umum, Bebas, Rahasia, Jujur, dan Adil',
-          'B. Langsung, Universal, Bebas, Rahasia, Jujur, dan Ideal',
-          'C. Luas, Umum, Bebas, Rahasia, Jujur, dan Ilmiah',
-          'D. Langsung, Umum, Bersih, Rahasia, Jujur, dan Adil',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Demokrasi Pancasila yang dianut Indonesia mengutamakan...',
-        options: [
-          'A. Keputusan berdasarkan suara mayoritas mutlak',
-          'B. Musyawarah mufakat dan mengutamakan kepentingan bersama',
-          'C. Keputusan individu yang berwenang',
-          'D. Sistem oligarki yang dipandu oleh tokoh-tokoh tertentu',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Partai politik di Indonesia memiliki fungsi sebagai...',
-        options: [
-          'A. Pelaksana kebijakan pemerintah',
-          'B. Lembaga yudikatif negara',
-          'C. Sarana rekrutmen politik dan artikulasi kepentingan rakyat',
-          'D. Pengawas keuangan negara',
-        ],
-        answer: 'C',
-      },
-      {
-        q: 'Lembaga yang bertanggung jawab menyelenggarakan Pemilu di Indonesia adalah...',
-        options: ['A. Kementerian Dalam Negeri', 'B. KPU (Komisi Pemilihan Umum)', 'C. Bawaslu', 'D. Mahkamah Konstitusi'],
-        answer: 'B',
-      },
-      {
-        q: 'Salah satu ciri pokok demokrasi adalah...',
-        options: [
-          'A. Kekuasaan ada di tangan satu orang',
-          'B. Adanya jaminan kebebasan pers dan berpendapat',
-          'C. Tidak ada oposisi terhadap pemerintah',
-          'D. Pemimpin dipilih seumur hidup',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Sistem multi-partai di Indonesia bertujuan untuk...',
-        options: [
-          'A. Mempersulit pembentukan pemerintahan',
-          'B. Memberikan ruang bagi berbagai kelompok untuk berpartisipasi dalam politik',
-          'C. Membatasi hak pilih warga negara',
-          'D. Memperkuat kekuasaan presiden',
-        ],
-        answer: 'B',
-      },
+  { id:7, title:"Paket 7 – HAM dan Kewarganegaraan", topic:"UUD NRI 1945",
+    pg:[
+      {id:"7-1",q:"Hak Asasi Manusia dijamin oleh UUD 1945 dalam Pasal...",options:["A. Pasal 25", "B. Pasal 28A-28J", "C. Pasal 30", "D. Pasal 33"],answer:"B"},
+      {id:"7-2",q:"Hak untuk hidup diatur dalam...",options:["A. Pasal 28A", "B. Pasal 28B", "C. Pasal 28C", "D. Pasal 28D"],answer:"A"},
+      {id:"7-3",q:"Kewajiban menghormati hak asasi manusia orang lain diatur dalam...",options:["A. Pasal 28I", "B. Pasal 28J ayat (1)", "C. Pasal 27", "D. Pasal 29"],answer:"B"},
+      {id:"7-4",q:"Setiap warga negara berkedudukan sama dalam hukum dan pemerintahan berdasarkan Pasal...",options:["A. Pasal 26", "B. Pasal 27 ayat (1)", "C. Pasal 28", "D. Pasal 29"],answer:"B"},
+      {id:"7-5",q:"Hak tidak dapat dikurangi dalam kondisi apapun (non-derogable rights) meliputi, KECUALI...",options:["A. Hak untuk hidup", "B. Hak untuk tidak disiksa", "C. Hak kebebasan berpendapat", "D. Hak bebas dari perbudakan"],answer:"C"},
+      {id:"7-6",q:"Negara menjamin kemerdekaan tiap-tiap penduduk untuk memeluk agamanya masing-masing berdasarkan Pasal...",options:["A. Pasal 28E", "B. Pasal 29 ayat (2)", "C. Pasal 30", "D. Pasal 31"],answer:"B"},
+      {id:"7-7",q:"Anggaran pendidikan minimum dalam APBN yang diatur dalam konstitusi adalah...",options:["A. 10%", "B. 20%", "C. 25%", "D. 30%"],answer:"B"},
+      {id:"7-8",q:"Fakir miskin dan anak-anak terlantar dipelihara oleh...",options:["A. Yayasan swasta", "B. Negara", "C. Partai politik", "D. Organisasi internasional"],answer:"B"},
+      {id:"7-9",q:"Pembatasan HAM dapat dilakukan hanya dengan...",options:["A. Keputusan Presiden", "B. Undang-undang semata-mata untuk menjamin pengakuan serta penghormatan hak dan kebebasan orang lain", "C. Peraturan Pemerintah", "D. Keputusan MPR"],answer:"B"},
     ],
-    essay: {
-      q: 'Jelaskan perbedaan antara Demokrasi Pancasila dengan demokrasi liberal Barat. Apa kelebihan dan tantangan dalam menerapkan Demokrasi Pancasila di Indonesia saat ini?',
-      rubrik: 'Jawaban mencakup: (1) Ciri demokrasi liberal: individualisme, voting mayoritas, kebebasan mutlak; (2) Ciri Demokrasi Pancasila: musyawarah mufakat, kepentingan bersama, dilandasi nilai-nilai Pancasila; (3) Kelebihan: menghargai kearifan lokal, menjaga harmoni; (4) Tantangan: praktik korupsi, politik uang, rendahnya partisipasi masyarakat.',
-    },
+    essay:{id:"7-e",q:"Jelaskan apa yang dimaksud HAM, sifat-sifatnya, dan kewajiban negara terhadap HAM warganya!",rubrik:"HAM: hak yang melekat sejak lahir. Sifat: universal, inalienable (tidak bisa dicabut), indivisible (tidak bisa dipisah), interdependent (saling bergantung). Kewajiban negara: menghormati, melindungi, dan memenuhi HAM warganya."},
   },
 
-  // ══════════════════════════════════════════════
-  // PAKET 10 — Soal Campuran 4 Pilar
-  // ══════════════════════════════════════════════
-  {
-    id: 10,
-    title: 'Paket 10 – Soal Campuran 4 Pilar',
-    topic: 'Campuran',
-    pg: [
-      {
-        q: 'Empat Pilar MPR RI terdiri dari...',
-        options: [
-          'A. Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika',
-          'B. Pancasila, Sumpah Pemuda, NKRI, Demokrasi',
-          'C. UUD 1945, Demokrasi, HAM, Bhinneka Tunggal Ika',
-          'D. Pancasila, UUD 1945, HAM, Sumpah Pemuda',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Dari empat pilar MPR RI, yang berfungsi sebagai sumber dari segala sumber hukum adalah...',
-        options: ['A. UUD 1945', 'B. Pancasila', 'C. NKRI', 'D. Bhinneka Tunggal Ika'],
-        answer: 'B',
-      },
-      {
-        q: 'Pembukaan UUD 1945 alinea keempat memuat...',
-        options: [
-          'A. Pernyataan kemerdekaan Indonesia',
-          'B. Dasar negara Pancasila dan tujuan negara',
-          'C. Sejarah perjuangan bangsa Indonesia',
-          'D. Hak dan kewajiban warga negara',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Tujuan negara Indonesia yang tercantum dalam Pembukaan UUD 1945 alinea keempat meliputi...',
-        options: [
-          'A. Memajukan kesejahteraan umum, mencerdaskan kehidupan bangsa, dan ikut menjaga perdamaian dunia',
-          'B. Memperluas wilayah, memperkuat angkatan bersenjata, dan meningkatkan kekayaan negara',
-          'C. Melindungi warga negara, memperbesar pendapatan negara, dan mengembangkan teknologi',
-          'D. Menjaga keamanan, meningkatkan GDP, dan memperluas pengaruh internasional',
-        ],
-        answer: 'A',
-      },
-      {
-        q: 'Konsep gotong royong yang menjadi salah satu nilai inti bangsa Indonesia paling mencerminkan sila...',
-        options: ['A. Sila pertama', 'B. Sila kedua', 'C. Sila ketiga', 'D. Sila keempat'],
-        answer: 'C',
-      },
-      {
-        q: 'Pasal 33 UUD 1945 mengatur tentang...',
-        options: [
-          'A. Pertahanan negara',
-          'B. Perekonomian nasional dan kesejahteraan sosial',
-          'C. Hak asasi manusia',
-          'D. Pemilihan umum',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Nilai persatuan dalam Pancasila sila ketiga paling tepat diwujudkan melalui...',
-        options: [
-          'A. Memenangkan kompetisi internasional',
-          'B. Mengutamakan kepentingan bangsa di atas golongan',
-          'C. Menolak pengaruh budaya asing',
-          'D. Hanya menggunakan produk dalam negeri',
-        ],
-        answer: 'B',
-      },
-      {
-        q: 'Dalam UUD 1945, kebebasan berpendapat dan berserikat dijamin dalam...',
-        options: ['A. Pasal 27', 'B. Pasal 28', 'C. Pasal 30', 'D. Pasal 33'],
-        answer: 'B',
-      },
-      {
-        q: 'Nilai dasar Pancasila yang menekankan keseimbangan antara hak dan kewajiban adalah...',
-        options: [
-          'A. Ketuhanan Yang Maha Esa',
-          'B. Kemanusiaan yang Adil dan Beradab',
-          'C. Keadilan Sosial bagi Seluruh Rakyat Indonesia',
-          'D. Persatuan Indonesia',
-        ],
-        answer: 'C',
-      },
+  { id:8, title:"Paket 8 – Sistem Pemerintahan & Demokrasi", topic:"UUD NRI 1945",
+    pg:[
+      {id:"8-1",q:"Sistem pemerintahan Indonesia setelah amandemen UUD 1945 adalah...",options:["A. Parlementer", "B. Presidensil", "C. Semipresidensil", "D. Federal"],answer:"B"},
+      {id:"8-2",q:"Demokrasi Pancasila menekankan pengambilan keputusan melalui...",options:["A. Suara mayoritas mutlak", "B. Musyawarah mufakat", "C. Keputusan pemimpin", "D. Referendum"],answer:"B"},
+      {id:"8-3",q:"Asas pemilu di Indonesia 'luber jurdil' kepanjangannya adalah...",options:["A. Langsung, umum, bebas, rahasia, jujur, adil", "B. Lugas, universal, bebas, rahasia, jujur, adil", "C. Langsung, umum, bebas, rahasia, jamak, adil", "D. Lokal, umum, bebas, rahasia, jujur, adil"],answer:"A"},
+      {id:"8-4",q:"Lembaga penyelenggara pemilu di Indonesia adalah...",options:["A. KPU, Bawaslu, dan DKPP", "B. KPU dan MPR", "C. KPU dan DPR", "D. KPU dan Presiden"],answer:"A"},
+      {id:"8-5",q:"Perselisihan hasil pemilu diselesaikan oleh...",options:["A. KPU", "B. Mahkamah Konstitusi", "C. MPR", "D. Mahkamah Agung"],answer:"B"},
+      {id:"8-6",q:"Prinsip rule of law (supremasi hukum) berarti...",options:["A. Pejabat berada di atas hukum", "B. Hukum berlaku bagi semua orang termasuk pejabat negara", "C. Hukum hanya untuk rakyat biasa", "D. Hukum ditentukan oleh pejabat"],answer:"B"},
+      {id:"8-7",q:"Prinsip 'pemerintahan dari rakyat, oleh rakyat, dan untuk rakyat' merupakan definisi dari...",options:["A. Monarki", "B. Demokrasi", "C. Oligarki", "D. Aristokrasi"],answer:"B"},
+      {id:"8-8",q:"Era reformasi Indonesia dimulai pada tahun...",options:["A. 1995", "B. 1998", "C. 2000", "D. 2002"],answer:"B"},
+      {id:"8-9",q:"Korupsi merupakan ancaman serius bagi demokrasi karena...",options:["A. Mengurangi pendapatan negara saja", "B. Meruntuhkan kepercayaan publik dan merusak legitimasi pemerintahan", "C. Hanya merugikan pejabat", "D. Hanya berdampak pada ekonomi"],answer:"B"},
     ],
-    essay: {
-      q: 'Jelaskan keterkaitan antara keempat pilar MPR RI (Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika). Mengapa keempat pilar ini harus dipahami dan diamalkan secara bersamaan oleh seluruh warga negara Indonesia?',
-      rubrik: 'Jawaban mencakup: (1) Pancasila sebagai filosofi dasar; (2) UUD 1945 sebagai hukum tertinggi yang mengejawantahkan Pancasila; (3) NKRI sebagai bentuk negara yang dipilih sesuai nilai Pancasila; (4) Bhinneka Tunggal Ika sebagai semboyan pemersatu; (5) Keterkaitan: keempatnya saling menguatkan dan tidak dapat dipisahkan; (6) Pentingnya pengamalan oleh seluruh rakyat untuk mewujudkan tujuan nasional.',
-    },
+    essay:{id:"8-e",q:"Jelaskan perbedaan sistem pemerintahan presidensil dan parlementer, serta mengapa Indonesia memilih sistem presidensil setelah amandemen!",rubrik:"Presidensil: Presiden kepala negara & pemerintahan, dipilih rakyat, tidak bertanggung jawab pada parlemen. Parlementer: PM bertanggung jawab pada parlemen, bisa dijatuhkan. Indonesia pilih presidensil untuk stabilitas dan legitimasi langsung dari rakyat."},
   },
+
+  { id:9, title:"Paket 9 – Benar/Salah LCC: Pasal UUD & TAP MPR (I)", topic:"UUD NRI 1945",
+    pg:[
+      {id:"9-1",q:"Amnesti adalah pengampunan yang diberikan Presiden kepada seseorang yang sudah ada putusan hukum tetap. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – amnesti tidak memerlukan putusan hukum tetap; diberikan kepada kelompok orang sebelum/saat proses hukum berjalan", "C. BENAR – sudah tepat definisinya", "D. SALAH – amnesti bukan kewenangan Presiden"],answer:"B"},
+      {id:"9-2",q:"Anggota Komisi Yudisial diangkat dan diberhentikan oleh Presiden dengan memperhatikan pertimbangan DPR. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – dengan persetujuan DPR, bukan pertimbangan", "D. SALAH – diangkat langsung oleh MPR"],answer:"B"},
+      {id:"9-3",q:"Jika RUU yang telah disetujui bersama tidak disahkan Presiden dalam 30 hari, maka RUU tersebut dinyatakan batal. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – jika tidak disahkan dalam 30 hari, RUU sah menjadi UU dan wajib diundangkan", "C. BENAR – dikembalikan ke DPR", "D. SALAH – diserahkan ke MPR"],answer:"B"},
+      {id:"9-4",q:"Calon Presiden dan Wakil Presiden harus WNI sejak kelahirannya dan tidak pernah menerima kewarganegaraan lain karena kehendaknya sendiri. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – cukup WNI minimal 5 tahun", "D. SALAH – boleh pernah menerima kewarganegaraan lain"],answer:"B"},
+      {id:"9-5",q:"Fakir miskin dan anak-anak terlantar dipelihara oleh pemerintah. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – menurut Pasal 34 ayat (1) UUD 1945, dipelihara oleh 'negara', bukan 'pemerintah'", "C. BENAR – pemerintah sama dengan negara", "D. SALAH – dipelihara masyarakat"],answer:"B"},
+      {id:"9-6",q:"DPR berwenang mengesahkan RUU yang telah dibahas dan disetujui bersama antara DPR dengan Presiden menjadi undang-undang. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – yang berwenang mengesahkan UU adalah Presiden, bukan DPR", "C. BENAR – DPR dan Presiden bersama-sama mengesahkan", "D. SALAH – yang mengesahkan adalah MPR"],answer:"B"},
+      {id:"9-7",q:"Keputusan MPR atas usul pemberhentian Presiden harus diambil dalam rapat paripurna yang dihadiri sekurang-kurangnya 3/4 anggota MPR dan disetujui 2/3 anggota yang hadir. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – cukup dihadiri 2/3 anggota", "D. SALAH – tidak ada kuorum khusus"],answer:"B"},
+      {id:"9-8",q:"Hasil pemeriksaan keuangan negara oleh BPK diserahkan kepada MPR, DPR, DPD, dan DPRD sesuai kewenangannya. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – diserahkan kepada DPR, DPD, dan DPRD saja (tidak termasuk MPR)", "C. BENAR – MPR juga menerima", "D. SALAH – hanya kepada Presiden"],answer:"B"},
+      {id:"9-9",q:"Setelah perubahan UUD 1945, MPR merupakan lembaga negara yang berkedudukan setara dengan lembaga negara lainnya. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – MPR masih lembaga tertinggi", "D. SALAH – MPR di bawah Presiden"],answer:"B"},
+    ],
+    essay:{id:"9-e",q:"Jelaskan bagian dan materi dalam UUD NRI Tahun 1945 yang tidak dapat diubah beserta alasan mengapa hal tersebut tidak dapat dilakukan perubahan!",rubrik:"Tidak dapat diubah: 1) Pembukaan UUD 1945 – memuat dasar filosofis dan normatif, staatsidee NKRI, tujuan dan dasar negara, merupakan kesepakatan dasar MPR; 2) Bentuk NKRI (Pasal 37 ayat 5) – melestarikan putusan pendiri negara, mewadahi persatuan bangsa yang majemuk, komitmen bangsa terhadap Pembukaan."},
+  },
+
+  { id:10, title:"Paket 10 – Benar/Salah LCC: UUD & TAP MPR (II)", topic:"UUD NRI 1945",
+    pg:[
+      {id:"10-1",q:"Kekuasaan kehakiman dilakukan oleh MA, badan peradilan di bawahnya, MK, dan Komisi Yudisial. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – Komisi Yudisial bukan pelaksana kekuasaan kehakiman; kekuasaan kehakiman dilakukan oleh MA dan MK saja", "C. BENAR – KY termasuk pelaksana", "D. SALAH – hanya MA"],answer:"B"},
+      {id:"10-2",q:"Kata PEMBUKAAN merupakan penyebutan resmi untuk Pembukaan UUD NRI 1945. Istilah lain yang dipakai adalah PREAMBULE sebagaimana tercantum dalam naskah asli UUD NRI 1945. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – istilah resminya MUKADIMAH", "D. SALAH – tidak ada naskah aslinya"],answer:"B"},
+      {id:"10-3",q:"MPR terdiri dari anggota DPR dan anggota DPD, serta sebagian anggota yang diangkat oleh Presiden. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – MPR terdiri dari anggota DPR dan DPD saja; tidak ada yang diangkat Presiden", "C. BENAR – ada anggota yang ditunjuk", "D. SALAH – hanya DPR"],answer:"B"},
+      {id:"10-4",q:"MPR wajib memberhentikan Presiden jika MK sudah memutus bahwa Presiden terbukti melakukan pelanggaran hukum. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – MPR tidak otomatis wajib; sidang paripurna MPR lah yang memutuskan secara politik", "C. BENAR – putusan MK mengikat MPR", "D. SALAH – yang memberhentikan adalah DPR"],answer:"B"},
+      {id:"10-5",q:"Setelah perubahan UUD 1945, MPR hanya dapat mengeluarkan Ketetapan MPR yang bersifat penetapan (beschikking). PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – MPR masih bisa ketetapan yang bersifat mengatur", "D. SALAH – MPR sama sekali tidak bisa"],answer:"B"},
+      {id:"10-6",q:"Pemberlakuan kembali UUD 1945 ditetapkan melalui Dekrit Presiden tanggal 5 Juli 1959 dan dikukuhkan secara aklamasi tanggal 22 Juli 1959 oleh Dewan Perwakilan Rakyat. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – dikukuhkan oleh MPRS", "D. SALAH – dikukuhkan oleh MPR"],answer:"B"},
+      {id:"10-7",q:"Peserta pemilihan umum untuk memilih anggota DPR dan DPRD adalah partai politik. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – pesertanya perseorangan", "D. SALAH – pesertanya gabungan ormas"],answer:"B"},
+      {id:"10-8",q:"Sebelum perubahan UUD 1945, kekuasaan membentuk undang-undang berada di tangan Presiden dengan persetujuan DPR. PERNYATAAN INI...",options:["A. SALAH", "B. BENAR", "C. SALAH – sebelum amandemen kekuasaan di tangan DPR", "D. SALAH – di tangan MPR"],answer:"B"},
+      {id:"10-9",q:"Pembentukan, pengubahan, dan pembubaran kementerian negara diatur dengan Peraturan Presiden. PERNYATAAN INI...",options:["A. BENAR", "B. SALAH – diatur dengan undang-undang (Pasal 17 ayat 4 UUD 1945)", "C. BENAR – sudah tepat", "D. SALAH – diatur dengan Ketetapan MPR"],answer:"B"},
+    ],
+    essay:{id:"10-e",q:"Jelaskan ciri-ciri sistem pemerintahan presidensil yang diterapkan di Indonesia setelah amandemen UUD 1945!",rubrik:"1) Masa jabatan Presiden bersifat pasti (fixed term) 5 tahun; 2) Presiden sebagai kepala negara sekaligus kepala pemerintahan; 3) Adanya mekanisme saling mengawasi dan mengimbangi (checks and balances); 4) Adanya mekanisme impeachment (pemakzulan) melalui DPR, MK, dan MPR."},
+  },
+
+  { id:11, title:"Paket 11 – Satu Lawan Satu LCC: Ketetapan MPR", topic:"UUD NRI 1945",
+    pg:[
+      {id:"11-1",q:"Ketetapan MPR Nomor VII/MPR/2001 adalah tentang...",options:["A. Pembaruan Agraria dan Pengelolaan Sumber Daya Alam", "B. Visi Indonesia Masa Depan", "C. Rekomendasi Arah Kebijakan Pemberantasan KKN", "D. Etika Kehidupan Berbangsa"],answer:"B"},
+      {id:"11-2",q:"Ketetapan MPR Nomor VIII/MPR/2001 adalah tentang...",options:["A. Etika Kehidupan Berbangsa", "B. Visi Indonesia Masa Depan", "C. Rekomendasi Arah Kebijakan Pemberantasan dan Pencegahan Korupsi, Kolusi, dan Nepotisme", "D. Penyelenggara Negara yang Bersih dan Bebas KKN"],answer:"C"},
+      {id:"11-3",q:"Ketetapan MPR Nomor XI/MPR/1998 adalah tentang...",options:["A. Politik Ekonomi dalam Rangka Demokrasi Ekonomi", "B. Penyelenggara Negara yang Bersih dan Bebas Korupsi, Kolusi, dan Nepotisme", "C. Pemantapan Persatuan dan Kesatuan Nasional", "D. Sumber Hukum dan Tata Urutan Peraturan Perundang-undangan"],answer:"B"},
+      {id:"11-4",q:"Ketetapan MPR Nomor IX/MPR/2001 adalah tentang...",options:["A. Visi Indonesia Masa Depan", "B. Etika Kehidupan Berbangsa", "C. Pembaruan Agraria dan Pengelolaan Sumber Daya Alam", "D. Penyelenggaraan Otonomi Daerah"],answer:"C"},
+      {id:"11-5",q:"Rumusan Pasal 7 UUD 1945 setelah amandemen adalah...",options:["A. Presiden memegang kekuasaan tertinggi atas AD, AL, dan AU", "B. Presiden dan Wakil Presiden memegang jabatan selama lima tahun, dan sesudahnya dapat dipilih kembali dalam jabatan yang sama, hanya untuk satu kali masa jabatan", "C. Presiden menetapkan peraturan pemerintah", "D. Presiden dibantu oleh satu orang Wakil Presiden"],answer:"B"},
+      {id:"11-6",q:"Jika Presiden dan Wakil Presiden mangkat, berhenti, diberhentikan, atau tidak dapat melakukan kewajibannya secara bersamaan, pelaksana tugas kepresidenan adalah...",options:["A. Ketua MPR", "B. Ketua DPR", "C. Menteri Luar Negeri, Menteri Dalam Negeri, dan Menteri Pertahanan secara bersama-sama", "D. Mahkamah Agung"],answer:"C"},
+      {id:"11-7",q:"Dasar hukum perubahan Undang-Undang Dasar adalah...",options:["A. Pasal 1 dan Pasal 2 UUD 1945", "B. Pasal 3 ayat (1) dan Pasal 37 UUD NRI Tahun 1945", "C. Pasal 5 dan Pasal 20 UUD 1945", "D. Pasal 37 saja"],answer:"B"},
+      {id:"11-8",q:"Yang dimaksud dengan istilah 'equality before the law' adalah...",options:["A. Penegakan hukum dengan cara yang tidak bertentangan dengan hukum", "B. Semua warga negara bersamaan kedudukannya di dalam hukum", "C. Hukum berlaku surut", "D. Hak untuk mendapat peradilan yang adil"],answer:"B"},
+      {id:"11-9",q:"Dasar hukum peninjauan terhadap materi dan status hukum Ketetapan MPRS dan Ketetapan MPR dari tahun 1960 sampai dengan tahun 2002 adalah...",options:["A. Pasal 37 UUD 1945", "B. Pasal I Aturan Tambahan UUD NRI Tahun 1945", "C. Pasal 2 UUD 1945", "D. Ketetapan MPR No. I/MPR/2003"],answer:"B"},
+    ],
+    essay:{id:"11-e",q:"Jelaskan kedudukan serta tugas dan wewenang MPR sebelum perubahan UUD NRI Tahun 1945!",rubrik:"Kedudukan: penjelmaan seluruh rakyat, lembaga tertinggi negara, pemegang dan pelaksana sepenuhnya kedaulatan rakyat. Tugas & wewenang: menetapkan dan mengubah UUD 1945, menetapkan GBHN, memilih dan mengangkat Presiden/Wapres, membuat putusan yang tidak dapat dibatalkan, meminta pertanggungjawaban Presiden, memberhentikan Presiden."},
+  },
+
+  { id:12, title:"Paket 12 – Tematik LCC: Substansi Ketetapan MPR", topic:"UUD NRI 1945",
+    pg:[
+      {id:"12-1",q:"Latar belakang pergeseran kewenangan membentuk UU dari Presiden ke DPR adalah, KECUALI...",options:["A. Mempertegas sistem presidensial", "B. Meletakkan fungsi DPR sebagai lembaga pembentuk UU", "C. Praktek masa lalu membuka peluang penyelewengan", "D. Mengurangi beban kerja Presiden dalam legislasi"],answer:"D"},
+      {id:"12-2",q:"Apa yang dimaksud etika penegakan hukum yang berkeadilan dalam TAP MPR No. VI/MPR/2001?",options:["A. Etika untuk menumbuhkan kesadaran tertib sosial melalui ketaatan hukum yang berpihak pada keadilan guna menjamin supremasi dan kepastian hukum", "B. Etika untuk mengurangi kekuasaan aparat hukum", "C. Etika mendorong rakyat taat hukum demi kepentingan penguasa", "D. Etika agar hakim mengikuti keputusan pemerintah"],answer:"A"},
+      {id:"12-3",q:"Latar belakang dibentuknya Mahkamah Konstitusi adalah...",options:["A. Untuk menggantikan Mahkamah Agung", "B. Mempertegas sistem presidensil, melaksanakan checks and balances, dan memberikan mekanisme konstitusional pemberhentian Presiden", "C. Untuk mengawasi keuangan negara", "D. Untuk membentuk peraturan daerah"],answer:"B"},
+      {id:"12-4",q:"Latar belakang dibentuknya Komisi Yudisial adalah...",options:["A. Untuk mengadili hakim yang korup", "B. Menjaga dan menegakkan kehormatan, keluhuran martabat, serta perilaku hakim guna mewujudkan kekuasaan kehakiman yang merdeka dan peradilan yang bersih", "C. Menggantikan peran Mahkamah Agung", "D. Mengawasi DPR"],answer:"B"},
+      {id:"12-5",q:"Latar belakang pembentukan Dewan Perwakilan Daerah adalah...",options:["A. Menggantikan utusan daerah dan golongan dalam MPR untuk memperkuat aspirasi dan kepentingan daerah dalam kerangka NKRI", "B. Untuk mengawasi pemerintah daerah", "C. Untuk memilih gubernur dan bupati", "D. Untuk mengelola keuangan daerah"],answer:"A"},
+      {id:"12-6",q:"Latar belakang penegasan anggaran pendidikan minimal 20% dari APBN dan APBD dalam UUD 1945 adalah...",options:["A. Karena usulan IMF", "B. Memenuhi kebutuhan minimal biaya operasional sistem pendidikan nasional yang terabaikan dan menjamin hak konstitusional warga atas pendidikan", "C. Karena tekanan partai politik", "D. Karena rekomendasi Bank Dunia"],answer:"B"},
+      {id:"12-7",q:"Mengapa MPR tidak lagi memiliki wewenang menetapkan GBHN setelah amandemen?",options:["A. Karena GBHN sudah tidak relevan", "B. Dengan pemilihan Presiden secara langsung oleh rakyat, Presiden memiliki mandat langsung dan tidak perlu pertanggungjawaban kepada MPR; rakyatlah mandatarisnya", "C. Karena DPR menolaknya", "D. Karena perintah PBB"],answer:"B"},
+      {id:"12-8",q:"Substansi TAP MPR No. VIII/MPR/2001 mengamanatkan untuk...",options:["A. Membubarkan lembaga koruptif", "B. Mempercepat dan menjamin efektivitas pemberantasan KKN sesuai TAP MPR No. XI/MPR/1998", "C. Membentuk undang-undang pemilu baru", "D. Menghapus kewenangan Presiden terkait pengampunan"],answer:"B"},
+      {id:"12-9",q:"Ketetapan MPR Nomor III/MPR/2000 adalah tentang...",options:["A. Etika Kehidupan Berbangsa", "B. Visi Indonesia Masa Depan", "C. Sumber Hukum dan Tata Urutan Peraturan Perundang-undangan", "D. Penyelenggara Negara yang Bersih dan Bebas KKN"],answer:"C"},
+    ],
+    essay:{id:"12-e",q:"Jelaskan arah politik ekonomi nasional untuk mewujudkan demokrasi ekonomi dan efisiensi nasional yang berdaya saing tinggi sebagaimana diatur dalam Ketetapan MPR Nomor XVI/MPR/1998!",rubrik:"Menciptakan pengusaha menengah yang kuat dan banyak; membentuk keterkaitan dan kemitraan saling menguntungkan antara usaha kecil, menengah, koperasi, usaha besar swasta, dan BUMN; tidak ada penumpukan aset dan pemusatan kekuatan ekonomi; pengusaha ekonomi lemah diberi prioritas; membuka akses pada sumber dana."},
+  },
+
+  { id:13, title:"Paket 13 – UUD 1945: Amandemen & Konstitusi", topic:"UUD NRI 1945",
+    pg:[
+      {id:"13-1",q:"Berapa kali UUD 1945 telah diamandemen?",options:["A. 1 kali", "B. 2 kali", "C. 3 kali", "D. 4 kali"],answer:"D"},
+      {id:"13-2",q:"Pasal-pasal yang pertama kali diamandemen dalam UUD 1945 adalah...",options:["A. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 21", "B. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 22", "C. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 23", "D. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 24"],answer:"A"},
+      {id:"13-3",q:"Pasal-pasal yang kedua kali diamandemen dalam UUD 1945 adalah...",options:["A. Pasal 18, 19, 20, 22, 25, 26, 27, 28, 30, dan 35", "B. Pasal 18, 19, 20, 22, 25, 26, 27, 28, 30, dan 36", "C. Pasal 18, 19, 20, 22, 25, 26, 27, 28, 30, dan 37", "D. Pasal 18, 19, 20, 22, 25, 26, 27, 28, 30, dan 34"],answer:"B"},
+      {id:"13-4",q:"Pasal-pasal yang ketiga kali diamandemen dalam UUD 1945 adalah...",options:["A. Pasal 1, 3, 6, 11, 17, 23, dan 24", "B. Pasal 1, 3, 6, 11, 17, 23, dan 25", "C. Pasal 1, 3, 6, 11, 17, 23, dan 26", "D. Pasal 1, 3, 6, 11, 17, 23, dan 27"],answer:"A"},
+      {id:"13-5",q:"Kapan amandemen pertama UUD 1945 dilakukan?",options:["A. 19 Oktober 1998", "B. 19 Oktober 1999", "C. 19 Oktober 2000", "D. 19 Oktober 2002"],answer:"B"},
+      {id:"13-6",q:"Kapan amandemen kedua UUD 1945 dilakukan?",options:["A. 18 Agustus 2000", "B. 18 Agustus 2001", "C. 18 Agustus 2002", "D. 18 Agustus 2003"],answer:"A"},
+      {id:"13-7",q:"Kapan amandemen ketiga UUD 1945 dilakukan?",options:["A. 9 November 2001", "B. 9 November 2002", "C. 9 November 2003", "D. 9 November 2004"],answer:"A"},
+      {id:"13-8",q:"Kapan amandemen keempat UUD 1945 dilakukan?",options:["A. 11 Agustus 2001", "B. 11 Agustus 2002", "C. 11 Agustus 2003", "D. 11 Agustus 2004"],answer:"B"},
+      {id:"13-9",q:"Pasal-pasal yang keempat kali diamandemen dalam UUD 1945 adalah...",options:["A. Pasal 2, 6, 8, 11, 16, 23, 24, 29, 31, 32, 33, 34, dan 30", "B. Pasal 2, 6, 8, 11, 16, 23, 24, 29, 31, 32, 33, 34, dan 35", "C. Pasal 2, 6, 8, 11, 16, 23, 24, 29, 31, 32, 33, 34, dan 37", "D. Pasal 2, 6, 8, 11, 16, 23, 24, 29, 31, 32, 33, 34, dan 36"],answer:"C"},
+    ],
+    essay:{id:"13-e",q:"Bagaimana konsepsi gotong royong tercermin pada sila-sila Pancasila? Jelaskan keterkaitan prinsip gotong royong dengan masing-masing sila secara terperinci!",rubrik:"Jawaban mencakup: (1) Ketuhanan – ketuhanan yang berkebudayaan, lapang, dan toleran; (2) Kemanusiaan – kemanusiaan yang berkeadilan dan berkeadaban, bukan yang menjajah atau menindas; (3) Persatuan – mengupayakan kebersamaan dengan menghargai perbedaan dalam bingkai Bhinneka Tunggal Ika; (4) Kerakyatan – demokrasi yang mengembangkan musyawarah mufakat; (5) Keadilan – mengembangkan partisipasi dan emansipasi di bidang ekonomi dengan semangat kekeluargaan."},
+  },
+
+  { id:14, title:"Paket 14 – Mahkamah Konstitusi & Lembaga Negara", topic:"UUD NRI 1945",
+    pg:[
+      {id:"14-1",q:"Di bagian mana dalam UUD 1945 disebutkan tata cara pembentukan Mahkamah Konstitusi?",options:["A. Aturan Peralihan Pasal I", "B. Aturan Peralihan Pasal II", "C. Aturan Peralihan Pasal III", "D. Aturan Peralihan Pasal IV"],answer:"C"},
+      {id:"14-2",q:"Apa dasar hukum pembentukan Mahkamah Konstitusi?",options:["A. UU Nomor 21 tahun 2003", "B. UU Nomor 22 tahun 2003", "C. UU Nomor 23 tahun 2003", "D. UU Nomor 24 tahun 2003"],answer:"D"},
+      {id:"14-3",q:"Di bawah ini merupakan kewenangan Mahkamah Konstitusi, kecuali...",options:["A. Menguji UU terhadap UUD Negara RI Tahun 1945", "B. Memutus sengketa kewenangan lembaga negara yang kewenangannya diberikan UUD", "C. Memutus pembubaran partai politik dan perselisihan hasil pemilihan umum", "D. Memutus sengketa peradilan pidana dan perdata"],answer:"D"},
+      {id:"14-4",q:"Macam dan harga mata uang ditetapkan dalam UUD 1945 pasal...",options:["A. 23A", "B. 23B", "C. 23C", "D. 23D"],answer:"B"},
+      {id:"14-5",q:"Menurut pasal 1 UUD 1945 amandemen, MPR tidak lagi melakukan sepenuhnya kedaulatan rakyat karena...",options:["A. Kedaulatan berada di tangan rakyat", "B. Kedaulatan sepenuhnya dilakukan melalui pilpres langsung", "C. Kedaulatan berada di tangan legislatif dan presiden melalui mekanisme pemilihan langsung", "D. Kedaulatan berada di tangan Mahkamah Konstitusi"],answer:"A"},
+      {id:"14-6",q:"Setiap warga negara berhak mendapat pendidikan. Hal ini tercantum dalam UUD 1945 pasal...",options:["A. 31 ayat 1", "B. 31 ayat 2", "C. 31 ayat 3", "D. 31 ayat 4"],answer:"A"},
+      {id:"14-7",q:"Setiap warga negara wajib mengikuti pendidikan dasar dan pemerintah wajib membiayainya. Hal ini tercantum dalam UUD 1945 pasal...",options:["A. 31 ayat 1", "B. 31 ayat 2", "C. 31 ayat 3", "D. 31 ayat 4"],answer:"B"},
+      {id:"14-8",q:"Bunyi pasal 32 ayat 1 UUD 1945 mengenai kebudayaan nasional Indonesia adalah...",options:["A. Setiap warga negara berhak mendapatkan pengetahuan kebudayaan Indonesia", "B. Negara Indonesia dilandasi oleh beragam budaya", "C. Negara memajukan kebudayaan nasional Indonesia di tengah peradaban dunia dengan menjamin kebebasan masyarakat dalam memelihara dan mengembangkan nilai-nilai budayanya", "D. Negara menghormati dan memelihara bahasa daerah sebagai kekayaan budaya nasional"],answer:"C"},
+      {id:"14-9",q:"Dewan Perwakilan Rakyat memiliki fungsi legislasi, anggaran, dan pengawasan. Hal ini diatur dalam UUD 1945 pasal...",options:["A. 20A", "B. 20B", "C. 20C", "D. 20D"],answer:"A"},
+    ],
+    essay:{id:"14-e",q:"Jelaskan latar belakang dibentuknya Mahkamah Konstitusi dalam sistem ketatanegaraan Indonesia dan apa yang dimaksud dengan mekanisme impeachment sebagai salah satu ciri sistem presidensial!",rubrik:"Jawaban mencakup: (1) MK dibentuk karena dianutnya paham negara hukum dan konstitusionalisme dalam UUD 1945; (2) MK sebagai lembaga khusus yang menjaga kemurnian UUD sebagai hukum dasar tertinggi; (3) Impeachment adalah mekanisme yang menegaskan bahwa siapapun termasuk kepala negara tidak kebal terhadap hukum; (4) Ciri sistem presidensial: masa jabatan pasti (fixed term), Presiden sebagai kepala negara dan kepala pemerintahan, mekanisme checks and balances, adanya mekanisme impeachment."},
+  },
+
+  { id:15, title:"Paket 15 – Hak Warga Negara & Lembaga Perwakilan", topic:"UUD NRI 1945",
+    pg:[
+      {id:"15-1",q:"Berikut adalah hak-hak Dewan Perwakilan Rakyat, kecuali...",options:["A. Hak interpelasi", "B. Hak angket", "C. Hak menyatakan pendapat", "D. Hak mosi tidak percaya"],answer:"D"},
+      {id:"15-2",q:"Setiap orang berhak mengembangkan diri dan memperoleh manfaat dari ilmu pengetahuan, teknologi, seni, dan budaya. Aturan ini dimuat dalam UUD 1945 pasal...",options:["A. 28A", "B. 28B", "C. 28C", "D. 28D"],answer:"C"},
+      {id:"15-3",q:"Anggota DPRD Provinsi, Kabupaten, dan Kota dipilih melalui...",options:["A. Pemilihan umum", "B. Pemilihan oleh DPRD", "C. Pemilihan oleh Partai Politik", "D. Organisasi massa"],answer:"A"},
+      {id:"15-4",q:"Gubernur, Bupati, dan Walikota masing-masing sebagai kepala pemerintah daerah dipilih melalui...",options:["A. Mekanisme demokratis", "B. Penunjukan Presiden", "C. Pemilihan oleh parpol mayoritas", "D. Keputusan MPR"],answer:"A"},
+      {id:"15-5",q:"Siapa yang berwenang memberi gelar, tanda jasa, dan lain-lain tanda kehormatan?",options:["A. DPR", "B. Presiden", "C. MPR", "D. DPD"],answer:"B"},
+      {id:"15-6",q:"Siapa yang berwenang memberi grasi dan rehabilitasi?",options:["A. Presiden", "B. DPR", "C. MPR", "D. MA"],answer:"A"},
+      {id:"15-7",q:"TAP MPR No IV/MPR/1983 tentang Referendum mengatur perubahan isi dari UUD 1945 melalui mekanisme...",options:["A. Interpelasi", "B. Budget", "C. Mosi tidak percaya", "D. Referendum"],answer:"D"},
+      {id:"15-8",q:"Upaya pemberantasan KKN harus dilaksanakan secara tegas terhadap siapapun, baik pejabat negara, mantan pejabat negara, keluarga, maupun pihak swasta. Ini adalah isi...",options:["A. Pasal 3 TAP MPR RI No XI/1998", "B. Pasal 4 TAP MPR RI No XI/1998", "C. Pasal 5 TAP MPR RI No XI/1998", "D. Pasal 6 TAP MPR RI No XI/1998"],answer:"B"},
+      {id:"15-9",q:"Pemisahan TNI dan Kepolisian Republik Indonesia dimuat di dalam...",options:["A. TAP MPR RI No VI/2000", "B. TAP MPR RI No VII/2000", "C. TAP MPR RI No VIII/2000", "D. TAP MPR RI No IX/2000"],answer:"B"},
+    ],
+    essay:{id:"15-e",q:"Jelaskan latar belakang pembentukan Dewan Perwakilan Daerah (DPD) dalam sistem ketatanegaraan Indonesia dan sebutkan fungsi serta kewenangannya!",rubrik:"Jawaban mencakup: (1) Memperkuat ikatan daerah dalam wadah NKRI dan memperteguh persatuan kebangsaan; (2) Meningkatkan agregasi dan akomodasi aspirasi daerah dalam perumusan kebijakan nasional; (3) Mendorong percepatan demokrasi, pembangunan, dan kemajuan daerah secara serasi dan seimbang; (4) Fungsi DPD: mengajukan dan membahas RUU terkait daerah, melakukan pengawasan atas pelaksanaan UU terkait daerah."},
+  },
+
+  { id:16, title:"Paket 16 – UUD 1945: Konstitusi, Hukum & DPR", topic:"UUD NRI 1945",
+    pg:[
+      {id:"16-1",q:"Manakah pernyataan yang paling tepat mengenai hubungan konstitusi dan UUD?",options:["A. Konstitusi tidak sama dengan UUD", "B. Konstitusi sama dengan UUD", "C. Konstitusi tidak tertulis, UUD tertulis", "D. Konstitusi lebih luas dari UUD"],answer:"D"},
+      {id:"16-2",q:"Tugas MPR menurut pasal 3 UUD 1945 adalah...",options:["A. Menetapkan Undang-Undang Dasar", "B. Memilih Presiden dan Wakil Presiden", "C. Mengubah Undang-Undang Dasar", "D. Meminta pertanggungjawaban dari Presiden"],answer:"A"},
+      {id:"16-3",q:"UUD 1945 merupakan sebagian dari hukum dasar Republik Indonesia. Hal ini berarti...",options:["A. Di samping UUD 1945 tidak ada dasar yang lainnya", "B. Di samping UUD 1945 masih terdapat hukum lain yang tertulis", "C. Di samping UUD 1945 masih terdapat hukum dasar yang tidak tertulis", "D. UUD 1945 tidak dapat diubah sama sekali"],answer:"C"},
+      {id:"16-4",q:"Tujuan negara Indonesia dalam Pembukaan UUD 1945 adalah seperti di bawah ini, kecuali...",options:["A. Melindungi segenap bangsa Indonesia", "B. Memajukan kesejahteraan umum", "C. Mencerdaskan kehidupan bangsa", "D. Menegakkan keadilan"],answer:"D"},
+      {id:"16-5",q:"DPR adalah lembaga tinggi negara yang mempunyai fungsi, antara lain...",options:["A. Mengubah UUD", "B. Menetapkan UUD", "C. Mengawasi jalannya pemerintahan", "D. Melaksanakan pemilu setiap 5 tahun sekali"],answer:"C"},
+      {id:"16-6",q:"Lagu Kebangsaan Indonesia Raya terdapat di dalam UUD 1945...",options:["A. Pasal 36A", "B. Pasal 36B", "C. Pasal 36C", "D. Pasal 36D"],answer:"B"},
+      {id:"16-7",q:"Lambang Negara ialah Garuda Pancasila dengan semboyan Bhinneka Tunggal Ika, adalah isi dari UUD 1945 pasal 36A hasil amandemen...",options:["A. Kesatu", "B. Kedua", "C. Ketiga", "D. Keempat"],answer:"B"},
+      {id:"16-8",q:"Bunyi pasal 23A UUD 1945 tentang pajak dan pungutan yang bersifat memaksa untuk kepentingan negara adalah hasil amandemen...",options:["A. Kesatu", "B. Kedua", "C. Ketiga", "D. Keempat"],answer:"C"},
+      {id:"16-9",q:"Beribadah dan menganut suatu agama atau kepercayaan termasuk hak asasi manusia jenis...",options:["A. Hak pribadi", "B. Hak perlakuan dan perlindungan", "C. Hak politik", "D. Hak sosial budaya"],answer:"A"},
+    ],
+    essay:{id:"16-e",q:"Jelaskan apa yang dimaksud dengan etika penegakkan hukum yang berkeadilan sebagaimana tercantum dalam Ketetapan MPR Nomor VI/MPR/2001 dan sebutkan ciri-ciri sistem pemerintahan presidensial!",rubrik:"Jawaban mencakup: (1) Etika penegakkan hukum: menumbuhkan kesadaran tertib sosial, ketenangan dan keteraturan hidup bersama melalui ketaatan terhadap hukum yang berpihak pada keadilan; menjamin tegaknya supremasi dan kepastian hukum; (2) Ciri sistem presidensial: masa jabatan Presiden bersifat pasti (fixed term), Presiden sebagai kepala negara sekaligus kepala pemerintahan, mekanisme saling mengawasi dan mengimbangi (checks and balances), adanya mekanisme impeachment."},
+  },
+
+  { id:17, title:"Paket 17 – Tematik: TAP MPR, KKN & Ketatanegaraan", topic:"UUD NRI 1945",
+    pg:[
+      {id:"17-1",q:"Presiden Republik Indonesia ke-3 adalah...",options:["A. Soeharto", "B. B.J. Habibie", "C. Abdurrahman Wahid", "D. Megawati Soekarnoputri"],answer:"B"},
+      {id:"17-2",q:"Undang-undang dasar tidak tertulis disebut...",options:["A. Konstitusi", "B. Perda", "C. Konvensi", "D. Peraturan Pemerintah"],answer:"C"},
+      {id:"17-3",q:"Hari Pendidikan Nasional jatuh pada tanggal...",options:["A. 21 April", "B. 2 Mei", "C. 28 Oktober", "D. 10 November"],answer:"B"},
+      {id:"17-4",q:"Yang pertama kali mengemukakan lima gagasan tentang dasar negara dalam sidang pertama BPUPKI adalah...",options:["A. M. Yamin", "B. Soepomo", "C. Soekarno", "D. Moh. Hatta"],answer:"A"},
+      {id:"17-5",q:"Tonggak persatuan Indonesia ditandai dengan pembacaan ikrar...",options:["A. Proklamasi Kemerdekaan", "B. Sumpah Pemuda", "C. Piagam Jakarta", "D. Pembukaan UUD 1945"],answer:"B"},
+      {id:"17-6",q:"Amandemen UUD 1945 keempat dilakukan pada tanggal...",options:["A. 9 November 2001", "B. 18 Agustus 2000", "C. 11 Agustus 2002", "D. 19 Oktober 1999"],answer:"C"},
+      {id:"17-7",q:"Nama gerakan yang dilakukan pada 30 September 1965 adalah...",options:["A. DI/TII", "B. PRRI/Permesta", "C. G 30 S/PKI", "D. RMS"],answer:"C"},
+      {id:"17-8",q:"Kepanjangan dari TRITURA adalah...",options:["A. Tri Tuntutan Rakyat", "B. Tri Tugas Rakyat", "C. Tri Tujuan Rakyat", "D. Tri Tindakan Rakyat"],answer:"A"},
+      {id:"17-9",q:"Belanda pertama kali datang ke Indonesia pada tahun 1596 di bawah pimpinan...",options:["A. Jan Pieterszoon Coen", "B. Herman Willem Daendels", "C. Cornelis de Houtman", "D. Pieter Both"],answer:"C"},
+    ],
+    essay:{id:"17-e",q:"Sebutkan dan jelaskan substansi serta amanat dari Ketetapan MPR Nomor VIII/MPR/2001 tentang Rekomendasi Arah Kebijakan Pemberantasan dan Pencegahan Korupsi, Kolusi, dan Nepotisme (KKN)! Mengapa pemberantasan KKN sangat penting bagi kemajuan bangsa?",rubrik:"Jawaban mencakup: (1) Substansi: mempercepat dan menjamin efektivitas pemberantasan KKN sebagaimana diamanatkan TAP MPR No. XI/MPR/1998 tentang Penyelenggaraan Negara yang bersih dan bebas KKN; (2) Amanat TAP MPR No. I/MPR/2003: memerintahkan pembentukan undang-undang serta peraturan pelaksanaannya untuk percepatan dan efektivitas pemberantasan dan pencegahan KKN; (3) Pentingnya pemberantasan KKN: menghambat pembangunan nasional, merugikan keuangan negara, merusak kepercayaan publik terhadap pemerintah, dan menghambat pemerataan kesejahteraan rakyat."},
+  },
+
+
+  // ══════════════════════════════════════════════
+  // KELOMPOK: NKRI (Paket 18–21)
+  // ══════════════════════════════════════════════
+,
+
+  { id:18, title:"Paket 18 – NKRI: Bentuk & Dasar Negara", topic:"NKRI",
+    pg:[
+      {id:"18-1",q:"Bentuk negara Indonesia berdasarkan Pasal 1 ayat (1) UUD 1945 adalah...",options:["A. Serikat", "B. Kesatuan yang berbentuk Republik", "C. Monarki konstitusional", "D. Federal"],answer:"B"},
+      {id:"18-2",q:"Alasan utama pendiri bangsa memilih NKRI bukan negara federal adalah...",options:["A. Karena tekanan internasional", "B. Untuk mencegah taktik pecah belah seperti yang dilakukan Belanda", "C. Karena wilayah Indonesia kecil", "D. Karena usulan MPR"],answer:"B"},
+      {id:"18-3",q:"Bentuk Negara Kesatuan Republik Indonesia tidak dapat diubah berdasarkan...",options:["A. Ketetapan MPR", "B. Pasal 37 ayat (5) UUD 1945", "C. Undang-undang", "D. Keputusan Presiden"],answer:"B"},
+      {id:"18-4",q:"Pasal 1 ayat (3) UUD 1945 menyatakan...",options:["A. Negara Indonesia ialah Negara Kesatuan", "B. Kedaulatan berada di tangan rakyat", "C. Negara Indonesia adalah negara hukum", "D. Presiden memegang kekuasaan tertinggi"],answer:"C"},
+      {id:"18-5",q:"Tujuan negara Indonesia yang tercantum dalam Pembukaan UUD 1945, KECUALI...",options:["A. Melindungi segenap bangsa Indonesia", "B. Memajukan kesejahteraan umum", "C. Memperluas wilayah negara", "D. Mencerdaskan kehidupan bangsa"],answer:"C"},
+      {id:"18-6",q:"Pemerintahan daerah menjalankan otonomi seluas-luasnya, kecuali urusan yang oleh UU ditentukan sebagai...",options:["A. Urusan daerah", "B. Urusan Pemerintah Pusat", "C. Urusan bersama", "D. Urusan internasional"],answer:"B"},
+      {id:"18-7",q:"Bumi dan air dan kekayaan alam yang terkandung di dalamnya dikuasai oleh negara dan dipergunakan untuk...",options:["A. Kepentingan pemerintah", "B. Sebesar-besar kemakmuran rakyat", "C. Kepentingan investor", "D. Kepentingan militer"],answer:"B"},
+      {id:"18-8",q:"Bendera negara Indonesia adalah...",options:["A. Merah-Putih-Biru", "B. Sang Saka Merah Putih", "C. Merah-Putih-Hijau", "D. Merah-Kuning-Hijau"],answer:"B"},
+      {id:"18-9",q:"Otonomi daerah di Indonesia dilaksanakan dalam kerangka...",options:["A. Federalisme", "B. Negara Kesatuan Republik Indonesia", "C. Konfederasi", "D. Unilateralisme"],answer:"B"},
+    ],
+    essay:{id:"18-e",q:"Jelaskan mengapa para pendiri bangsa memilih bentuk NKRI bukan negara federal, dan apa ancaman terhadap keutuhan NKRI saat ini!",rubrik:"Alasan: pengalaman devide et impera Belanda, menyatukan seluruh wilayah, mencegah pecah belah, setelah berbentuk kesatuan taktik Belanda dapat dipatahkan. Ancaman: separatisme, radikalisme, konflik SARA, korupsi, pengaruh asing."},
+  },
+
+  { id:19, title:"Paket 19 – Sumpah Pemuda & Sejarah Kemerdekaan", topic:"NKRI",
+    pg:[
+      {id:"19-1",q:"Hari Sumpah Pemuda diperingati setiap tanggal...",options:["A. 17 Agustus", "B. 20 Mei", "C. 28 Oktober", "D. 1 Juni"],answer:"C"},
+      {id:"19-2",q:"Sumpah Pemuda diresmikan di gedung...",options:["A. Gedung Volksraad, Batavia", "B. Gedung Oost Java Bioscoop di Batavia (Jakarta)", "C. Gedung Concordia, Bandung", "D. Gedung Sate, Bandung"],answer:"B"},
+      {id:"19-3",q:"Alinea pertama Sumpah Pemuda bermakna...",options:["A. Para pemuda mengakui satu bangsa Indonesia", "B. Para pemuda dan pemudi bersungguh-sungguh memperjuangkan kemerdekaan", "C. Bahasa Indonesia sebagai bahasa persatuan", "D. Satu tanah air Indonesia"],answer:"B"},
+      {id:"19-4",q:"BPUPKI dibentuk oleh...",options:["A. Ir. Soekarno", "B. Drs. Mohammad Hatta", "C. Jenderal Harada Kumakici", "D. Jenderal Koiso Kuniaki"],answer:"C"},
+      {id:"19-5",q:"Bendera merah putih yang digunakan pada waktu pembacaan proklamasi kemerdekaan dijahit oleh...",options:["A. Ibu Inggit Garnasih", "B. Fatmawati", "C. Dewi Soekarno", "D. Cut Nyak Dhien"],answer:"B"},
+      {id:"19-6",q:"Proklamasi kemerdekaan Indonesia dibacakan pada pukul...",options:["A. 08.00", "B. 09.00", "C. 10.00", "D. 12.00"],answer:"C"},
+      {id:"19-7",q:"Perumusan teks proklamasi dilakukan di rumah...",options:["A. Ir. Soekarno", "B. Drs. Mohammad Hatta", "C. Laksamana Maeda", "D. Ahmad Soebardjo"],answer:"C"},
+      {id:"19-8",q:"Jumlah anggota PPKI adalah...",options:["A. 17 orang", "B. 19 orang", "C. 21 orang", "D. 23 orang"],answer:"C"},
+      {id:"19-9",q:"Negara pertama yang mengakui kemerdekaan Indonesia adalah...",options:["A. India", "B. Mesir", "C. Arab Saudi", "D. Belanda"],answer:"B"},
+    ],
+    essay:{id:"19-e",q:"Jelaskan latar belakang terbentuknya Sumpah Pemuda dan apa makna penting ikrar tersebut bagi persatuan bangsa Indonesia!",rubrik:"Latar belakang: para pemuda ingin mewujudkan persatuan antarorganisasi yang bersifat kedaerahan; dua kali kongres pemuda. Makna: menegaskan satu bangsa, satu tanah air, satu bahasa Indonesia; tonggak persatuan nasional yang melampaui sekat kedaerahan dan menjadi fondasi perjuangan kemerdekaan."},
+  },
+
+  { id:20, title:"Paket 20 – Sejarah Kemerdekaan: Proklamasi & BPUPKI", topic:"NKRI",
+    pg:[
+      {id:"20-1",q:"Lambang sila ke-3 Pancasila adalah...",options:["A. Bintang", "B. Rantai Emas", "C. Pohon Beringin", "D. Kepala Banteng"],answer:"C"},
+      {id:"20-2",q:"Kapan BPUPKI dibentuk?",options:["A. 1 Maret 1945", "B. 29 Mei 1945", "C. 22 Juni 1945", "D. 7 Agustus 1945"],answer:"A"},
+      {id:"20-3",q:"BPUPKI diketuai oleh...",options:["A. Ir. Soekarno", "B. Moh. Hatta", "C. Radjiman Widiodiningrat", "D. Ahmad Soebardjo"],answer:"C"},
+      {id:"20-4",q:"Siapa yang membentuk BPUPKI?",options:["A. Jenderal Terauchi", "B. Jenderal Harada Kumakici", "C. Laksamana Maeda", "D. Jenderal Hideki Tojo"],answer:"B"},
+      {id:"20-5",q:"Kapan Jepang menyerah tanpa syarat kepada Sekutu?",options:["A. 6 Agustus 1945", "B. 9 Agustus 1945", "C. 14 Agustus 1945", "D. 17 Agustus 1945"],answer:"C"},
+      {id:"20-6",q:"Bendera Merah Putih yang digunakan pada pembacaan proklamasi kemerdekaan 17 Agustus 1945 dijahit oleh...",options:["A. Dewi Soekarno", "B. Fatmawati", "C. Inggit Ganarsih", "D. Cut Nyak Dien"],answer:"B"},
+      {id:"20-7",q:"Di rumah siapakah perumusan teks proklamasi dilakukan?",options:["A. Ir. Soekarno", "B. Moh. Hatta", "C. Ahmad Soebardjo", "D. Laksamana Maeda"],answer:"D"},
+      {id:"20-8",q:"UUD 1945 disahkan pada tanggal...",options:["A. 1 Juni 1945", "B. 22 Juni 1945", "C. 17 Agustus 1945", "D. 18 Agustus 1945"],answer:"D"},
+      {id:"20-9",q:"Yang membawa Soekarno-Hatta dari Rengasdengklok ke Jakarta adalah...",options:["A. Darwis dan Wikana", "B. Chairul Saleh dan Sukarni", "C. Kunto dan Achmad Soebardjo", "D. Sayuti Melik dan Latief Hendraningrat"],answer:"C"},
+    ],
+    essay:{id:"20-e",q:"Jelaskan penyebab terjadinya peristiwa Rengasdengklok, siapa saja tokoh yang terlibat, dan apa hasil dari peristiwa tersebut bagi kemerdekaan Indonesia!",rubrik:"Jawaban mencakup: (1) Penyebab: perbedaan paham antara golongan tua (menunggu keputusan PPKI/Jepang) dan golongan muda (segera proklamasikan kemerdekaan); (2) Tokoh golongan muda: Chairul Saleh, Sukarni, Darwis, Wikana; (3) Tokoh golongan tua: Soekarno dan Hatta (yang dibawa); (4) Penengah: Ahmad Soebardjo dengan jaminan proklamasi dilakukan 17 Agustus 1945; (5) Hasil: kesepakatan bahwa proklamasi segera dibacakan; perumusan teks proklamasi di rumah Laksamana Maeda malam 16-17 Agustus 1945."},
+  },
+
+  { id:21, title:"Paket 21 – Sejarah Perjuangan & Pahlawan Nasional", topic:"NKRI",
+    pg:[
+      {id:"21-1",q:"Orang yang pertama kali mengemukakan istilah Pancasila adalah...",options:["A. Moh. Yamin", "B. Soepomo", "C. Bung Karno", "D. Moh. Hatta"],answer:"C"},
+      {id:"21-2",q:"Yang menandatangani naskah proklamasi kemerdekaan Indonesia adalah...",options:["A. Hanya Ir. Soekarno", "B. Ir. Soekarno dan Moh. Hatta", "C. Soekarno, Hatta, dan Soebardjo", "D. Seluruh anggota PPKI"],answer:"B"},
+      {id:"21-3",q:"Hari Kartini diperingati setiap tanggal...",options:["A. 21 April", "B. 28 Oktober", "C. 10 November", "D. 22 Desember"],answer:"A"},
+      {id:"21-4",q:"Kalimat pertama pada teks proklamasi diusulkan oleh...",options:["A. Ir. Soekarno", "B. Moh. Hatta", "C. Ahmad Soebardjo", "D. Sukarni"],answer:"C"},
+      {id:"21-5",q:"Perlawanan rakyat Batak kepada penjajah Belanda pada tahun 1883–1907 dipimpin oleh...",options:["A. Teuku Umar", "B. Cut Nyak Dien", "C. Sisingamangaraja XII", "D. Tuanku Imam Bonjol"],answer:"C"},
+      {id:"21-6",q:"Negara sahabat yang pertama kali mengakui kemerdekaan Indonesia adalah...",options:["A. India", "B. Malaysia", "C. Arab Saudi", "D. Mesir"],answer:"D"},
+      {id:"21-7",q:"Tercapainya persetujuan Roem-Royen pada tanggal...",options:["A. 8 Desember 1947", "B. 27 Desember 1949", "C. 7 Mei 1949", "D. 18 Agustus 1945"],answer:"C"},
+      {id:"21-8",q:"Perundingan antara Indonesia dan Belanda yang diselenggarakan oleh Komite Tiga Negara (KTN) adalah...",options:["A. Perjanjian Linggarjati", "B. Perjanjian Renville", "C. Perjanjian Roem-Royen", "D. Konferensi Meja Bundar"],answer:"B"},
+      {id:"21-9",q:"Perubahan teks proklamasi kemerdekaan dalam proses pengetikan dilakukan oleh...",options:["A. Moh. Hatta", "B. Soekarno", "C. Sayuti Melik", "D. Ahmad Soebardjo"],answer:"C"},
+    ],
+    essay:{id:"21-e",q:"Jelaskan perjalanan perjuangan kemerdekaan Indonesia dari terbentuknya BPUPKI hingga proklamasi kemerdekaan pada 17 Agustus 1945! Sertakan tokoh-tokoh kunci dan peran mereka masing-masing.",rubrik:"Jawaban mencakup: (1) BPUPKI dibentuk 1 Maret 1945 oleh Jepang, diketuai Radjiman Widiodiningrat; (2) Sidang BPUPKI I (29 Mei – 1 Juni 1945): perumusan dasar negara oleh M. Yamin, Soepomo, Soekarno; (3) Panitia Sembilan merumuskan Piagam Jakarta (22 Juni 1945); (4) BPUPKI dibubarkan, PPKI dibentuk (7 Agustus 1945); (5) Jepang menyerah kepada Sekutu (14 Agustus 1945); (6) Peristiwa Rengasdengklok; (7) Perumusan teks proklamasi di rumah Laksamana Maeda; (8) Proklamasi dibacakan Soekarno-Hatta, 17 Agustus 1945; (9) PPKI mengesahkan UUD 1945 dan memilih Presiden-Wapres (18 Agustus 1945)."},
+  },
+
+
+  // ══════════════════════════════════════════════
+  // KELOMPOK: BHINNEKA TUNGGAL IKA (Paket 22–24)
+  // ══════════════════════════════════════════════
+,
+
+  { id:22, title:"Paket 22 – Bhinneka Tunggal Ika: Asal Usul & Makna", topic:"Bhinneka Tunggal Ika",
+    pg:[
+      {id:"22-1",q:"Semboyan 'Bhinneka Tunggal Ika' berasal dari bahasa...",options:["A. Jawa", "B. Sansekerta", "C. Melayu", "D. Arab"],answer:"B"},
+      {id:"22-2",q:"Bhinneka Tunggal Ika pertama kali diungkapkan oleh...",options:["A. Ir. Soekarno", "B. Mpu Tantular", "C. Mpu Gandring", "D. Ki Hadjar Dewantara"],answer:"B"},
+      {id:"22-3",q:"Karya Mpu Tantular yang memuat Bhinneka Tunggal Ika berjudul...",options:["A. Kakawin Sutasoma", "B. Negarakertagama", "C. Pararaton", "D. Serat Centhini"],answer:"A"},
+      {id:"22-4",q:"Bunyi asli kalimat Bhinneka Tunggal Ika adalah...",options:["A. Bhinna ika tunggal ika, tan hana dharma mangrwa", "B. Berbeda-beda tetapi tetap satu jua", "C. Unity in diversity", "D. Bersatu kita teguh bercerai kita runtuh"],answer:"A"},
+      {id:"22-5",q:"Bhinneka Tunggal Ika ditetapkan sebagai semboyan resmi negara melalui...",options:["A. UUD 1945", "B. Peraturan Pemerintah No. 66 Tahun 1951", "C. Ketetapan MPR", "D. Keputusan Presiden"],answer:"B"},
+      {id:"22-6",q:"Bhinneka Tunggal Ika dikukuhkan sebagai semboyan resmi dan tercantum dalam Pasal...",options:["A. Pasal 35", "B. Pasal 36A UUD 1945", "C. Pasal 37", "D. Pasal 38"],answer:"B"},
+      {id:"22-7",q:"Mpu Tantular hidup pada masa pemerintahan Raja...",options:["A. Sanjaya", "B. Hayamwuruk", "C. Airlangga", "D. Gajah Mada"],answer:"B"},
+      {id:"22-8",q:"'Bhinneka' dalam semboyan tersebut berarti...",options:["A. Tunggal", "B. Berbeda-beda/beragam", "C. Satu", "D. Bangsa"],answer:"B"},
+      {id:"22-9",q:"Bhinneka Tunggal Ika menjadi semboyan dalam Lambang Negara sejak tanggal...",options:["A. 17 Agustus 1945", "B. 17 Agustus 1950", "C. 5 Juli 1959", "D. 18 Agustus 1945"],answer:"B"},
+    ],
+    essay:{id:"22-e",q:"Jelaskan asal usul semboyan Bhinneka Tunggal Ika dan mengapa semboyan ini sangat relevan bagi bangsa Indonesia!",rubrik:"Dari Kakawin Sutasoma karya Mpu Tantular abad ke-14, bermakna berbeda-beda itu satu itu tidak ada pengabdian yang mendua. Relevan karena Indonesia terdiri dari ratusan suku, bahasa, dan agama yang berbeda namun harus bersatu dalam NKRI."},
+  },
+
+  { id:23, title:"Paket 23 – Bhinneka Tunggal Ika dalam Kehidupan", topic:"Bhinneka Tunggal Ika",
+    pg:[
+      {id:"23-1",q:"Bhinneka Tunggal Ika menjadi semangat untuk mewujudkan...",options:["A. Kemajuan ekonomi semata", "B. Persatuan dan kesatuan bangsa", "C. Kekuatan militer", "D. Kemajuan teknologi"],answer:"B"},
+      {id:"23-2",q:"Konflik horizontal di Indonesia sering dipicu oleh...",options:["A. Kemajuan teknologi", "B. Intoleransi dan fanatisme sempit terhadap perbedaan SARA", "C. Pertumbuhan ekonomi", "D. Pembangunan infrastruktur"],answer:"B"},
+      {id:"23-3",q:"Sikap yang mencerminkan nilai Bhinneka Tunggal Ika adalah...",options:["A. Fanatisme kelompok", "B. Toleransi dan menghargai perbedaan", "C. Egoisme suku", "D. Diskriminasi agama"],answer:"B"},
+      {id:"23-4",q:"Diskriminasi terhadap kelompok minoritas BERTENTANGAN dengan semangat...",options:["A. Liberalisme", "B. Bhinneka Tunggal Ika", "C. Kapitalisme", "D. Sekularisme"],answer:"B"},
+      {id:"23-5",q:"Indonesia memiliki ratusan bahkan ribuan suku dengan...",options:["A. Bahasa yang sama", "B. Bahasa daerah yang berbeda-beda", "C. Agama yang sama", "D. Budaya yang homogen"],answer:"B"},
+      {id:"23-6",q:"Hoaks yang mengandung unsur SARA merupakan ancaman serius bagi...",options:["A. Pertumbuhan ekonomi", "B. Persatuan bangsa dan nilai Bhinneka Tunggal Ika", "C. Kemajuan teknologi", "D. Pariwisata"],answer:"B"},
+      {id:"23-7",q:"Keberagaman Indonesia seharusnya dilihat sebagai...",options:["A. Sumber konflik yang harus dihindari", "B. Kekuatan dan kekayaan bangsa jika dikelola dengan baik", "C. Hambatan pembangunan", "D. Kelemahan bangsa"],answer:"B"},
+      {id:"23-8",q:"Negara mengakui enam agama secara resmi, yaitu...",options:["A. Islam, Kristen, Katolik, Hindu, Buddha, Konghucu", "B. Islam, Kristen, Katolik, Hindu, Buddha, animisme", "C. Islam, Kristen, Yahudi, Hindu, Buddha, Konghucu", "D. Islam, Kristen, Katolik, Hindu, Buddha, Sikhisme"],answer:"A"},
+      {id:"23-9",q:"Nilai Bhinneka Tunggal Ika dalam konteks globalisasi berfungsi sebagai...",options:["A. Penghalang masuknya budaya asing", "B. Filter untuk menyerap budaya luar yang positif tanpa kehilangan identitas bangsa", "C. Penolak semua nilai asing", "D. Pendorong westernisasi"],answer:"B"},
+    ],
+    essay:{id:"23-e",q:"Jelaskan ancaman terhadap nilai Bhinneka Tunggal Ika di era media sosial dan bagaimana cara mengatasinya!",rubrik:"Ancaman: hoaks berbasis SARA, ujaran kebencian, radikalisme online, polarisasi. Cara: literasi digital, konten positif, dialog antaragama, penegakan hukum UU ITE, pendidikan toleransi sejak dini."},
+  },
+
+  { id:24, title:"Paket 24 – Sumpah Pemuda & Bhinneka Tunggal Ika", topic:"Bhinneka Tunggal Ika",
+    pg:[
+      {id:"24-1",q:"Hari Sumpah Pemuda diresmikan pada tanggal...",options:["A. 20 Mei 1908", "B. 28 Oktober 1928", "C. 17 Agustus 1945", "D. 28 Oktober 1945"],answer:"B"},
+      {id:"24-2",q:"Sumpah Pemuda diresmikan di...",options:["A. Istana Negara Jakarta", "B. Gedung Merdeka Bandung", "C. Gedung Oost Java Bioscoop di Batavia (Jakarta)", "D. Lapangan Ikada Jakarta"],answer:"C"},
+      {id:"24-3",q:"Istilah Bhinneka Tunggal Ika ditulis oleh Mpu Tantular dalam kitab...",options:["A. Kitab Negarakertagama", "B. Kitab Pararaton", "C. Kitab Sutasoma", "D. Kitab Ramayana"],answer:"C"},
+      {id:"24-4",q:"Terjemahan makna Bhinneka Tunggal Ika dari Kitab Sutasoma adalah...",options:["A. Bersatu kita teguh, bercerai kita runtuh", "B. Agama Buddha dan Siwa (Hindu) merupakan zat yang berbeda, tetapi nilai kebenaran Jina dan Siwa adalah tunggal", "C. Berbeda-beda suku tetapi satu tujuan", "D. Indonesia adalah negara yang majemuk dan bersatu"],answer:"B"},
+      {id:"24-5",q:"Pada saat kemerdekaan diproklamirkan, Indonesia baru lepas dari penjajahan negara...",options:["A. Belanda", "B. Portugis", "C. Inggris", "D. Jepang"],answer:"D"},
+      {id:"24-6",q:"Kerja paksa yang diterapkan Jepang kepada rakyat Indonesia disebut...",options:["A. Cultuurstelsel", "B. Tanam Paksa", "C. Romusha", "D. Herendiensten"],answer:"C"},
+      {id:"24-7",q:"Trias Politika terdiri dari...",options:["A. Eksekutif, Legislatif, dan Federatif", "B. Legislatif, Eksekutif, dan Yudikatif", "C. Legislatif, Eksekutif, dan Konstitutif", "D. Eksekutif, Yudikatif, dan Administratif"],answer:"B"},
+      {id:"24-8",q:"Jenderal yang selamat dari tragedi G 30 S/PKI adalah...",options:["A. Jenderal Ahmad Yani", "B. Jend. A.H. Nasution", "C. Mayjen R. Suprapto", "D. Brigjen Panjaitan"],answer:"B"},
+      {id:"24-9",q:"Makna alinea pertama Sumpah Pemuda menggambarkan bahwa...",options:["A. Para pemuda mengakui satu bahasa, yaitu Bahasa Indonesia", "B. Para pemuda bersungguh-sungguh memperjuangkan kemerdekaan hingga titik darah penghabisan", "C. Pemuda Indonesia mengakui satu bangsa meskipun berbeda suku", "D. Bahasa Indonesia adalah bahasa persatuan yang harus dijunjung tinggi"],answer:"B"},
+    ],
+    essay:{id:"24-e",q:"Jelaskan latar belakang terbentuknya Sumpah Pemuda dan makna ketiga butir Sumpah Pemuda bagi persatuan dan kesatuan bangsa Indonesia! Mengapa Sumpah Pemuda harus tetap diperingati hingga saat ini?",rubrik:"Jawaban mencakup: (1) Latar belakang: ingin mewujudkan persatuan organisasi pemuda; sifat kedaerahan masyarakat; kegagalan perlawanan terhadap penjajah karena bersifat lokal; dilaksanakan 2 kali Kongres Pemuda; (2) Makna butir 1: bertumpah darah satu – tanah air Indonesia; (3) Makna butir 2: berbangsa satu – bangsa Indonesia (persatuan lintas suku); (4) Makna butir 3: menjunjung bahasa persatuan – Bahasa Indonesia sebagai identitas bangsa; (5) Relevansi: sebagai tonggak persatuan, sumber inspirasi semangat nasionalisme, dan pengingat pentingnya persatuan bagi generasi muda."},
+  },
+
+
+  // ══════════════════════════════════════════════
+  // KELOMPOK: CAMPURAN (Paket 25–27)
+  // ══════════════════════════════════════════════
+,
+
+  { id:25, title:"Paket 25 – Soal Campuran 4 Pilar", topic:"Campuran",
+    pg:[
+      {id:"25-1",q:"Empat Pilar MPR RI terdiri dari...",options:["A. Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika", "B. Pancasila, UUD 1945, MPR, DPR", "C. Pancasila, Proklamasi, NKRI, Bhinneka Tunggal Ika", "D. Pancasila, UUD 1945, Demokrasi, NKRI"],answer:"A"},
+      {id:"25-2",q:"Dasar hukum sosialisasi 4 Pilar MPR RI antara lain...",options:["A. UU Nomor 42 Tahun 2014 tentang MPR, DPR, DPD, dan DPRD", "B. UU Nomor 32 Tahun 2004 tentang Pemerintahan Daerah", "C. UU Nomor 12 Tahun 2011 tentang Pembentukan Peraturan", "D. UU Nomor 24 Tahun 2003 tentang Mahkamah Konstitusi"],answer:"A"},
+      {id:"25-3",q:"Pancasila sebagai Historische Grondslag berarti...",options:["A. Dasar filosofis", "B. Fondamen sejarah", "C. Dasar hukum", "D. Ideologi negara"],answer:"B"},
+      {id:"25-4",q:"Sikap yang bertentangan dengan nilai Bhinneka Tunggal Ika sekaligus mengancam NKRI adalah...",options:["A. Toleransi antaragama", "B. Gotong royong antar suku", "C. Separatisme dan radikalisme", "D. Dialog kebudayaan"],answer:"C"},
+      {id:"25-5",q:"Nilai Pancasila sila ke-4 yang tercermin dalam mekanisme pengambilan keputusan di lembaga negara adalah...",options:["A. Toleransi antaragama", "B. Musyawarah mufakat / voting", "C. Hak ekonomi warga negara", "D. Kesetaraan hukum"],answer:"B"},
+      {id:"25-6",q:"Konsensus dasar bangsa Indonesia menurut Presiden SBY terdiri dari...",options:["A. Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika", "B. Pancasila, Proklamasi, NKRI, Demokrasi", "C. Pancasila, UUD 1945, Demokrasi, HAM", "D. Pancasila, MPR, DPR, DPD"],answer:"A"},
+      {id:"25-7",q:"Pasal 1 ayat (2) UUD 1945 menyatakan...",options:["A. Negara Indonesia adalah negara hukum", "B. Negara Indonesia ialah Negara Kesatuan", "C. Kedaulatan berada di tangan rakyat dan dilaksanakan menurut Undang-Undang Dasar", "D. MPR memegang kedaulatan rakyat"],answer:"C"},
+      {id:"25-8",q:"Prinsip 'perbedaan bukan untuk dipertentangkan melainkan untuk saling melengkapi' sesuai dengan semangat...",options:["A. Kompetisi bebas", "B. Bhinneka Tunggal Ika", "C. Individualisme", "D. Materialisme"],answer:"B"},
+      {id:"25-9",q:"Tujuan pengamalan nilai-nilai Empat Pilar menurut MPR adalah...",options:["A. Memperbanyak peraturan hukum", "B. Mengukuhkan jiwa kebangsaan, nasionalisme, dan patriotisme generasi penerus", "C. Meningkatkan anggaran pertahanan", "D. Mengurangi jumlah partai politik"],answer:"B"},
+    ],
+    essay:{id:"25-e",q:"Jelaskan keterkaitan antara keempat pilar (Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika) dalam kehidupan berbangsa dan bernegara!",rubrik:"Pancasila sebagai ideologi/dasar negara → UUD 1945 sebagai konstitusi berdasarkan Pancasila → NKRI sebagai bentuk negara yang menjaga persatuan → Bhinneka Tunggal Ika sebagai semboyan yang merangkul keberagaman dalam persatuan. Keempat pilar saling melengkapi dan tidak dapat dipisahkan."},
+  },
+
+  { id:26, title:"Paket 26 – LCC: UUD 1945 & Sejarah Kemerdekaan", topic:"Campuran",
+    pg:[
+      {id:"26-1",q:"Berapa kali UUD 1945 diamandemen?",options:["A. 1 kali", "B. 2 kali", "C. 3 kali", "D. 4 kali"],answer:"D"},
+      {id:"26-2",q:"Pasal-pasal yang diamandemen pada amandemen pertama UUD 1945 adalah...",options:["A. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 21", "B. Pasal 5, 7, 9, 13, 14, 15, 17, 20, dan 22", "C. Pasal 18, 19, 20, 22, 25, 26, 27, 28, 30, dan 36", "D. Pasal 2, 6, 8, 11, 16, 23, 24, 29, 31, 32, 33, 34, dan 37"],answer:"A"},
+      {id:"26-3",q:"Amandemen pertama UUD 1945 dilakukan pada tanggal...",options:["A. 19 Oktober 1998", "B. 19 Oktober 1999", "C. 18 Agustus 2000", "D. 9 November 2001"],answer:"B"},
+      {id:"26-4",q:"Amandemen kedua UUD 1945 dilakukan pada tanggal...",options:["A. 19 Oktober 1999", "B. 18 Agustus 2000", "C. 9 November 2001", "D. 11 Agustus 2002"],answer:"B"},
+      {id:"26-5",q:"Amandemen ketiga UUD 1945 dilakukan pada tanggal...",options:["A. 18 Agustus 2000", "B. 9 November 2001", "C. 11 Agustus 2002", "D. 19 Oktober 1999"],answer:"B"},
+      {id:"26-6",q:"Amandemen keempat UUD 1945 dilakukan pada tanggal...",options:["A. 9 November 2001", "B. 19 Oktober 1999", "C. 11 Agustus 2002", "D. 18 Agustus 2000"],answer:"C"},
+      {id:"26-7",q:"Dasar hukum pembentukan Mahkamah Konstitusi adalah...",options:["A. UU Nomor 21 Tahun 2003", "B. UU Nomor 22 Tahun 2003", "C. UU Nomor 23 Tahun 2003", "D. UU Nomor 24 Tahun 2003"],answer:"D"},
+      {id:"26-8",q:"Di bagian mana dalam UUD 1945 disebutkan tata cara pembentukan Mahkamah Konstitusi?",options:["A. Aturan Peralihan Pasal I", "B. Aturan Peralihan Pasal II", "C. Aturan Peralihan Pasal III", "D. Aturan Peralihan Pasal IV"],answer:"C"},
+      {id:"26-9",q:"Negara Indonesia ialah Negara Kesatuan yang berbentuk Republik, pernyataan ini adalah isi dari UUD 1945...",options:["A. Pasal 1 ayat (1)", "B. Pasal 1 ayat (2)", "C. Pasal 1 ayat (3)", "D. Pasal 2 ayat (1)"],answer:"A"},
+    ],
+    essay:{id:"26-e",q:"Jelaskan makna pemilihan umum yang dilaksanakan secara langsung, umum, bebas, rahasia, jujur, dan adil (luber jurdil)!",rubrik:"Langsung: pemilih memberikan suara langsung tanpa perantara. Umum: berlaku bagi semua WNI yang memenuhi syarat. Bebas: pemilih bebas menentukan pilihan tanpa paksaan. Rahasia: pilihan dijaga kerahasiaannya. Jujur: penyelenggara dan peserta harus jujur. Adil: semua peserta diperlakukan setara tanpa diskriminasi."},
+  },
+
+  { id:27, title:"Paket 27 – Istilah Ketatanegaraan & Kosakata Hukum", topic:"Campuran",
+    pg:[
+      {id:"27-1",q:"Yang dimaksud dengan 'abolisi' dalam hukum ketatanegaraan adalah...",options:["A. Pengampunan hukuman kepada terpidana", "B. Hak kepala negara untuk menghapuskan hak tuntutan pidana dan menghentikannya jika telah dijalankan", "C. Pemulihan nama baik seseorang", "D. Pengangkatan pejabat negara"],answer:"B"},
+      {id:"27-2",q:"Yang dimaksud dengan 'adendum' dalam konteks UUD 1945 adalah...",options:["A. Penggantian seluruh naskah UUD", "B. Perubahan dengan tetap mempertahankan naskah asli UUD 1945; naskah perubahan dilekatkan pada naskah asli", "C. Penambahan pasal baru secara terpisah", "D. Pembatalan pasal lama"],answer:"B"},
+      {id:"27-3",q:"'Checks and balances' dalam sistem ketatanegaraan berarti...",options:["A. Pemeriksaan keuangan negara", "B. Saling mengawasi dan mengimbangi antarlembaga negara", "C. Keseimbangan APBN", "D. Pengawasan pemilu"],answer:"B"},
+      {id:"27-4",q:"Yang dimaksud dengan 'grasi' adalah...",options:["A. Penghapusan hak tuntutan pidana", "B. Pengampunan/pemotongan hukuman yang diberikan oleh kepala negara kepada orang yang telah dijatuhi hukuman", "C. Pemulihan nama baik", "D. Pengangkatan hakim"],answer:"B"},
+      {id:"27-5",q:"'Ius soli' adalah cara penetapan kewarganegaraan berdasarkan...",options:["A. Garis keturunan orang tua", "B. Tempat kelahiran", "C. Pernikahan dengan WNI", "D. Lama tinggal di Indonesia"],answer:"B"},
+      {id:"27-6",q:"'Ius sanguinis' adalah cara penetapan kewarganegaraan berdasarkan...",options:["A. Tempat kelahiran", "B. Garis keturunan (orang tua)", "C. Pilihan sendiri", "D. Naturalisasi"],answer:"B"},
+      {id:"27-7",q:"Yang dimaksud dengan 'ratifikasi' adalah...",options:["A. Pencabutan undang-undang", "B. Pengesahan suatu dokumen negara oleh parlemen, khususnya perjanjian antarnegara", "C. Pembatalan perjanjian", "D. Pengajuan RUU"],answer:"B"},
+      {id:"27-8",q:"'Hak angket' DPR adalah...",options:["A. Hak meminta keterangan kepada Presiden", "B. Hak DPR untuk melakukan penyelidikan terhadap kebijakan pemerintah yang penting dan strategis serta berdampak luas", "C. Hak mengusulkan RUU", "D. Hak menyampaikan pertanyaan kepada pemerintah"],answer:"B"},
+      {id:"27-9",q:"'Hak interpelasi' DPR adalah...",options:["A. Hak melakukan penyelidikan kebijakan pemerintah", "B. Hak untuk meminta keterangan/penjelasan resmi kepada Presiden/Pemerintah", "C. Hak mengusulkan mosi tidak percaya", "D. Hak membentuk panitia angket"],answer:"B"},
+    ],
+    essay:{id:"27-e",q:"Jelaskan perbedaan antara grasi, rehabilitasi, amnesti, dan abolisi beserta siapa yang berwenang memberikannya!",rubrik:"Grasi: pengampunan/pemotongan hukuman kepada terpidana, Presiden dengan pertimbangan MA. Rehabilitasi: pemulihan nama baik, Presiden dengan pertimbangan MA. Amnesti: pengampunan kelompok orang (misal tahanan politik), Presiden dengan pertimbangan DPR. Abolisi: penghapusan hak tuntutan pidana, Presiden dengan pertimbangan DPR."},
+  }
 ];
