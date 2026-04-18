@@ -539,7 +539,50 @@ th {
 }
 td { padding:12px 14px; border-top:1px solid rgba(26,40,68,.7); font-size:13px; vertical-align:middle }
 tr:hover td { background:rgba(75,130,245,.03) }
-.essay-answer-cell { max-width:260px; white-space:pre-wrap; word-break:break-word; color:var(--text2); font-size:12px; line-height:1.5 }
+.essay-answer-cell { max-width:240px; }
+.essay-answer-preview {
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden; color:var(--text2); font-size:12px; line-height:1.5;
+  white-space:normal; word-break:break-word; margin-bottom:4px;
+}
+.essay-read-more {
+  font-size:11px; color:var(--accent); cursor:pointer; font-weight:600;
+  background:none; border:none; padding:0; font-family:var(--font);
+  display:inline-flex; align-items:center; gap:3px;
+}
+.essay-read-more:hover { text-decoration:underline; }
+/* Modal jawaban essay */
+.essay-modal-overlay {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:rgba(0,0,0,.65); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; padding:20px;
+}
+.essay-modal-overlay.open { display:flex; }
+.essay-modal {
+  background:var(--surface); border:1px solid var(--border2);
+  border-radius:var(--radius-lg); width:100%; max-width:580px;
+  max-height:80vh; display:flex; flex-direction:column;
+  box-shadow: 0 24px 80px rgba(0,0,0,.7);
+}
+.essay-modal-head {
+  padding:18px 22px 14px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.essay-modal-head-left { display:flex; flex-direction:column; gap:3px; }
+.essay-modal-title { font-size:14px; font-weight:700; color:var(--text); }
+.essay-modal-meta  { font-size:11px; color:var(--text2); }
+.essay-modal-close {
+  width:30px; height:30px; border-radius:8px; border:1px solid var(--border);
+  background:var(--surface2); color:var(--text2); cursor:pointer;
+  display:grid; place-items:center; font-size:14px; flex-shrink:0;
+  transition:all .14s;
+}
+.essay-modal-close:hover { border-color:var(--red); color:var(--red); }
+.essay-modal-section { padding:16px 22px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.essay-modal-label { font-size:10px; font-weight:700; color:var(--text3); letter-spacing:.6px; text-transform:uppercase; margin-bottom:6px; }
+.essay-modal-question { font-size:13px; color:var(--text); line-height:1.65; }
+.essay-modal-body { padding:16px 22px; overflow-y:auto; flex:1; }
+.essay-modal-answer { font-size:13.5px; color:var(--text); line-height:1.75; white-space:pre-wrap; word-break:break-word; }
 .grade-input {
   width:68px; padding:6px 9px; text-align:center;
   background:var(--surface2); border:1.5px solid var(--border);
@@ -1271,19 +1314,48 @@ function goTo(page){
 }
 
 async function renderDashboard(){
-  let results={};
-  let essayGrades={};
+  let results={}; let essayGrades={};
   if(currentUser){
     const{data}=await sb.from('quiz_results').select('*').eq('user_id',currentUser.id);
     if(data) data.forEach(r=>{ results[r.paket_id]=r; });
     const{data:essayData}=await sb.from('essay_answers').select('paket_id,grade').eq('user_id',currentUser.id);
     if(essayData) essayData.forEach(e=>{ essayGrades[e.paket_id]=e.grade; });
   }
+
+  // Ambil soal dari soal_tambahan dan gabung ke PAKETS virtual
+  let allPakets=[...PAKETS];
+  try {
+    const{data:soalDb}=await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
+    if(soalDb && soalDb.length){
+      const dbPaketMap={};
+      soalDb.forEach(s=>{
+        const pid=s.paket_id;
+        if(!dbPaketMap[pid]){
+          // Cari paket_title dari kolom atau buat default
+          const titleFromDb=s.paket_title||`Paket ${pid}`;
+          dbPaketMap[pid]={ id:pid, title:titleFromDb, topic:'Campuran', pg:[], essay:null };
+        }
+        if(s.type==='pg'){
+          let opts=[]; try{ opts=JSON.parse(s.options||'[]'); }catch(e){}
+          dbPaketMap[pid].pg.push({ q:s.question, options:opts, answer:s.answer });
+        } else if(s.type==='essay'){
+          dbPaketMap[pid].essay={ q:s.question, rubrik:s.rubrik||'' };
+        }
+      });
+      // Gabungkan: paket dari DB yang belum ada di PAKETS lokal
+      Object.values(dbPaketMap).forEach(dp=>{
+        if(!allPakets.find(p=>p.id===dp.id)) allPakets.push(dp);
+      });
+    }
+  } catch(e){ /* soal_tambahan mungkin belum ada, abaikan */ }
+
+  allPakets.sort((a,b)=>a.id-b.id);
+  window._allPakets = allPakets;
   const done=Object.keys(results).length;
 
   const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix'};
   const grid=document.getElementById('paket-grid'); grid.innerHTML='';
-  PAKETS.forEach(p=>{
+  allPakets.forEach(p=>{
     const res=results[p.id];
     const tc=topicMap[p.topic]||'topic-mix';
     const statusBadge=res?`<div class="paket-status-badge done"><i class="fi fi-sr-check-circle"></i> Selesai</div>`:'';
@@ -1318,7 +1390,8 @@ async function renderDashboard(){
 function startRandomPaket(){ startPaket(Math.floor(Math.random()*10)+1) }
 
 function startPaket(paketId){
-  const paket=PAKETS.find(p=>p.id===paketId); if(!paket)return;
+  const paket=window._allPakets ? window._allPakets.find(p=>p.id===paketId) : PAKETS.find(p=>p.id===paketId);
+  if(!paket)return;
   currentPaketId=paketId;
   const questions=[...paket.pg.map((q,i)=>({...q,type:'pg',num:i+1})),{...paket.essay,type:'essay',num:paket.pg.length+1}];
   quizState={paketId,questions,current:0,answers:{},answered:new Set(),startTime:Date.now(),timerInterval:null};
@@ -1468,16 +1541,37 @@ function switchAdminTab(tab){
 const emptyRow=(cols,msg,icon='fi-rr-inbox')=>`<tr><td colspan="${cols}"><div class="empty-state"><div class="empty-icon"><i class="fi ${icon}"></i></div><div>${msg}</div></div></td></tr>`;
 
 /* ── Essay ── */
+function openEssayModal(name,meta,question,answer){
+  document.getElementById('em-name').textContent=name;
+  document.getElementById('em-meta').textContent=meta;
+  document.getElementById('em-question').textContent=question;
+  document.getElementById('em-answer').textContent=answer;
+  document.getElementById('essay-modal-overlay').classList.add('open');
+}
+function closeEssayModal(e){
+  if(e.target===document.getElementById('essay-modal-overlay'))
+    document.getElementById('essay-modal-overlay').classList.remove('open');
+}
+
 async function loadEssayAnswers(){
   const tbody=document.getElementById('essay-table-body');
   tbody.innerHTML=emptyRow(7,'Memuat...','fi-rr-time-past');
   const{data,error}=await sb.from('essay_answers').select('*').order('submitted_at',{ascending:false});
   if(error||!data?.length){ tbody.innerHTML=emptyRow(7,'Belum ada jawaban essay.'); return; }
-  tbody.innerHTML=data.map(row=>`<tr>
+  tbody.innerHTML=data.map(row=>{
+    const ans=row.answer||'-';
+    const q=(row.question||'').slice(0,70)+(row.question?.length>70?'…':'');
+    const safeAns=ans.replace(/`/g,'\\`').replace(/\${/g,'\\${');
+    const safeName=(row.user_name||'-').replace(/`/g,'\\`').replace(/\${/g,'\\${');
+    const safeQ=(row.question||'').replace(/`/g,'\\`').replace(/\${/g,'\\${');
+    return `<tr>
     <td><div class="user-cell"><div class="user-mini-avatar">${getInitials(row.user_name)}</div><strong>${row.user_name||'-'}</strong></div></td>
     <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${row.paket_id}</span></td>
-    <td style="max-width:180px;font-size:12px;color:var(--text2)">${(row.question||'').slice(0,70)}...</td>
-    <td class="essay-answer-cell">${row.answer||'-'}</td>
+    <td style="max-width:160px;font-size:12px;color:var(--text2)">${q}</td>
+    <td class="essay-answer-cell">
+      <div class="essay-answer-preview">${ans}</div>
+      <button class="essay-read-more" onclick='openEssayModal(`${safeName}`,`P${row.paket_id} · ${new Date(row.submitted_at||'').toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'})}`,`${safeQ}`,`${safeAns}`)'><i class="fi fi-rr-expand"></i> Lihat</button>
+    </td>
     <td>${row.grade!==null?`<span class="graded-badge"><i class="fi fi-sr-check"></i>${row.grade}</span>`:`<input type="number" class="grade-input" min="0" max="100" value="" id="grade-${row.id}" placeholder="0–100">`}</td>
     <td><div class="td-actions">${row.grade!==null
       ?`<button class="btn btn-ghost btn-sm" onclick="resetGrade('${row.id}')"><i class="fi fi-rr-edit"></i> Edit</button>`
@@ -1926,5 +2020,26 @@ document.addEventListener('keydown',e=>{
   }
 });
 </script>
+
+<!-- Modal: Jawaban Essay Lengkap -->
+<div class="essay-modal-overlay" id="essay-modal-overlay" onclick="closeEssayModal(event)">
+  <div class="essay-modal">
+    <div class="essay-modal-head">
+      <div class="essay-modal-head-left">
+        <div class="essay-modal-title" id="em-name">—</div>
+        <div class="essay-modal-meta" id="em-meta">—</div>
+      </div>
+      <button class="essay-modal-close" onclick="document.getElementById('essay-modal-overlay').classList.remove('open')"><i class="fi fi-rr-cross-small"></i></button>
+    </div>
+    <div class="essay-modal-section">
+      <div class="essay-modal-label"><i class="fi fi-rr-interrogation"></i> Pertanyaan</div>
+      <div class="essay-modal-question" id="em-question">—</div>
+    </div>
+    <div class="essay-modal-body">
+      <div class="essay-modal-label"><i class="fi fi-rr-pen-field"></i> Jawaban Peserta</div>
+      <div class="essay-modal-answer" id="em-answer">—</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
