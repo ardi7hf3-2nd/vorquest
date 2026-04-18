@@ -502,17 +502,23 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .admin-header h2 { font-size:20px; font-weight:800; letter-spacing:-.4px; margin-bottom:3px }
 .admin-header p  { color:var(--text2); font-size:13px }
 .admin-tabs {
-  display:flex; gap:3px; background:var(--surface2); padding:4px;
-  border-radius:11px; margin-bottom:24px; width:fit-content; border:1px solid var(--border);
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:8px;
+  margin-bottom:24px;
+  width:100%;
 }
 .admin-tab {
-  display:flex; align-items:center; gap:6px; padding:8px 16px;
-  border-radius:8px; cursor:pointer; font-size:12.5px; font-weight:600;
+  display:flex; align-items:center; justify-content:center; gap:7px;
+  padding:10px 8px;
+  border-radius:10px; cursor:pointer; font-size:12px; font-weight:600;
   color:var(--text2); transition:all .16s;
+  background:var(--surface2); border:1px solid var(--border);
+  white-space:nowrap;
 }
-.admin-tab i { font-size:14px }
-.admin-tab.active { background:var(--accent); color:#fff; box-shadow:0 2px 10px rgba(75,130,245,.35) }
+.admin-tab i { font-size:15px; flex-shrink:0 }
+.admin-tab:hover { background:var(--surface3); color:var(--text1); border-color:var(--border2) }
+.admin-tab.active { background:var(--accent); color:#fff; border-color:transparent; box-shadow:0 2px 12px rgba(75,130,245,.4) }
 .admin-panel { display:none }
 .admin-panel.active { display:block }
 
@@ -740,7 +746,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
   .dash-hero { flex-direction:column; align-items:flex-start; padding:22px }
   .result-breakdown { grid-template-columns:1fr 1fr }
   .result-breakdown .breakdown-item:last-child { grid-column:span 2 }
-  .admin-tabs { flex-wrap:wrap; width:100% }
+  .admin-tabs { grid-template-columns: repeat(3, 1fr) }
   /* Navbar mobile: sembunyikan username agar tombol tidak terpotong */
   .nav-username { display:none }
   .nav-user { padding:4px 8px; gap:6px }
@@ -965,13 +971,25 @@ tr:hover td { background:rgba(75,130,245,.03) }
       <h2>Panel Admin</h2>
       <p>Kelola soal, nilai essay, log pengerjaan, dan manajemen pengguna</p>
     </div>
-    <div class="admin-tabs">
-      <div class="admin-tab active" onclick="switchAdminTab('essay')"><i class="fi fi-rr-pen-field"></i> Nilai Essay</div>
-      <div class="admin-tab" onclick="switchAdminTab('logs')"><i class="fi fi-rr-list-timeline"></i> Log Tryout</div>
-      <div class="admin-tab" onclick="switchAdminTab('users')"><i class="fi fi-rr-users"></i> Users</div>
-      <div class="admin-tab" onclick="switchAdminTab('addsoal')"><i class="fi fi-rr-plus-small"></i> Tambah Soal</div>
-      <div class="admin-tab" onclick="switchAdminTab('importsoal')"><i class="fi fi-rr-upload"></i> Import Soal</div>
-      <div class="admin-tab" onclick="switchAdminTab('soallist')"><i class="fi fi-rr-list-check"></i> Daftar Soal</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:2px">
+        <span style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase">Data &amp; Pengguna</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="admin-tabs-row1">
+        <div class="admin-tab active" onclick="switchAdminTab('essay')"><i class="fi fi-rr-pen-field"></i> Nilai Essay</div>
+        <div class="admin-tab" onclick="switchAdminTab('logs')"><i class="fi fi-rr-list-timeline"></i> Log Tryout</div>
+        <div class="admin-tab" onclick="switchAdminTab('users')"><i class="fi fi-rr-users"></i> Users</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:4px;margin-bottom:2px">
+        <span style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase">Kelola Soal</span>
+        <div style="flex:1;height:1px;background:var(--border)"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="admin-tabs-row2">
+        <div class="admin-tab" onclick="switchAdminTab('addsoal')"><i class="fi fi-rr-plus-small"></i> Tambah Soal</div>
+        <div class="admin-tab" onclick="switchAdminTab('importsoal')"><i class="fi fi-rr-upload"></i> Import Soal</div>
+        <div class="admin-tab" onclick="switchAdminTab('soallist')"><i class="fi fi-rr-list-check"></i> Daftar Soal</div>
+      </div>
     </div>
 
     <!-- Tab: Essay -->
