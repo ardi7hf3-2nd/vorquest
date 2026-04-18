@@ -173,52 +173,235 @@ select.form-input { cursor:pointer }
 textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 
 /* ══════════════════════════════════ AUTH ══════════════════════════════════ */
-#page-auth { align-items:center; justify-content:center; padding:40px 20px; min-height:100vh }
-.auth-split {
-  display:flex; width:100%; max-width:860px;
-  background:var(--surface); border:1px solid var(--border);
-  border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow);
+#page-auth {
+  align-items:center; justify-content:center;
+  min-height:100vh; padding:0; position:relative; overflow:hidden;
 }
+
+/* Animated background orbs */
+.auth-orb {
+  position:absolute; border-radius:50%; pointer-events:none; filter:blur(80px); opacity:.18;
+  animation: auth-float 8s ease-in-out infinite;
+}
+.auth-orb-1 { width:500px; height:500px; background:var(--accent); top:-160px; left:-120px; animation-delay:0s }
+.auth-orb-2 { width:380px; height:380px; background:var(--accent2); bottom:-100px; right:-80px; animation-delay:-4s }
+.auth-orb-3 { width:260px; height:260px; background:var(--purple); top:40%; left:38%; animation-delay:-2s; opacity:.09 }
+@keyframes auth-float {
+  0%,100% { transform:translateY(0) scale(1) }
+  50%      { transform:translateY(-28px) scale(1.04) }
+}
+
+/* Grid overlay */
+#page-auth::before {
+  content:''; position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:
+    linear-gradient(rgba(75,130,245,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75,130,245,.035) 1px, transparent 1px);
+  background-size:44px 44px;
+}
+
+/* Card */
+.auth-card {
+  position:relative; z-index:2;
+  display:flex; width:100%; max-width:880px;
+  background:rgba(13,18,34,.85);
+  border:1px solid rgba(75,130,245,.18);
+  border-radius:28px; overflow:hidden;
+  box-shadow: 0 32px 80px rgba(0,0,0,.65), 0 0 0 1px rgba(255,255,255,.04) inset;
+  backdrop-filter: blur(28px);
+  animation: auth-card-in .55s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes auth-card-in {
+  from { opacity:0; transform:translateY(28px) scale(.97) }
+  to   { opacity:1; transform:translateY(0) scale(1) }
+}
+
+/* Left panel */
 .auth-side {
-  flex:1; padding:44px;
-  background: linear-gradient(150deg, rgba(75,130,245,.1), rgba(52,198,244,.04));
-  border-right:1px solid var(--border);
+  flex:1.1; padding:52px 44px;
+  background: linear-gradient(145deg, rgba(75,130,245,.13) 0%, rgba(52,198,244,.05) 60%, rgba(167,139,250,.06) 100%);
+  border-right:1px solid rgba(75,130,245,.12);
   display:flex; flex-direction:column; justify-content:center;
+  position:relative; overflow:hidden;
 }
+
+/* Decorative ring */
+.auth-side::after {
+  content:''; position:absolute;
+  width:340px; height:340px; border-radius:50%;
+  border:1px solid rgba(75,130,245,.1);
+  bottom:-120px; right:-80px; pointer-events:none;
+}
+.auth-side::before {
+  content:''; position:absolute;
+  width:200px; height:200px; border-radius:50%;
+  border:1px solid rgba(52,198,244,.08);
+  bottom:-50px; right:20px; pointer-events:none;
+}
+
 .auth-side-logo {
-  width:52px; height:52px; border-radius:13px;
+  width:58px; height:58px; border-radius:16px;
   background:var(--accent-g); display:grid; place-items:center;
-  margin-bottom:22px; box-shadow:0 8px 24px rgba(75,130,245,.4);
+  margin-bottom:26px;
+  box-shadow: 0 0 0 8px rgba(75,130,245,.1), 0 12px 32px rgba(75,130,245,.45);
+  animation: logo-pulse 3s ease-in-out infinite;
 }
-.auth-side-logo i { font-size:24px; color:#fff }
-.auth-side h1 { font-size:24px; font-weight:800; letter-spacing:-.8px; line-height:1.2; margin-bottom:10px }
-.auth-side h1 em { color:var(--accent); font-style:normal }
-.auth-side p { color:var(--text2); font-size:13.5px; line-height:1.7 }
-.auth-side-features { margin-top:28px; display:flex; flex-direction:column; gap:12px }
-.auth-feature { display:flex; align-items:center; gap:11px; font-size:13px; color:var(--text2) }
+@keyframes logo-pulse {
+  0%,100% { box-shadow:0 0 0 8px rgba(75,130,245,.1), 0 12px 32px rgba(75,130,245,.45) }
+  50%      { box-shadow:0 0 0 14px rgba(75,130,245,.06), 0 12px 40px rgba(75,130,245,.6) }
+}
+.auth-side-logo i { font-size:26px; color:#fff }
+
+.auth-side-eyebrow {
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  color:var(--accent); margin-bottom:10px;
+  display:flex; align-items:center; gap:7px;
+}
+.auth-side-eyebrow::before {
+  content:''; width:20px; height:2px; background:var(--accent-g); border-radius:2px;
+}
+
+.auth-side h1 {
+  font-size:28px; font-weight:900; letter-spacing:-1.2px; line-height:1.15;
+  margin-bottom:12px; color:var(--text);
+}
+.auth-side h1 em { 
+  color:transparent; font-style:normal;
+  background:var(--accent-g); -webkit-background-clip:text; background-clip:text;
+}
+.auth-side > p { color:var(--text2); font-size:13.5px; line-height:1.75; max-width:300px }
+
+.auth-divider {
+  width:40px; height:2px; border-radius:2px;
+  background:linear-gradient(90deg, var(--accent), transparent);
+  margin:24px 0;
+}
+
+.auth-side-features { display:flex; flex-direction:column; gap:14px }
+.auth-feature {
+  display:flex; align-items:center; gap:13px;
+  padding:12px 14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(75,130,245,.1);
+  border-radius:12px;
+  font-size:13px; color:var(--text2);
+  transition:border-color .2s, background .2s;
+}
+.auth-feature:hover { border-color:rgba(75,130,245,.25); background:rgba(75,130,245,.05) }
 .auth-feature-icon {
-  width:32px; height:32px; border-radius:8px;
-  background:rgba(75,130,245,.1); border:1px solid rgba(75,130,245,.2);
+  width:34px; height:34px; border-radius:9px;
+  background:rgba(75,130,245,.12); border:1px solid rgba(75,130,245,.2);
   display:grid; place-items:center; flex-shrink:0;
 }
 .auth-feature-icon i { font-size:14px; color:var(--accent) }
-.auth-feature span { font-weight:600; color:var(--text) }
-.auth-form { flex:1; padding:44px; display:flex; flex-direction:column; justify-content:center }
-.auth-form-title  { font-size:19px; font-weight:800; margin-bottom:4px }
-.auth-form-sub    { font-size:13px; color:var(--text2); margin-bottom:24px }
-.auth-tabs {
-  display:flex; gap:3px; margin-bottom:24px;
-  background:var(--bg2); padding:3px; border-radius:9px; border:1px solid var(--border);
+.auth-feature-text strong { display:block; font-size:12.5px; font-weight:700; color:var(--text); margin-bottom:1px }
+.auth-feature-text span  { font-size:11.5px; color:var(--text2) }
+
+/* Right panel */
+.auth-form {
+  flex:1; padding:52px 44px;
+  display:flex; flex-direction:column; justify-content:center;
 }
-.auth-tab { flex:1; padding:8px; text-align:center; border-radius:7px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text2); transition:all .16s }
-.auth-tab.active { background:var(--accent); color:#fff; box-shadow:0 2px 8px rgba(75,130,245,.4) }
+
+.auth-form-header { margin-bottom:28px }
+.auth-form-title {
+  font-size:22px; font-weight:800; letter-spacing:-.5px;
+  margin-bottom:5px; color:var(--text);
+}
+.auth-form-sub { font-size:13px; color:var(--text2); line-height:1.6 }
+
+/* Tabs */
+.auth-tabs {
+  display:flex; gap:0; margin-bottom:26px;
+  background:rgba(255,255,255,.03);
+  padding:4px; border-radius:12px;
+  border:1px solid var(--border);
+  position:relative;
+}
+.auth-tab {
+  flex:1; padding:9px 12px; text-align:center; border-radius:8px;
+  cursor:pointer; font-size:13px; font-weight:600;
+  color:var(--text2); transition:all .22s ease; position:relative; z-index:1;
+  letter-spacing:.1px;
+}
+.auth-tab.active {
+  color:#fff;
+  background:var(--accent-g);
+  box-shadow: 0 3px 12px rgba(75,130,245,.4);
+}
+
+/* Input group with icon */
+.auth-input-group { position:relative; margin-bottom:14px }
+.auth-input-icon {
+  position:absolute; left:13px; top:50%; transform:translateY(-50%);
+  font-size:14px; color:var(--text3); pointer-events:none;
+  transition:color .16s;
+}
+.auth-input-group:focus-within .auth-input-icon { color:var(--accent) }
+.auth-input-group input {
+  width:100%; padding:11px 13px 11px 38px;
+  background:rgba(255,255,255,.04);
+  border:1.5px solid var(--border);
+  border-radius:11px; color:var(--text);
+  font-family:var(--font); font-size:14px;
+  transition:all .18s;
+}
+.auth-input-group input.has-eye { padding-right:42px }
+.auth-input-group input:focus {
+  outline:none;
+  border-color:var(--accent);
+  background:rgba(75,130,245,.06);
+  box-shadow:0 0 0 4px rgba(75,130,245,.1);
+}
+.auth-input-group input::placeholder { color:var(--text3) }
+
+/* Eye toggle */
+.auth-eye-btn {
+  position:absolute; right:11px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer; padding:4px;
+  color:var(--text3); font-size:15px;
+  border-radius:6px; transition:color .16s, background .16s;
+  display:flex; align-items:center; justify-content:center;
+  line-height:1;
+}
+.auth-eye-btn:hover { color:var(--accent); background:rgba(75,130,245,.1) }
+.auth-input-group:focus-within .auth-eye-btn { color:var(--text2) }
+
+.auth-input-label {
+  font-size:11px; font-weight:700; color:var(--text2);
+  text-transform:uppercase; letter-spacing:.5px;
+  margin-bottom:6px; display:block;
+}
+
+/* Btn login */
+.auth-btn-submit {
+  width:100%; padding:12px;
+  background:var(--accent-g); border:none; border-radius:11px;
+  color:#fff; font-family:var(--font); font-size:14px; font-weight:700;
+  cursor:pointer; letter-spacing:.2px;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  box-shadow: 0 4px 18px rgba(75,130,245,.38);
+  transition:all .2s ease; margin-top:6px;
+}
+.auth-btn-submit:hover { transform:translateY(-2px); box-shadow:0 8px 28px rgba(75,130,245,.52) }
+.auth-btn-submit:active { transform:translateY(0) }
+.auth-btn-submit:disabled { opacity:.45; cursor:not-allowed; transform:none; box-shadow:none }
+.auth-btn-submit i { font-size:15px }
+
 .auth-error {
   background:rgba(248,113,113,.07); border:1px solid rgba(248,113,113,.25);
-  color:var(--red); padding:10px 13px; border-radius:9px;
-  font-size:13px; margin-bottom:14px; display:none; align-items:center; gap:7px;
+  color:var(--red); padding:10px 13px; border-radius:10px;
+  font-size:13px; margin-bottom:16px; display:none; align-items:center; gap:8px;
 }
 .auth-error.show { display:flex }
 .auth-error i { font-size:14px; flex-shrink:0 }
+
+/* Responsive */
+@media(max-width:760px){
+  .auth-side { display:none }
+  .auth-card  { max-width:440px; border-radius:22px }
+  .auth-form  { padding:38px 28px }
+}
 
 /* ══════════════════════════════════ DASHBOARD ══════════════════════════════════ */
 #page-dashboard { padding:0 }
@@ -744,7 +927,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
 /* ══════════════════════════════════ RESPONSIVE ══════════════════════════════════ */
 @media(max-width:900px) {
   .auth-side { display:none }
-  .auth-split { max-width:460px }
+  .auth-card { max-width:460px; border-radius:22px }
   .stats-row { grid-template-columns:repeat(2,1fr) }
 }
 @media(max-width:640px) {
@@ -774,64 +957,102 @@ tr:hover td { background:rgba(75,130,245,.03) }
 
 <!-- ═══════════════════ AUTH ═══════════════════ -->
 <div class="page" id="page-auth">
-  <div class="auth-split">
+  <!-- Ambient orbs -->
+  <div class="auth-orb auth-orb-1"></div>
+  <div class="auth-orb auth-orb-2"></div>
+  <div class="auth-orb auth-orb-3"></div>
+
+  <div class="auth-card">
+    <!-- Left: Brand panel -->
     <div class="auth-side">
       <div class="auth-side-logo"><i class="fi fi-sr-graduation-cap"></i></div>
+      <div class="auth-side-eyebrow">Platform Tryout Digital</div>
       <h1>Vor<em>Quest</em></h1>
-      <p>Platform tryout digital untuk mempersiapkan ujian 4 Pilar MPR RI secara efektif dan terstruktur.</p>
+      <p>Persiapkan ujian 4 Pilar MPR RI secara efektif dan terstruktur.</p>
+      <div class="auth-divider"></div>
       <div class="auth-side-features">
         <div class="auth-feature">
           <div class="auth-feature-icon"><i class="fi fi-rr-book-open-cover"></i></div>
-          <div><span>100 Soal Lengkap</span><br>90 Pilihan Ganda + 10 Essay</div>
+          <div class="auth-feature-text">
+            <strong>270+ Soal Lengkap</strong>
+            <span>Pilihan Ganda + Essay per paket</span>
+          </div>
         </div>
         <div class="auth-feature">
           <div class="auth-feature-icon"><i class="fi fi-rr-layers"></i></div>
-          <div><span>10 Paket Soal</span><br>Pancasila, UUD 1945, NKRI, Bhinneka Tunggal Ika</div>
+          <div class="auth-feature-text">
+            <strong>27+ Paket Soal</strong>
+            <span>Pancasila, UUD 1945, NKRI, BTI</span>
+          </div>
         </div>
         <div class="auth-feature">
           <div class="auth-feature-icon"><i class="fi fi-rr-chart-line-up"></i></div>
-          <div><span>Penilaian Otomatis</span><br>PG langsung dicek, Essay dikoreksi admin</div>
+          <div class="auth-feature-text">
+            <strong>Penilaian Otomatis</strong>
+            <span>PG instan, Essay dikoreksi admin</span>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Right: Form panel -->
     <div class="auth-form">
-      <div class="auth-form-title">Selamat Datang</div>
-      <div class="auth-form-sub">Masuk atau buat akun untuk mulai berlatih</div>
+      <div class="auth-form-header">
+        <div class="auth-form-title">Selamat Datang 👋</div>
+        <div class="auth-form-sub">Masuk atau buat akun baru untuk mulai berlatih</div>
+      </div>
+
       <div class="auth-tabs">
         <div class="auth-tab active" onclick="switchAuthTab('login')">Masuk</div>
         <div class="auth-tab" onclick="switchAuthTab('register')">Daftar</div>
       </div>
+
       <div class="auth-error" id="auth-error"><i class="fi fi-rr-triangle-warning"></i><span id="auth-error-text"></span></div>
+
+      <!-- Login -->
       <div id="form-login">
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-envelope"></i> Email</label>
-          <input type="email" class="form-input" id="login-email" placeholder="email@contoh.com">
+        <label class="auth-input-label">Email</label>
+        <div class="auth-input-group">
+          <i class="fi fi-rr-envelope auth-input-icon"></i>
+          <input type="email" id="login-email" placeholder="email@contoh.com">
         </div>
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-lock"></i> Password</label>
-          <input type="password" class="form-input" id="login-pass" placeholder="••••••••">
+        <label class="auth-input-label">Password</label>
+        <div class="auth-input-group">
+          <i class="fi fi-rr-lock auth-input-icon"></i>
+          <input type="password" id="login-pass" placeholder="••••••••" class="has-eye">
+          <button type="button" class="auth-eye-btn" onclick="togglePassword('login-pass',this)" tabindex="-1" aria-label="Tampilkan password">
+            <i class="fi fi-rr-eye"></i>
+          </button>
         </div>
-        <button class="btn btn-primary btn-full" onclick="handleLogin()" id="btn-login">
-          <span id="login-content" style="display:flex;align-items:center;gap:7px;justify-content:center;width:100%">
+        <button class="auth-btn-submit" onclick="handleLogin()" id="btn-login">
+          <span id="login-content" style="display:flex;align-items:center;gap:8px">
             <i class="fi fi-rr-sign-in-alt"></i> Masuk ke Akun
           </span>
         </button>
       </div>
+
+      <!-- Register -->
       <div id="form-register" style="display:none">
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-user"></i> Nama Lengkap</label>
-          <input type="text" class="form-input" id="reg-name" placeholder="Nama lengkapmu">
+        <label class="auth-input-label">Nama Lengkap</label>
+        <div class="auth-input-group">
+          <i class="fi fi-rr-user auth-input-icon"></i>
+          <input type="text" id="reg-name" placeholder="Nama lengkapmu">
         </div>
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-envelope"></i> Email</label>
-          <input type="email" class="form-input" id="reg-email" placeholder="email@contoh.com">
+        <label class="auth-input-label">Email</label>
+        <div class="auth-input-group">
+          <i class="fi fi-rr-envelope auth-input-icon"></i>
+          <input type="email" id="reg-email" placeholder="email@contoh.com">
         </div>
-        <div class="form-group">
-          <label class="form-label"><i class="fi fi-rr-lock"></i> Password</label>
-          <input type="password" class="form-input" id="reg-pass" placeholder="Min. 6 karakter">
+        <label class="auth-input-label">Password</label>
+        <div class="auth-input-group">
+          <i class="fi fi-rr-lock auth-input-icon"></i>
+          <input type="password" id="reg-pass" placeholder="Min. 6 karakter" class="has-eye">
+          <button type="button" class="auth-eye-btn" onclick="togglePassword('reg-pass',this)" tabindex="-1" aria-label="Tampilkan password">
+            <i class="fi fi-rr-eye"></i>
+          </button>
         </div>
-        <button class="btn btn-primary btn-full" onclick="handleRegister()" id="btn-register">
-          <span id="register-content" style="display:flex;align-items:center;gap:7px;justify-content:center;width:100%">
+        <button class="auth-btn-submit" onclick="handleRegister()" id="btn-register">
+          <span id="register-content" style="display:flex;align-items:center;gap:8px">
             <i class="fi fi-rr-user-add"></i> Buat Akun
           </span>
         </button>
@@ -1367,6 +1588,14 @@ function updateNavUser(){
   document.getElementById('btn-admin-link').style.display=isAdmin?'inline-flex':'none';
 }
 
+function togglePassword(inputId, btn){
+  const input = document.getElementById(inputId);
+  const icon  = btn.querySelector('i');
+  const show  = input.type === 'password';
+  input.type  = show ? 'text' : 'password';
+  icon.className = show ? 'fi fi-rr-eye-crossed' : 'fi fi-rr-eye';
+  btn.setAttribute('aria-label', show ? 'Sembunyikan password' : 'Tampilkan password');
+}
 function switchAuthTab(tab){
   document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='register')));
   document.getElementById('form-login').style.display=tab==='login'?'block':'none';
@@ -1874,14 +2103,15 @@ async function setPaketName(){
   const btn=document.getElementById('btn-set-paket-name');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Memeriksa...';
 
-  // Cari max paket_id dari soal_tambahan + pakets dari questions.js
-  let maxId = 10; // default minimal dari PAKETS hardcoded
+  // Hitung total paket: jumlah unik di questions.js + jumlah unik di database
+  const jsCount = Array.isArray(window.PAKETS) ? new Set(window.PAKETS.map(p=>p.id)).size : 0;
+  let dbCount = 0;
   try {
-    const { data } = await sb.from('soal_tambahan').select('paket_id').order('paket_id', { ascending:false }).limit(1);
-    if(data && data.length) maxId = Math.max(maxId, data[0].paket_id);
+    const { data } = await sb.from('soal_tambahan').select('paket_id');
+    if(data && data.length) dbCount = new Set(data.map(r=>r.paket_id)).size;
   } catch(e){}
 
-  _newPaketId   = maxId + 1;
+  _newPaketId   = jsCount + dbCount + 1;
   _newPaketName = name;
   _paketBuffer  = [];
 
