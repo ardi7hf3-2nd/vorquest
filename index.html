@@ -1745,7 +1745,14 @@ async function showResult(correct,wrong,totalPG,paketId){
 function replayCurrentPaket(){ if(currentPaketId) startPaket(currentPaketId); }
 function confirmExitQuiz(){ document.getElementById('modal-exit').classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-function exitQuiz(){ clearInterval(quizState.timerInterval); closeModal('modal-exit'); goTo('dashboard'); }
+function exitQuiz(){
+  clearInterval(quizState.timerInterval);
+  closeModal('modal-exit');
+  // Pindah halaman langsung tanpa tunggu renderDashboard
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-dashboard')?.classList.add('active');
+  renderDashboard().catch(()=>{});
+}
 
 function switchAdminTab(tab){
   const tabs=['essay','logs','users','addsoal'];
