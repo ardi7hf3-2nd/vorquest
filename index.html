@@ -1499,12 +1499,22 @@ RUBRIK: Kriteria penilaian jawaban essay...</pre>
     <!-- Tab: Daftar Soal -->
     <div class="admin-panel" id="panel-soallist">
       <div class="panel-toolbar">
-        <div class="panel-title"><i class="fi fi-rr-list-check"></i> Soal dari Database</div>
-        <button class="btn btn-ghost btn-sm" onclick="loadSoalList()"><i class="fi fi-rr-refresh"></i> Refresh</button>
+        <div class="panel-toolbar-left">
+          <div class="panel-title"><i class="fi fi-rr-list-check"></i> Soal dari Database</div>
+          <span id="soal-count-badge" style="display:none;font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px;background:rgba(75,130,245,.1);color:var(--accent);border:1px solid rgba(75,130,245,.2)"></span>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost btn-sm" onclick="loadSoalList()"><i class="fi fi-rr-refresh"></i> Refresh</button>
+          <button class="btn btn-danger btn-sm" id="btn-hapus-semua-soal" onclick="confirmDeleteAllSoal()" style="display:none"><i class="fi fi-rr-trash"></i> Hapus Semua</button>
+        </div>
+      </div>
+      <div class="log-info-box" id="soal-delete-warning" style="display:none">
+        <i class="fi fi-rr-triangle-warning"></i>
+        <span>Menghapus semua soal akan menghapus seluruh paket yang diimport dari database secara permanen dan tidak dapat dikembalikan.</span>
       </div>
       <div class="table-wrap"><table>
-        <thead><tr><th>Paket</th><th>Tipe</th><th>Pertanyaan</th><th>Aksi</th></tr></thead>
-        <tbody id="soal-table-body"><tr><td colspan="4"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
+        <thead><tr><th>Paket</th><th>Topik</th><th>Tipe</th><th>Pertanyaan</th><th>Aksi</th></tr></thead>
+        <tbody id="soal-table-body"><tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
       </table></div>
     </div>
   </div>
@@ -2301,21 +2311,73 @@ async function savePaket(){
 async function submitNewSoal(){}
 async function loadSoalList(){
   const tbody=document.getElementById('soal-table-body');
-  tbody.innerHTML=emptyRow(4,'Memuat...','fi-rr-time-past');
-  const{data,error}=await sb.from('soal_tambahan').select('*').order('created_at',{ascending:false});
-  if(error||!data?.length){ tbody.innerHTML=emptyRow(4,'Belum ada soal tambahan.'); return; }
-  tbody.innerHTML=data.map(s=>`<tr>
-    <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${s.paket_id}</span></td>
+  const badge=document.getElementById('soal-count-badge');
+  const btnHapus=document.getElementById('btn-hapus-semua-soal');
+  const warnBox=document.getElementById('soal-delete-warning');
+  tbody.innerHTML=emptyRow(5,'Memuat...','fi-rr-time-past');
+  const{data,error}=await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
+  if(error||!data?.length){
+    tbody.innerHTML=emptyRow(5,'Belum ada soal tambahan.');
+    if(badge){ badge.style.display='none'; }
+    if(btnHapus){ btnHapus.style.display='none'; }
+    if(warnBox){ warnBox.style.display='none'; }
+    return;
+  }
+  // Hitung paket unik
+  const paketIds=new Set(data.map(s=>s.paket_id));
+  if(badge){ badge.textContent=`${data.length} soal · ${paketIds.size} paket`; badge.style.display='inline-flex'; }
+  if(btnHapus){ btnHapus.style.display='inline-flex'; }
+  if(warnBox){ warnBox.style.display='flex'; }
+  const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix'};
+  tbody.innerHTML=data.map(s=>{
+    const tc=topicMap[s.paket_topic||'Campuran']||'topic-mix';
+    const topicLabel=s.paket_topic||'Campuran';
+    return `<tr>
+    <td>
+      <span style="font-family:var(--mono);font-size:12px;color:var(--accent);display:block">P${s.paket_id}</span>
+      <span style="font-size:11px;color:var(--text3)">${s.paket_title||''}</span>
+    </td>
+    <td><span class="topic-badge ${tc}" style="font-size:10px">${topicLabel}</span></td>
     <td><span class="question-type-badge ${s.type==='pg'?'type-pg':'type-essay'}" style="font-size:10px;padding:2px 7px">${s.type.toUpperCase()}</span></td>
-    <td style="font-size:13px;max-width:380px;color:var(--text2)">${(s.question||'').slice(0,100)}...</td>
-    <td><button class="btn btn-danger btn-sm" onclick="deleteSoal('${s.id}')"><i class="fi fi-rr-trash"></i> Hapus</button></td>
-  </tr>`).join('');
+    <td style="font-size:13px;max-width:340px;color:var(--text2)">${(s.question||'').slice(0,90)}${(s.question||'').length>90?'…':''}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteSoal('${s.id}','P${s.paket_id}')"><i class="fi fi-rr-trash"></i> Hapus</button></td>
+  </tr>`;
+  }).join('');
 }
-async function deleteSoal(id){
-  if(!confirm('Hapus soal ini?'))return;
-  const{error}=await sb.from('soal_tambahan').delete().eq('id',id);
-  if(error) return showToast('Gagal menghapus','error');
-  showToast('Soal dihapus','success'); loadSoalList();
+let _pendingDeleteSoalId = null;
+function confirmDeleteSoal(id, label){
+  _pendingDeleteSoalId = id;
+  document.getElementById('modal-delete-log-title').textContent = `Hapus soal ${label}?`;
+  document.getElementById('modal-delete-log-desc').textContent = 'Soal ini akan dihapus permanen dari database. Tindakan ini tidak dapat dibatalkan.';
+  document.getElementById('modal-delete-log-confirm').onclick = deleteSoal;
+  document.getElementById('modal-delete-log').classList.add('open');
+}
+async function deleteSoal(){
+  closeModal('modal-delete-log');
+  const{error}=await sb.from('soal_tambahan').delete().eq('id',_pendingDeleteSoalId);
+  if(error) return showToast('Gagal menghapus: '+error.message,'error');
+  showToast('Soal dihapus','success'); loadSoalList(); await renderDashboard();
+}
+function confirmDeleteAllSoal(){
+  document.getElementById('modal-delete-log-title').textContent = 'Hapus Semua Soal dari Database?';
+  document.getElementById('modal-delete-log-desc').textContent = 'Seluruh soal yang diimport ke database akan dihapus permanen. Soal bawaan di questions.js tidak terpengaruh. Tindakan ini tidak dapat dibatalkan!';
+  document.getElementById('modal-delete-log-confirm').onclick = deleteAllSoal;
+  document.getElementById('modal-delete-log').classList.add('open');
+}
+async function deleteAllSoal(){
+  closeModal('modal-delete-log');
+  const btnHapus = document.getElementById('btn-hapus-semua-soal');
+  if(btnHapus){ btnHapus.disabled=true; btnHapus.innerHTML='<span class="spinner"></span> Menghapus...'; }
+  const{data:existing}=await sb.from('soal_tambahan').select('id').limit(1);
+  if(!existing||existing.length===0){
+    if(btnHapus){ btnHapus.disabled=false; btnHapus.innerHTML='<i class="fi fi-rr-trash"></i> Hapus Semua'; }
+    return showToast('Tidak ada soal untuk dihapus','error');
+  }
+  const{error}=await sb.from('soal_tambahan').delete().neq('id','00000000-0000-0000-0000-000000000000');
+  if(btnHapus){ btnHapus.disabled=false; btnHapus.innerHTML='<i class="fi fi-rr-trash"></i> Hapus Semua'; }
+  if(error) return showToast('Gagal: '+error.message,'error');
+  showToast('Semua soal berhasil dihapus dari database','success');
+  loadSoalList(); await renderDashboard();
 }
 
 /* ══════════════════════════════════════
