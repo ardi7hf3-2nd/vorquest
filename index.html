@@ -1386,31 +1386,8 @@ tr:hover td { background:rgba(75,130,245,.03) }
       </div>
     </div>
 
-    
 
-<!-- ═══════════════════ MODALS ═══════════════════ -->
-<div class="modal-overlay" id="modal-exit">
-  <div class="modal">
-    <div class="modal-icon"><i class="fi fi-rr-triangle-warning"></i></div>
-    <h3>Keluar dari Quiz?</h3>
-    <p>Progres kamu pada paket ini akan hilang dan tidak tersimpan. Yakin ingin keluar?</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-exit')"><i class="fi fi-rr-arrow-left"></i> Lanjutkan</button>
-      <button class="btn btn-danger" style="flex:1" onclick="exitQuiz()"><i class="fi fi-rr-sign-out-alt"></i> Ya, Keluar</button>
-    </div>
-  </div>
 </div>
-
-<div class="modal-overlay" id="modal-delete-log">
-  <div class="modal">
-    <div class="modal-icon"><i class="fi fi-rr-trash"></i></div>
-    <h3 id="modal-delete-log-title">Hapus Log Ini?</h3>
-    <p id="modal-delete-log-desc">Riwayat pengerjaan ini akan dihapus secara permanen.</p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-delete-log')"><i class="fi fi-rr-cross"></i> Batal</button>
-      <button class="btn btn-danger" style="flex:1" id="modal-delete-log-confirm"><i class="fi fi-rr-trash"></i> Ya, Hapus</button>
-    </div>
-  </div>
 </div>
 
 <div id="toast"></div>
@@ -2252,5 +2229,31 @@ document.addEventListener('keydown',e=>{
     </div>
   </div>
 </div>
+
+<!-- ═══════════════════ MODALS ═══════════════════ -->
+<div class="modal-overlay" id="modal-exit">
+  <div class="modal">
+    <div class="modal-icon"><i class="fi fi-rr-triangle-warning"></i></div>
+    <h3>Keluar dari Quiz?</h3>
+    <p>Progres kamu pada paket ini akan hilang dan tidak tersimpan. Yakin ingin keluar?</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-exit')"><i class="fi fi-rr-arrow-left"></i> Lanjutkan</button>
+      <button class="btn btn-danger" style="flex:1" onclick="exitQuiz()"><i class="fi fi-rr-sign-out-alt"></i> Ya, Keluar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-delete-log">
+  <div class="modal">
+    <div class="modal-icon"><i class="fi fi-rr-trash"></i></div>
+    <h3 id="modal-delete-log-title">Hapus Log Ini?</h3>
+    <p id="modal-delete-log-desc">Riwayat pengerjaan ini akan dihapus secara permanen.</p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" style="flex:1" onclick="closeModal('modal-delete-log')"><i class="fi fi-rr-cross"></i> Batal</button>
+      <button class="btn btn-danger" style="flex:1" id="modal-delete-log-confirm"><i class="fi fi-rr-trash"></i> Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
