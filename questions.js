@@ -1,6 +1,6 @@
 // VorQuest — Bank Soal 4 Pilar MPR RI (GABUNGAN)
-// Sumber: questions-1.js + soal_import.js
-// Total: 27 paket, dikelompokkan per materi
+// Sumber: questions-1.js + soal_import.js + soal_dpd_final.js
+// Total: 37 paket (Paket 1–37), dikelompokkan per materi
 // Format per paket: pg[] (9 soal PG) + essay (1 soal essay)
 
 const PAKETS = [
@@ -438,4 +438,160 @@ const PAKETS = [
     ],
     essay:{id:"27-e",q:"Jelaskan perbedaan antara grasi, rehabilitasi, amnesti, dan abolisi beserta siapa yang berwenang memberikannya!",rubrik:"Grasi: pengampunan/pemotongan hukuman kepada terpidana, Presiden dengan pertimbangan MA. Rehabilitasi: pemulihan nama baik, Presiden dengan pertimbangan MA. Amnesti: pengampunan kelompok orang (misal tahanan politik), Presiden dengan pertimbangan DPR. Abolisi: penghapusan hak tuntutan pidana, Presiden dengan pertimbangan DPR."},
   }
+
+  // ══════════════════════════════════════════════
+  // KELOMPOK: DPD (Paket 28–37)
+  // ══════════════════════════════════════════════
+,
+
+  { id:28, title:"Paket 28 – Sejarah Pembentukan DPD", topic:"DPD",
+    pg:[
+      {id:"28-1",q:"DPD (Dewan Perwakilan Daerah) pertama kali diatur dalam UUD 1945 pada perubahan ke...",options:["A. Pertama", "B. Kedua", "C. Ketiga", "D. Keempat"],answer:"C"},
+      {id:"28-2",q:"Pasal UUD 1945 yang mengatur eksistensi DPD adalah...",options:["A. Pasal 22A dan 22B", "B. Pasal 22C dan 22D", "C. Pasal 22E dan 22F", "D. Pasal 20 dan 21"],answer:"B"},
+      {id:"28-3",q:"Sebelum dibentuknya DPD, sistem parlemen Indonesia berdasarkan UUD 1945 (sebelum amandemen) menganut sistem...",options:["A. Bikameral", "B. Trikameral", "C. Unikameral", "D. Multikameral"],answer:"C"},
+      {id:"28-4",q:"Sistem bikameral dalam sejarah ketatanegaraan Indonesia pernah diterapkan pada masa berlakunya...",options:["A. UUD 1945 sebelum amandemen", "B. UUD RIS 1949", "C. UUDS 1950", "D. Dekrit Presiden 1959"],answer:"B"},
+      {id:"28-5",q:"Pada masa UUD RIS 1949, dua kamar parlemen yang ada adalah...",options:["A. DPR dan DPD", "B. DPR dan MPR", "C. DPR dan Senat", "D. DPR dan DPRD"],answer:"C"},
+      {id:"28-6",q:"UUD RIS 1949 berakhir dan digantikan oleh Undang-Undang Dasar Sementara (UUDS) pada tahun...",options:["A. 1945", "B. 1950", "C. 1955", "D. 1959"],answer:"B"},
+      {id:"28-7",q:"Berlakunya UUD 1945 kembali setelah UUDS 1950 ditandai oleh...",options:["A. Pemilu 1955", "B. Sidang MPRS 1960", "C. Dekrit Presiden 5 Juli 1959", "D. Proklamasi Kemerdekaan"],answer:"C"},
+      {id:"28-8",q:"Selain DPD, lembaga negara baru yang lahir dari amandemen UUD 1945 di bidang hukum adalah...",options:["A. BPK", "B. MA", "C. Mahkamah Konstitusi", "D. Komnas HAM"],answer:"C"},
+      {id:"28-9",q:"Reformasi total yang menjadi latar belakang perubahan UUD 1945 berhasil dimulai pada tanggal...",options:["A. 17 Agustus 1945", "B. 21 Mei 1998", "C. 1 Juni 1999", "D. 18 Agustus 2002"],answer:"B"},
+    ],
+    essay:{id:"28-e",q:"Jelaskan latar belakang historis pembentukan DPD dalam sistem ketatanegaraan Indonesia pasca reformasi 1998!",rubrik:"Reformasi 21 Mei 1998 mengakhiri rezim Orde Baru → Amandemen UUD 1945 (1999–2002) untuk mendemokratisasi sistem ketatanegaraan → Penghapusan DPA dan pembentukan DPD serta MK → DPD dibentuk untuk memperkuat demokrasi, supremasi hukum, dan mendukung otonomi daerah → DPD mulai diatur sejak amandemen ketiga melalui Pasal 22C dan 22D UUD 1945."},
+  },
+
+  { id:29, title:"Paket 29 – Keanggotaan DPD", topic:"DPD",
+    pg:[
+      {id:"29-1",q:"Anggota DPD dipilih dari setiap provinsi melalui...",options:["A. Penunjukan presiden", "B. Pemilihan umum", "C. Rapat paripurna DPR", "D. Keputusan gubernur"],answer:"B"},
+      {id:"29-2",q:"Jumlah anggota DPD dari setiap provinsi adalah...",options:["A. 2 orang", "B. 3 orang", "C. 4 orang", "D. 5 orang"],answer:"C"},
+      {id:"29-3",q:"Jumlah keseluruhan anggota DPD tidak boleh melebihi... jumlah anggota DPR.",options:["A. Seperempat", "B. Sepertiga", "C. Setengah", "D. Dua pertiga"],answer:"B"},
+      {id:"29-4",q:"Peserta pemilihan umum untuk memilih anggota DPD adalah...",options:["A. Partai politik", "B. Organisasi kemasyarakatan", "C. Perseorangan", "D. Gabungan partai"],answer:"C"},
+      {id:"29-5",q:"Masa jabatan anggota DPD adalah...",options:["A. 3 tahun", "B. 4 tahun", "C. 5 tahun", "D. 6 tahun"],answer:"C"},
+      {id:"29-6",q:"Peresmian keanggotaan DPD dilakukan dengan...",options:["A. Keputusan DPR", "B. Keputusan MPR", "C. Keputusan Presiden", "D. Keputusan KPU"],answer:"C"},
+      {id:"29-7",q:"Sebelum memangku jabatan, anggota DPD mengucapkan sumpah/janji yang dipandu oleh...",options:["A. Presiden", "B. Ketua DPR", "C. Ketua Mahkamah Agung", "D. Ketua MPR"],answer:"C"},
+      {id:"29-8",q:"Anggota DPD dapat diberhentikan antarwaktu apabila dinyatakan bersalah oleh pengadilan dengan ancaman pidana minimal...",options:["A. 1 tahun", "B. 3 tahun", "C. 5 tahun", "D. 7 tahun"],answer:"C"},
+      {id:"29-9",q:"Sistem pemilihan yang digunakan dalam pemilu anggota DPD adalah...",options:["A. Sistem proporsional tertutup", "B. Sistem proporsional terbuka", "C. Sistem distrik berwakil banyak", "D. Sistem campuran"],answer:"C"},
+    ],
+    essay:{id:"29-e",q:"Jelaskan syarat-syarat pemberhentian antarwaktu anggota DPD beserta prosedurnya!",rubrik:"Alasan pemberhentian: meninggal dunia, mengundurkan diri, berhalangan tetap, tidak memenuhi syarat, melanggar sumpah/janji atau kode etik, rangkap jabatan, atau dipidana ≥5 tahun. Prosedur: melalui Badan Kehormatan → penyelidikan dan verifikasi → usulan sanksi ke Sidang Paripurna DPD → keputusan Sidang Paripurna. Ada pula mekanisme rehabilitasi jika terbukti tidak melanggar."},
+  },
+
+  { id:30, title:"Paket 30 – Fungsi, Tugas, dan Wewenang DPD", topic:"DPD",
+    pg:[
+      {id:"30-1",q:"Fungsi DPD dalam bidang legislasi mencakup hal berikut, KECUALI...",options:["A. Mengajukan RUU kepada DPR", "B. Ikut membahas RUU", "C. Menetapkan dan mengesahkan undang-undang", "D. Memberikan pertimbangan atas RUU tertentu"],answer:"C"},
+      {id:"30-2",q:"DPD dapat mengajukan RUU kepada DPR yang berkaitan dengan, KECUALI...",options:["A. Otonomi daerah", "B. Hubungan pusat dan daerah", "C. Pertahanan dan keamanan nasional", "D. Pengelolaan sumber daya alam"],answer:"C"},
+      {id:"30-3",q:"DPD memberikan pertimbangan atas RUU pajak, pendidikan, dan agama kepada DPR. Pertimbangan tersebut disampaikan...",options:["A. Setelah DPR dan pemerintah selesai membahas", "B. Secara lisan dalam rapat paripurna", "C. Dalam bentuk tertulis sebelum tahap pembahasan DPR dan pemerintah", "D. Melalui Presiden"],answer:"C"},
+      {id:"30-4",q:"DPD memberikan pertimbangan kepada DPR dalam pemilihan anggota...",options:["A. Mahkamah Konstitusi", "B. Komisi Yudisial", "C. Badan Pemeriksa Keuangan (BPK)", "D. Komisi Pemberantasan Korupsi"],answer:"C"},
+      {id:"30-5",q:"Hasil pengawasan DPD atas pelaksanaan undang-undang disampaikan kepada...",options:["A. Presiden", "B. MPR", "C. DPR sebagai bahan pertimbangan untuk ditindaklanjuti", "D. Mahkamah Agung"],answer:"C"},
+      {id:"30-6",q:"DPD menerima hasil pemeriksaan keuangan negara dari BPK untuk dijadikan bahan pertimbangan bagi DPR tentang RUU yang berkaitan dengan...",options:["A. Pertahanan", "B. APBN", "C. Pendidikan", "D. Otonomi daerah"],answer:"B"},
+      {id:"30-7",q:"Kedudukan DPD menurut Jimly Assiddiqie dalam fungsi legislasi paling jauh hanya dapat disebut sebagai...",options:["A. Legislator penuh", "B. Co-legislator", "C. Super legislator", "D. Veto player"],answer:"B"},
+      {id:"30-8",q:"Pembahasan RUU yang diajukan DPD kepada DPR dilakukan...",options:["A. Setelah DPR membahas dengan pemerintah", "B. Bersamaan dengan pembahasan DPR dan pemerintah", "C. Sebelum DPR membahas dengan pemerintah", "D. Tanpa melibatkan pemerintah"],answer:"C"},
+      {id:"30-9",q:"Fungsi anggaran DPD dalam pembahasan RAPBN bersifat...",options:["A. Dominan dan menentukan", "B. Hanya memberikan pertimbangan", "C. Sama kuatnya dengan DPR", "D. Langsung memutuskan bersama DPR"],answer:"B"},
+    ],
+    essay:{id:"30-e",q:"Uraikan tiga fungsi utama DPD (legislasi, pertimbangan, dan pengawasan) beserta bidang yang tercakup dalam masing-masing fungsi tersebut!",rubrik:"Legislasi: mengajukan dan membahas RUU terkait otonomi daerah, hub. pusat-daerah, pembentukan/pemekaran daerah, pengelolaan SDA, dan perimbangan keuangan. Pertimbangan (konsultasi): atas RUU APBN, RUU pajak/pendidikan/agama, dan pemilihan anggota BPK. Pengawasan (kontrol): atas pelaksanaan UU terkait otonomi daerah, hub. pusat-daerah, SDA, APBN, pajak, pendidikan, dan agama; hasilnya disampaikan ke DPR."},
+  },
+
+  { id:31, title:"Paket 31 – Alat Kelengkapan DPD", topic:"DPD",
+    pg:[
+      {id:"31-1",q:"Alat kelengkapan DPD yang setara dengan komisi di DPR adalah...",options:["A. Badan Kehormatan", "B. Panitia Musyawarah", "C. Panitia Ad Hoc (PAH)", "D. Panitia Urusan Rumah Tangga"],answer:"C"},
+      {id:"31-2",q:"Panitia Ad Hoc (PAH) yang ruang lingkup tugasnya menyangkut masalah otonomi daerah dan hubungan pusat-daerah adalah...",options:["A. PAH I", "B. PAH II", "C. PAH III", "D. PAH IV"],answer:"A"},
+      {id:"31-3",q:"PAH II DPD memiliki ruang lingkup tugas menyangkut masalah...",options:["A. Otonomi daerah dan hubungan pusat-daerah", "B. Pengelolaan SDA, perimbangan keuangan, dan pajak", "C. Pendidikan dan agama", "D. RUU APBN dan pemeriksaan BPK"],answer:"B"},
+      {id:"31-4",q:"PAH III DPD memiliki ruang lingkup tugas menyangkut masalah...",options:["A. Pengelolaan SDA dan perimbangan keuangan", "B. APBN dan BPK", "C. Otonomi daerah", "D. Pendidikan dan agama"],answer:"D"},
+      {id:"31-5",q:"Alat kelengkapan DPD yang berfungsi menyelesaikan pelanggaran yang dilakukan oleh anggota DPD adalah...",options:["A. Panitia Ad Hoc", "B. Badan Kehormatan", "C. Panitia Musyawarah", "D. Panitia Perancang Undang-Undang"],answer:"B"},
+      {id:"31-6",q:"Badan Kehormatan DPD beranggotakan sebanyak-banyaknya...",options:["A. 16 orang", "B. 24 orang", "C. 32 orang", "D. 40 orang"],answer:"C"},
+      {id:"31-7",q:"Alat kelengkapan DPD yang menetapkan acara dan jadwal persidangan DPD adalah...",options:["A. Badan Kehormatan", "B. Panitia Musyawarah", "C. Panitia Perancang Undang-Undang", "D. Panitia Kerja Sama Antar-Lembaga Perwakilan"],answer:"B"},
+      {id:"31-8",q:"Alat kelengkapan DPD yang merencanakan dan menyusun program prioritas pembahasan RUU adalah...",options:["A. Panitia Ad Hoc", "B. Panitia Musyawarah", "C. Panitia Perancang Undang-Undang (PPUU)", "D. Panitia Urusan Rumah Tangga"],answer:"C"},
+      {id:"31-9",q:"Alat kelengkapan DPD yang bertugas membina hubungan dengan lembaga perwakilan sejenis di luar negeri adalah...",options:["A. Panitia Musyawarah", "B. Panitia Urusan Rumah Tangga", "C. Badan Kehormatan", "D. Panitia Kerja Sama Antar-Lembaga Perwakilan (PKSALP)"],answer:"D"},
+    ],
+    essay:{id:"31-e",q:"Jelaskan fungsi dan tugas Badan Kehormatan DPD serta jenis sanksi yang dapat dijatuhkannya!",rubrik:"Badan Kehormatan dibentuk untuk menyelesaikan pelanggaran anggota DPD → melakukan penyelidikan dan verifikasi atas pengaduan → memutuskan jenis sanksi → melaporkan ke Sidang Paripurna. Jenis sanksi: (1) teguran tertulis, (2) pemberhentian dari jabatan pimpinan DPD/alat kelengkapan, (3) pemberhentian sebagai anggota DPD. Jika tidak terbukti melanggar, anggota diberikan rehabilitasi."},
+  },
+
+  { id:32, title:"Paket 32 – Mekanisme Kerja Internal DPD", topic:"DPD",
+    pg:[
+      {id:"32-1",q:"Dasar organisasi internal DPD diatur dalam Keputusan DPD Nomor...",options:["A. 1/DPD/2004", "B. 2/DPD/2004", "C. 3/DPD/2004", "D. 4/DPD/2004"],answer:"B"},
+      {id:"32-2",q:"Mekanisme pengambilan keputusan internal DPD dibagi menjadi berapa tingkat?",options:["A. Dua tingkat", "B. Tiga tingkat", "C. Empat tingkat", "D. Lima tingkat"],answer:"B"},
+      {id:"32-3",q:"Pada tingkat pertama mekanisme kerja internal DPD, pembahasan dilakukan melalui...",options:["A. Rapat alat kelengkapan", "B. Rapat Paripurna DPD", "C. Sidang bersama dengan DPR", "D. Rapat konsultasi dengan Presiden"],answer:"B"},
+      {id:"32-4",q:"Pada tingkat kedua mekanisme kerja internal DPD, kegiatan yang dilakukan antara lain adalah penyusunan...",options:["A. Laporan keuangan", "B. Daftar Inventaris Masalah (DIM)", "C. Peraturan tata tertib baru", "D. Kode etik anggota"],answer:"B"},
+      {id:"32-5",q:"Pengambilan keputusan akhir dalam mekanisme kerja internal DPD dilakukan oleh...",options:["A. Pimpinan DPD", "B. Panitia Ad Hoc", "C. Sidang Paripurna DPD", "D. Badan Kehormatan"],answer:"C"},
+      {id:"32-6",q:"Ketidakhadiran anggota DPD sebanyak berapa kali berturut-turut tanpa pemberitahuan tertulis dinyatakan sebagai pelanggaran kode etik?",options:["A. 1 kali", "B. 2 kali", "C. 3 kali", "D. 4 kali"],answer:"C"},
+      {id:"32-7",q:"Kode Etik DPD disahkan pada tanggal...",options:["A. 15 Januari 2005", "B. 23 Maret 2005", "C. 17 Agustus 2004", "D. 1 Oktober 2004"],answer:"B"},
+      {id:"32-8",q:"Kode Etik DPD bertujuan menjaga...",options:["A. Keuangan dan aset DPD", "B. Martabat, kehormatan, dan citra DPD", "C. Hubungan DPD dengan pemerintah daerah", "D. Efisiensi sidang dan rapat DPD"],answer:"B"},
+      {id:"32-9",q:"DPD memiliki sebuah pejabat administrasi tertinggi yang disebut...",options:["A. Direktur Jenderal", "B. Kepala Staf", "C. Sekretaris Jenderal", "D. Inspektur Jenderal"],answer:"C"},
+    ],
+    essay:{id:"32-e",q:"Jelaskan tiga tingkat mekanisme kerja internal DPD dalam proses pengambilan keputusan beserta kegiatan utama di setiap tingkatannya!",rubrik:"Tingkat I: Pembahasan awal dalam Rapat Paripurna DPD, pimpinan/alat kelengkapan menyampaikan usulan. Tingkat II: Pembahasan lanjutan dalam alat kelengkapan yang ditugaskan → penyampaian pendapat anggota, penyusunan DIM, pembahasan berdasarkan DIM, penyusunan materi rancangan keputusan. Tingkat III: Pengambilan keputusan akhir oleh Sidang Paripurna DPD, didahului laporan alat kelengkapan mengenai hasil tingkat II."},
+  },
+
+  { id:33, title:"Paket 33 – Mekanisme Kerja Eksternal: Hubungan DPD dengan Lembaga Lain", topic:"DPD",
+    pg:[
+      {id:"33-1",q:"Dalam fungsi legislasi, pandangan dan pendapat DPD atas suatu RUU disampaikan pada tahap...",options:["A. Pembicaraan Tingkat II", "B. Pembicaraan Tingkat I", "C. Rapat Paripurna Pengambilan Keputusan", "D. Konsultasi Presiden"],answer:"B"},
+      {id:"33-2",q:"Pada Pembicaraan Tingkat I antara DPR, DPD, dan Pemerintah, pandangan dan pendapat DPD dijadikan...",options:["A. Keputusan mengikat bagi DPR", "B. Masukan untuk pembahasan lebih lanjut antara DPR dan pemerintah", "C. Dasar hukum RUU", "D. Veto atas RUU tersebut"],answer:"B"},
+      {id:"33-3",q:"DPD menerima hasil pemeriksaan keuangan negara dari BPK untuk dijadikan bahan pertimbangan bagi DPR mengenai...",options:["A. Pemilihan anggota BPK baru", "B. RUU yang berkaitan dengan APBN", "C. Pengawasan terhadap Presiden", "D. Pembentukan pansus DPR"],answer:"B"},
+      {id:"33-4",q:"Hubungan DPD dengan Presiden diwakili oleh pimpinan DPD yang melakukan...",options:["A. Pengambilalihan kewenangan eksekutif", "B. Konsultasi sesuai keputusan DPD", "C. Pemberian sanksi kepada Presiden", "D. Pemakzulan Presiden secara langsung"],answer:"B"},
+      {id:"33-5",q:"Menurut Jimly Assiddiqie, DPD dapat lebih berkonsentrasi di bidang pengawasan agar...",options:["A. Dapat menyaingi kewenangan DPR", "B. Efektivitasnya dapat dirasakan masyarakat di daerah-daerah", "C. Dapat menggantikan fungsi MPR", "D. Dapat mengesahkan undang-undang"],answer:"B"},
+      {id:"33-6",q:"DPD tidak berhak mengawasi pelaksanaan undang-undang di luar ketentuan...",options:["A. Pasal 20 UUD 1945", "B. Pasal 22D ayat (3) UUD 1945", "C. Pasal 23 UUD 1945", "D. Pasal 24 UUD 1945"],answer:"B"},
+      {id:"33-7",q:"Dalam hubungannya dengan MPR, DPD berperan sebagai...",options:["A. Lembaga yang setara dengan DPR di dalam MPR", "B. Bagian dari MPR dengan jumlah anggota yang lebih kecil dari DPR", "C. Pengganti MPR dalam kondisi tertentu", "D. Lembaga pengawas MPR"],answer:"B"},
+      {id:"33-8",q:"Fungsi pengawasan DPD dinilai lemah karena hasil pengawasannya hanya bersifat...",options:["A. Mengikat dan wajib dilaksanakan", "B. Bahan pertimbangan bagi DPR tanpa implikasi hukum langsung", "C. Putusan tetap yang tidak dapat diganggu gugat", "D. Perintah yang harus dijalankan oleh pemerintah"],answer:"B"},
+      {id:"33-9",q:"Pasal konstitusional yang memberikan kewenangan anggaran besar kepada DPR dan hanya peran terbatas kepada DPD adalah...",options:["A. Pasal 20 UUD 1945", "B. Pasal 22D UUD 1945", "C. Pasal 23 UUD 1945", "D. Pasal 24 UUD 1945"],answer:"C"},
+    ],
+    essay:{id:"33-e",q:"Jelaskan perbedaan fungsi pengawasan DPD dan DPR, serta mengapa fungsi pengawasan DPD dinilai lemah!",rubrik:"DPR: pengawasan luas dengan implikasi politik kuat terhadap pemerintahan, dapat menggunakan hak interpelasi/angket/menyatakan pendapat. DPD: pengawasan hanya atas UU tertentu (otonomi daerah, SDA, APBN, pajak, pendidikan, agama) → hasilnya hanya disampaikan ke DPR sebagai bahan pertimbangan tanpa kekuatan hukum mengikat. Kelemahan: pengawasan bersifat formal-prosedural, tidak ada mekanisme pressure, DPD tidak dapat mengajukan usul perubahan UU terkait, sehingga dinilai sebagai \"kelemahan yang sengaja diciptakan\" oleh politik hukum."},
+  },
+
+  { id:34, title:"Paket 34 – DPD dalam MPR dan Proses Impeachment", topic:"DPD",
+    pg:[
+      {id:"34-1",q:"Komposisi MPR berdasarkan UUD 1945 hasil amandemen terdiri atas...",options:["A. Anggota DPR, DPD, dan utusan golongan", "B. Anggota DPR dan DPD yang dipilih melalui pemilihan umum", "C. Anggota DPR, DPD, dan TNI/Polri", "D. Anggota DPR dan utusan daerah"],answer:"B"},
+      {id:"34-2",q:"Jumlah anggota DPD dalam MPR adalah...",options:["A. 100 orang", "B. 128 orang", "C. 150 orang", "D. 200 orang"],answer:"B"},
+      {id:"34-3",q:"Dalam proses impeachment, usul pemberhentian Presiden dan/atau Wakil Presiden dapat diajukan DPR kepada MPR setelah memperoleh putusan dari...",options:["A. Mahkamah Agung", "B. Mahkamah Konstitusi", "C. Komisi Yudisial", "D. BPK"],answer:"B"},
+      {id:"34-4",q:"Pengajuan permintaan DPR kepada MK dalam proses impeachment harus didukung sekurang-kurangnya... anggota DPR yang hadir dalam sidang paripurna.",options:["A. Setengah", "B. Dua pertiga", "C. Tiga perempat", "D. Seperlima"],answer:"B"},
+      {id:"34-5",q:"Quorum sidang paripurna DPR untuk mengajukan permintaan ke MK dalam proses impeachment adalah sekurang-kurangnya...",options:["A. Setengah anggota DPR", "B. Dua pertiga anggota DPR", "C. Tiga perempat anggota DPR", "D. Seluruh anggota DPR"],answer:"B"},
+      {id:"34-6",q:"MK wajib memutus pendapat DPR terkait impeachment paling lama...",options:["A. 30 hari", "B. 60 hari", "C. 90 hari", "D. 120 hari"],answer:"C"},
+      {id:"34-7",q:"Keputusan MPR untuk memberhentikan Presiden dan/atau Wakil Presiden harus dihadiri sekurang-kurangnya... anggota MPR.",options:["A. Dua pertiga", "B. Tiga perempat", "C. Setengah", "D. Empat perlima"],answer:"B"},
+      {id:"34-8",q:"Keputusan pemberhentian Presiden dan/atau Wakil Presiden dalam MPR harus disetujui sekurang-kurangnya... dari jumlah anggota yang hadir.",options:["A. Setengah lebih satu", "B. Dua pertiga", "C. Tiga perempat", "D. Sembilan persepuluh"],answer:"B"},
+      {id:"34-9",q:"Presiden Indonesia yang diberhentikan melalui Sidang Istimewa MPR adalah...",options:["A. Ir. Soekarno dan Soeharto", "B. Soeharto dan K.H. Abdurrahman Wahid", "C. Ir. Soekarno dan K.H. Abdurrahman Wahid", "D. B.J. Habibie dan K.H. Abdurrahman Wahid"],answer:"C"},
+    ],
+    essay:{id:"34-e",q:"Jelaskan mekanisme impeachment Presiden dan/atau Wakil Presiden berdasarkan UUD 1945 setelah amandemen keempat, dan bagaimana peran DPD di dalamnya!",rubrik:"Tahapan: (1) DPR mengajukan pendapat melalui sidang paripurna (2/3 dari 2/3 anggota). (2) DPR mengajukan permintaan ke MK. (3) MK memeriksa dan memutus dalam 90 hari. (4) Jika terbukti, DPR meneruskan usul ke MPR melalui sidang paripurna. (5) MPR bersidang dalam 30 hari, dihadiri ¾ anggota, disetujui 2/3 anggota hadir. Peran DPD: sebagai anggota MPR (128 orang), DPD adalah kekuatan minoritas namun jika bersatu dapat mempengaruhi quorum dan hasil voting. DPD tidak dapat memulai proses impeachment secara mandiri."},
+  },
+
+  { id:35, title:"Paket 35 – Sistem Bikameral dan Posisi DPD", topic:"DPD",
+    pg:[
+      {id:"35-1",q:"Menurut Jimly Assiddiqie, struktur DPD saat ini tidak dapat disebut sistem bikameral karena...",options:["A. DPD memiliki kewenangan sama dengan DPR", "B. DPD tidak diberi kewenangan legislatif meskipun yang sederhana sekalipun", "C. DPD tidak dipilih melalui pemilihan umum", "D. DPD tidak termasuk dalam MPR"],answer:"B"},
+      {id:"35-2",q:"Jimly Assiddiqie menyebut struktur parlemen Indonesia pasca amandemen keempat UUD 1945 sebagai...",options:["A. Unikameral", "B. Bikameral", "C. Trikameral", "D. Multikameral"],answer:"C"},
+      {id:"35-3",q:"Sistem bikameral \"soft\" yang diterapkan Indonesia artinya...",options:["A. Sistem dua kamar dengan kewenangan yang seimbang", "B. Sistem dua kamar dengan posisi kamar kedua (DPD) yang lemah", "C. Sistem satu kamar yang fleksibel", "D. Sistem campuran unikameral dan bikameral"],answer:"B"},
+      {id:"35-4",q:"Menurut CF Strong, kamar kedua dalam sistem bikameral yang menjadi masalah dapat...",options:["A. Langsung dihapuskan", "B. Dihidupkan kembali melalui reformasi", "C. Digabung dengan kamar pertama", "D. Diubah menjadi lembaga yudikatif"],answer:"B"},
+      {id:"35-5",q:"Kelemahan mendasar DPD dalam proses legislasi adalah tidak dapat mengajukan usul perubahan UU terkait domain-nya. Hal ini diatur dalam...",options:["A. Pasal 22C ayat (1) UUD 1945", "B. Pasal 22D ayat (2) UUD 1945", "C. Pasal 22D ayat (3) UUD 1945", "D. Pasal 23 UUD 1945"],answer:"B"},
+      {id:"35-6",q:"Kata \"dapat\" dalam rumusan pasal 22D UUD 1945 menunjukkan bahwa kewenangan DPD bersifat...",options:["A. Imperatif konstitusional", "B. Wajib dilaksanakan", "C. Fakultatif (boleh dilakukan atau tidak)", "D. Mutlak dan tidak dapat diganggu gugat"],answer:"C"},
+      {id:"35-7",q:"Kualitas legitimasi anggota DPD dinilai lebih tinggi dari DPR karena...",options:["A. Anggota DPD dipilih oleh presiden", "B. Persyaratan dukungan untuk menjadi calon anggota DPD jauh lebih berat", "C. Masa jabatan DPD lebih panjang", "D. Anggota DPD tidak memiliki afiliasi partai"],answer:"B"},
+      {id:"35-8",q:"Negara yang menganut sistem federal dan dianggap sebagai rujukan sistem bikameral yang kuat adalah...",options:["A. Singapura", "B. Vietnam", "C. Amerika Serikat", "D. Filipina"],answer:"C"},
+      {id:"35-9",q:"Dalam perbandingan dengan AS, Konggres Amerika Serikat terdiri atas...",options:["A. MPR dan DPR", "B. DPR dan DPD", "C. House of Representatives dan Senate", "D. Eerste Kamer dan Tweede Kamer"],answer:"C"},
+    ],
+    essay:{id:"35-e",q:"Bandingkan sistem bikameral yang diterapkan di Indonesia dengan sistem bikameral di Amerika Serikat! Apa perbedaan mendasarnya?",rubrik:"Indonesia: bikameral \"soft\"/lemah → DPD tidak memiliki kewenangan legislatif penuh, hanya co-legislator. DPR sangat dominan. MPR sebagai lembaga tersendiri membuat sebagian ahli menyebutnya trikameral. AS: bikameral \"hard\"/kuat → House of Representatives dan Senat memiliki kewenangan legislatif yang seimbang, keduanya harus menyetujui suatu UU. AS menganut federalisme sehingga Senat mewakili negara bagian secara kuat. Perbedaan mendasar: di AS tidak ada lembaga di atas Kongres, sementara di Indonesia ada MPR. Kekuatan checks and balances di AS jauh lebih kuat."},
+  },
+
+  { id:36, title:"Paket 36 – Hak, Kewajiban, dan Larangan Anggota DPD", topic:"DPD",
+    pg:[
+      {id:"36-1",q:"Hak anggota DPD yang memberikan kebebasan untuk tidak dituntut di pengadilan atas pernyataan dalam rapat adalah...",options:["A. Hak protokoler", "B. Hak imunitas", "C. Hak membela diri", "D. Hak administratif"],answer:"B"},
+      {id:"36-2",q:"Anggota DPD berkewajiban menyerap, menghimpun, menampung, dan menindaklanjuti...",options:["A. Kebijakan partai politik", "B. Aspirasi masyarakat dan daerah", "C. Keputusan pemerintah pusat", "D. Arahan presiden"],answer:"B"},
+      {id:"36-3",q:"Kewajiban anggota DPD untuk mendahulukan kepentingan... di atas kepentingan pribadi, kelompok, dan golongan.",options:["A. Partai politik", "B. Daerah pemilihan", "C. Negara", "D. Pimpinan DPD"],answer:"C"},
+      {id:"36-4",q:"Larangan bagi anggota DPD yang diatur dalam UU Nomor 22 Tahun 2003 antara lain adalah...",options:["A. Menghadiri rapat DPR", "B. Melakukan korupsi, kolusi, dan nepotisme", "C. Memberikan pendapat di media massa", "D. Melakukan kunjungan kerja ke daerah"],answer:"B"},
+      {id:"36-5",q:"Anggota DPD wajib memberikan pertanggungjawaban secara moral dan politis kepada...",options:["A. Pimpinan DPD", "B. Presiden", "C. Pemilih dan daerah pilihannya", "D. Ketua MPR"],answer:"C"},
+      {id:"36-6",q:"Penggunaan fasilitas perjalanan dinas atas biaya pengundang dari luar negeri oleh anggota DPD harus...",options:["A. Dilarang sepenuhnya", "B. Disetujui oleh Presiden", "C. Sepengetahuan pimpinan DPD", "D. Diumumkan kepada publik"],answer:"C"},
+      {id:"36-7",q:"Anggota DPD wajib melaporkan kekayaannya secara jujur dan benar sebagaimana diatur dalam...",options:["A. Kode Etik DPD", "B. Peraturan tata tertib DPD", "C. Peraturan perundang-undangan", "D. Keputusan pimpinan DPD"],answer:"C"},
+      {id:"36-8",q:"Pernyataan anggota DPD yang disampaikan di luar forum rapat atau konsultasi resmi dianggap sebagai...",options:["A. Pernyataan resmi DPD", "B. Pernyataan yang mewakili daerah", "C. Pernyataan pribadi", "D. Pernyataan yang tidak sah"],answer:"C"},
+      {id:"36-9",q:"Sanksi terberat yang dapat dijatuhkan kepada anggota DPD yang melanggar kode etik adalah...",options:["A. Teguran lisan", "B. Teguran tertulis", "C. Pemberhentian dari jabatan pimpinan", "D. Pemberhentian sebagai anggota DPD"],answer:"D"},
+    ],
+    essay:{id:"36-e",q:"Jelaskan perbedaan antara pernyataan resmi DPD dan pernyataan pribadi anggota DPD, serta apa implikasinya terhadap akuntabilitas anggota!",rubrik:"Pernyataan resmi DPD: disampaikan dalam rapat, konsultasi, atau pertemuan resmi → merupakan pernyataan dalam kapasitas sebagai anggota DPD dan mengikat lembaga. Pernyataan pribadi: disampaikan di luar forum resmi → tidak mewakili DPD secara institusional. Implikasi: anggota yang tidak hadir tidak boleh menyampaikan hasil rapat atas nama forum. Akuntabilitas: anggota bertanggung jawab secara moral dan politis kepada pemilih dan daerahnya; melanggar ketentuan ini dapat dikenai sanksi kode etik."},
+  },
+
+  { id:37, title:"Paket 37 – Penguatan DPD dan Prospek Bikameral", topic:"DPD",
+    pg:[
+      {id:"37-1",q:"Untuk memperkuat DPD agar terjadi checks and balances dengan DPR, salah satu usulan yang direkomendasikan penelitian ini adalah...",options:["A. Menghapus DPD dan mengembalikan ke sistem unikameral", "B. Memberikan hak veto bagi DPD untuk UU yang berkaitan langsung dengan kepentingan daerah", "C. Menyatukan DPD dengan DPR menjadi satu kamar", "D. Mengubah DPD menjadi lembaga yudikatif"],answer:"B"},
+      {id:"37-2",q:"Penguatan sistem bikameral atau kesejajaran DPD dan DPR sangat tergantung pada...",options:["A. Keputusan Presiden", "B. Putusan Mahkamah Konstitusi", "C. Political will rakyat melalui perubahan kelima UUD 1945", "D. Kebijakan pimpinan DPD"],answer:"C"},
+      {id:"37-3",q:"Salah satu saran penelitian terkait DPD adalah agar DPD menyalurkan aspirasi kelompok yang tidak terwakili (under-represented), yang dahulu ditangani oleh...",options:["A. DPR", "B. Utusan Daerah MPR", "C. Utusan Golongan MPR", "D. Komisi Nasional"],answer:"C"},
+      {id:"37-4",q:"Konsep \"gridlock\" dalam sistem parlemen bikameral merujuk pada...",options:["A. Efisiensi legislasi yang tinggi", "B. Kebuntuan proses legislasi akibat ketidaksepakatan antara dua kamar", "C. Kerjasama efektif DPR dan DPD", "D. Proses peninjauan ulang UU"],answer:"B"},
+      {id:"37-5",q:"Menurut penelitian, keberadaan DPD yang hasil kerjanya dapat diabaikan lembaga lain tanpa konsekuensi apapun menunjukkan bahwa DPD tidak lebih dari...",options:["A. Lembaga legislatif yang efektif", "B. Pelengkap penderita dalam konstruksi demokrasi perwakilan", "C. Lembaga yang setara dengan DPR", "D. Pilar utama demokrasi Indonesia"],answer:"B"},
+      {id:"37-6",q:"Paradoks DPD: legitimasi tinggi namun kewenangan lemah. Ini karena persyaratan dukungan untuk menjadi anggota DPD lebih berat daripada menjadi anggota...",options:["A. MPR", "B. DPR", "C. DPRD", "D. Senat"],answer:"B"},
+      {id:"37-7",q:"Perwakilan modern menginsyafi adanya tiga karakter untuk mewujudkan rakyat, yaitu perwakilan politik, perwakilan daerah, dan...",options:["A. Perwakilan militer", "B. Perwakilan golongan (fungsional)", "C. Perwakilan keagamaan", "D. Perwakilan profesional"],answer:"B"},
+      {id:"37-8",q:"Dalam amandemen UUD 1945, perwakilan golongan yang sebelumnya ada di MPR...",options:["A. Diperkuat dengan pembentukan DPD", "B. Dialihkan ke DPD", "C. Dihapuskan", "D. Digabungkan dengan DPR"],answer:"C"},
+      {id:"37-9",q:"Menurut prinsip trias politica yang dipadukan dengan checks and balances, setiap kekuasaan dalam pemerintahan harus diimbangi oleh...",options:["A. Kekuasaan yang lebih besar dari lembaga lain", "B. Kekuasaan yang setara dan berlawanan dari cabang terpisah", "C. Pengawasan dari lembaga internasional", "D. Kontrol penuh oleh eksekutif"],answer:"B"},
+    ],
+    essay:{id:"37-e",q:"Berikan analisis mengenai kelemahan utama DPD dan rekomendasikan langkah-langkah konkret untuk memperkuat peran DPD dalam sistem ketatanegaraan Indonesia!",rubrik:"Kelemahan: (1) kewenangan legislatif sangat terbatas/hanya co-legislator; (2) hasil pengawasan tidak mengikat; (3) tidak ada hak veto; (4) minority position di MPR; (5) tidak dapat mengajukan usul perubahan UU terkait; (6) fungsi anggaran sangat kecil. Rekomendasi: (1) amandemen UUD 1945 kelima untuk memberikan kewenangan setara DPR di bidang legislasi daerah; (2) berikan hak veto atas UU yang langsung menyangkut kepentingan daerah; (3) perkuat fungsi pengawasan agar memiliki implikasi hukum; (4) DPD mengisi kekosongan aspirasi golongan yang tidak terwakili; (5) tingkatkan pengawasan terhadap eksekutif; (6) sosialisasi lebih luas peran dan fungsi DPD."},
+  },
+
 ];
