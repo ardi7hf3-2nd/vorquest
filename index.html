@@ -1732,7 +1732,11 @@ async function renderDashboard(){
     </div>`;
   });
 }
-function startRandomPaket(){ startPaket(Math.floor(Math.random()*10)+1) }
+function startRandomPaket(){
+  const pakets = window._allPakets || PAKETS;
+  const rnd = pakets[Math.floor(Math.random()*pakets.length)];
+  if(rnd) startPaket(rnd.id);
+}
 
 function startPaket(paketId){
   const paket=window._allPakets ? window._allPakets.find(p=>p.id===paketId) : PAKETS.find(p=>p.id===paketId);
@@ -2261,6 +2265,7 @@ async function savePaket(){
   const payload=_paketBuffer.map(s=>({
     type: s.type,
     paket_id: _newPaketId,
+    paket_title: _newPaketName,
     question: s.question,
     options: s.options||null,
     answer: s.answer||null,
@@ -2275,6 +2280,7 @@ async function savePaket(){
   showToast(`Paket "${_newPaketName}" berhasil disimpan (${payload.length} soal)!`,'success');
   resetPaketBuilder();
   loadSoalList();
+  await renderDashboard();
 }
 
 /* Deprecated: kept for import compatibility */
@@ -2572,6 +2578,7 @@ async function doImportSoal() {
   const payload = importedSoalList.map(s => ({
     type: s.type,
     paket_id: s.paket_id,
+    paket_title: s.paket_title || `Paket ${s.paket_id}`,
     question: s.question,
     options: s.options || null,
     answer: s.answer || null,
@@ -2588,11 +2595,16 @@ async function doImportSoal() {
     return;
   }
 
+  const importedCount = importedSoalList.length;
+  importedSoalList = [];
+
   document.getElementById('import-preview-wrap').style.display = 'none';
   document.getElementById('import-result-wrap').style.display = 'block';
   document.getElementById('import-result-msg').textContent =
-    `${importedSoalList.length} soal berhasil diimport ke database!`;
-  importedSoalList = [];
+    `${importedCount} soal berhasil diimport ke database!`;
+
+  // Refresh window._allPakets agar dashboard langsung up-to-date
+  await renderDashboard();
 }
 
 /* ── Toast ── */
