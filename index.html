@@ -1277,6 +1277,16 @@ tr:hover td { background:rgba(75,130,245,.03) }
             <input type="text" class="form-input" id="new-paket-name" placeholder="Contoh: Paket 11 – Sejarah Pancasila" oninput="onPaketNameInput()">
             <div style="font-size:11.5px;color:var(--text2);margin-top:6px"><i class="fi fi-rr-info" style="font-size:11px"></i> Nama paket harus unik dan berbeda dari paket yang sudah ada.</div>
           </div>
+          <div class="form-group" style="margin-bottom:16px">
+            <label class="form-label"><i class="fi fi-rr-tags"></i> Topik</label>
+            <select class="form-input" id="new-paket-topic">
+              <option value="Pancasila">Pancasila</option>
+              <option value="UUD NRI 1945">UUD NRI 1945</option>
+              <option value="NKRI">NKRI</option>
+              <option value="Bhinneka Tunggal Ika">Bhinneka Tunggal Ika</option>
+              <option value="Campuran" selected>Campuran</option>
+            </select>
+          </div>
           <button class="btn btn-primary" id="btn-set-paket-name" onclick="setPaketName()" disabled>
             <i class="fi fi-rr-arrow-right"></i> Mulai Isi Soal
           </button>
@@ -1679,7 +1689,7 @@ async function renderDashboard(){
       soalDb.forEach(s=>{
         const pid=s.paket_id;
         if(!dbPaketMap[pid]){
-          dbPaketMap[pid]={ id:pid, title:s.paket_title||('Paket '+pid), topic:'Campuran', pg:[], essay:null };
+          dbPaketMap[pid]={ id:pid, title:s.paket_title||('Paket '+pid), topic:s.paket_topic||'Campuran', pg:[], essay:null };
         }
         if(s.type==='pg'){
           let opts=[]; try{ opts=JSON.parse(s.options||'[]'); }catch(_){}
@@ -1689,7 +1699,7 @@ async function renderDashboard(){
         }
       });
       Object.values(dbPaketMap).forEach(dp=>{
-        if(!allPakets.find(p=>p.id===dp.id)) allPakets.push(dp);
+        if(!allPakets.find(p=>parseInt(p.id)===parseInt(dp.id))) allPakets.push(dp);
       });
     }
   } catch(_){}
@@ -2082,6 +2092,7 @@ async function changeRole(userId,newRole){
 let _paketBuffer = [];         // array soal yang belum disimpan
 let _newPaketName = '';        // nama paket baru yang diinput
 let _newPaketId = null;        // ID paket yang akan diautoassign
+let _newPaketTopic = 'Campuran'; // topik paket baru
 
 function toggleAddOptions(){
   const type=document.getElementById('add-type').value;
@@ -2109,9 +2120,10 @@ async function setPaketName(){
     if(data && data.length) dbCount = new Set(data.map(r=>r.paket_id)).size;
   } catch(e){}
 
-  _newPaketId   = jsCount + dbCount + 1;
-  _newPaketName = name;
-  _paketBuffer  = [];
+  _newPaketId    = jsCount + dbCount + 1;
+  _newPaketName  = name;
+  _newPaketTopic = document.getElementById('new-paket-topic')?.value || 'Campuran';
+  _paketBuffer   = [];
 
   // Tampilkan builder
   document.getElementById('paket-name-card').style.display='none';
@@ -2125,6 +2137,7 @@ function resetPaketBuilder(){
   _paketBuffer=[];
   _newPaketName='';
   _newPaketId=null;
+  _newPaketTopic='Campuran';
   document.getElementById('new-paket-name').value='';
   document.getElementById('btn-set-paket-name').disabled=true;
   document.getElementById('paket-builder-wrap').style.display='none';
@@ -2266,6 +2279,7 @@ async function savePaket(){
     type: s.type,
     paket_id: _newPaketId,
     paket_title: _newPaketName,
+    paket_topic: _newPaketTopic||'Campuran',
     question: s.question,
     options: s.options||null,
     answer: s.answer||null,
@@ -2431,6 +2445,7 @@ function parseJsFile(file) {
               type: 'pg',
               paket_id: parseInt(p.id),
               paket_title: p.title || `Paket ${p.id}`,
+              paket_topic: p.topic || 'Campuran',
               question: s.q,
               options: JSON.stringify(s.options || []),
               answer: s.answer,
@@ -2444,6 +2459,7 @@ function parseJsFile(file) {
             type: 'essay',
             paket_id: parseInt(p.id),
             paket_title: p.title || `Paket ${p.id}`,
+            paket_topic: p.topic || 'Campuran',
             question: p.essay.q,
             options: null,
             answer: null,
@@ -2579,6 +2595,7 @@ async function doImportSoal() {
     type: s.type,
     paket_id: s.paket_id,
     paket_title: s.paket_title || `Paket ${s.paket_id}`,
+    paket_topic: s.paket_topic || 'Campuran',
     question: s.question,
     options: s.options || null,
     answer: s.answer || null,
