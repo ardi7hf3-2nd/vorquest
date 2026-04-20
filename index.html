@@ -1544,7 +1544,7 @@ function goTo(page){
   if(page==='dashboard') renderDashboard();
   if(page==='admin'){
     if(userProfile?.role!=='admin'){ goTo('dashboard'); return; }
-    loadEssayAnswers(); loadUsers(); loadSoalList(); loadTryoutLogs();
+    loadEssayAnswers(); loadUsers(); loadTryoutLogs();
   }
 }
 
@@ -1557,30 +1557,8 @@ async function renderDashboard(){
     if(essayData) essayData.forEach(e=>{ essayGrades[e.paket_id]=e.grade; });
   }
 
-  // Ambil soal dari soal_tambahan dan gabung ke PAKETS virtual
+  // Ambil soal dari PAKETS statis saja
   let allPakets=[...PAKETS];
-  try {
-    const _res = await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
-    const soalDb = _res && _res.data;
-    if(soalDb && soalDb.length){
-      const dbPaketMap={};
-      soalDb.forEach(s=>{
-        const pid=s.paket_id;
-        if(!dbPaketMap[pid]){
-          dbPaketMap[pid]={ id:pid, title:s.paket_title||('Paket '+pid), topic:s.paket_topic||'Campuran', pg:[], essay:null };
-        }
-        if(s.type==='pg'){
-          let opts=[]; try{ opts=JSON.parse(s.options||'[]'); }catch(_){}
-          dbPaketMap[pid].pg.push({ q:s.question, options:opts, answer:s.answer });
-        } else if(s.type==='essay'){
-          dbPaketMap[pid].essay={ q:s.question, rubrik:s.rubrik||'' };
-        }
-      });
-      Object.values(dbPaketMap).forEach(dp=>{
-        if(!allPakets.find(p=>parseInt(p.id)===parseInt(dp.id))) allPakets.push(dp);
-      });
-    }
-  } catch(_){}
 
   allPakets.sort((a,b)=>a.id-b.id);
   window._allPakets = allPakets;
@@ -1990,13 +1968,9 @@ async function setPaketName(){
   const btn=document.getElementById('btn-set-paket-name');
   btn.disabled=true; btn.innerHTML='<span class="spinner"></span> Memeriksa...';
 
-  // Hitung total paket: jumlah unik di questions.js + jumlah unik di database
+  // Hitung total paket dari questions.js saja
   const jsCount = Array.isArray(window.PAKETS) ? new Set(window.PAKETS.map(p=>p.id)).size : 0;
   let dbCount = 0;
-  try {
-    const { data } = await sb.from('soal_tambahan').select('paket_id');
-    if(data && data.length) dbCount = new Set(data.map(r=>r.paket_id)).size;
-  } catch(e){}
 
   _newPaketId    = jsCount + dbCount + 1;
   _newPaketName  = name;
@@ -2165,128 +2139,24 @@ async function savePaket(){
     created_by: currentUser?.id,
   }));
 
-  const { error }=await sb.from('soal_tambahan').insert(payload);
   btn.innerHTML='<i class="fi fi-rr-disk"></i> Simpan Paket ke Database';
-  if(error){ btn.disabled=false; return showToast('Gagal menyimpan: '+error.message,'error'); }
+  showToast('Fitur simpan ke database telah dinonaktifkan.','error');
+  btn.disabled=false;
+  return;
 
   showToast(`Paket "${_newPaketName}" berhasil disimpan (${payload.length} soal)!`,'success');
   resetPaketBuilder();
-  loadSoalList();
   await renderDashboard();
 }
 
-/* Deprecated: kept for import compatibility */
+/* Deprecated: removed import soal feature */
 async function submitNewSoal(){}
-async function loadSoalList(){
-  const tbody=document.getElementById('soal-table-body');
-  const badge=document.getElementById('soal-count-badge');
-  const btnHapus=document.getElementById('btn-hapus-semua-soal');
-  const warnBox=document.getElementById('soal-delete-warning');
-  tbody.innerHTML=emptyRow(5,'Memuat...','fi-rr-time-past');
-  const{data,error}=await sb.from('soal_tambahan').select('*').order('paket_id',{ascending:true});
-  if(error||!data?.length){
-    tbody.innerHTML=emptyRow(5,'Belum ada soal tambahan.');
-    if(badge){ badge.style.display='none'; }
-    if(btnHapus){ btnHapus.style.display='none'; }
-    if(warnBox){ warnBox.style.display='none'; }
-    return;
-  }
-  // Hitung paket unik
-  const paketIds=new Set(data.map(s=>s.paket_id));
-  if(badge){ badge.textContent=`${data.length} soal · ${paketIds.size} paket`; badge.style.display='inline-flex'; }
-  if(btnHapus){ btnHapus.style.display='inline-flex'; }
-  if(warnBox){ warnBox.style.display='flex'; }
-  const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix'};
-  tbody.innerHTML=data.map(s=>{
-    const tc=topicMap[s.paket_topic||'Campuran']||'topic-mix';
-    const topicLabel=s.paket_topic||'Campuran';
-    return `<tr>
-    <td>
-      <span style="font-family:var(--mono);font-size:12px;color:var(--accent);display:block">P${s.paket_id}</span>
-      <span style="font-size:11px;color:var(--text3)">${s.paket_title||''}</span>
-    </td>
-    <td><span class="topic-badge ${tc}" style="font-size:10px">${topicLabel}</span></td>
-    <td><span class="question-type-badge ${s.type==='pg'?'type-pg':'type-essay'}" style="font-size:10px;padding:2px 7px">${s.type.toUpperCase()}</span></td>
-    <td style="font-size:13px;max-width:340px;color:var(--text2)">${(s.question||'').slice(0,90)}${(s.question||'').length>90?'…':''}</td>
-    <td><button class="btn btn-danger btn-sm" onclick="confirmDeleteSoal('${s.id}','P${s.paket_id}')"><i class="fi fi-rr-trash"></i> Hapus</button></td>
-  </tr>`;
-  }).join('');
-}
-let _pendingDeleteSoalId = null;
-function confirmDeleteSoal(id, label){
-  _pendingDeleteSoalId = id;
-  document.getElementById('modal-delete-log-title').textContent = `Hapus soal ${label}?`;
-  document.getElementById('modal-delete-log-desc').textContent = 'Soal ini akan dihapus permanen dari database. Tindakan ini tidak dapat dibatalkan.';
-  document.getElementById('modal-delete-log-confirm').onclick = deleteSoal;
-  document.getElementById('modal-delete-log').classList.add('open');
-}
-async function deleteSoal(){
-  closeModal('modal-delete-log');
-  const{error}=await sb.from('soal_tambahan').delete().eq('id',_pendingDeleteSoalId);
-  if(error) return showToast('Gagal menghapus: '+error.message,'error');
-  showToast('Soal dihapus','success'); loadSoalList(); await renderDashboard();
-}
-function confirmDeleteAllSoal(){
-  document.getElementById('modal-delete-log-title').textContent = 'Hapus Semua Soal dari Database?';
-  document.getElementById('modal-delete-log-desc').textContent = 'Seluruh soal yang diimport ke database akan dihapus permanen. Soal bawaan di questions.js tidak terpengaruh. Tindakan ini tidak dapat dibatalkan!';
-  document.getElementById('modal-delete-log-confirm').onclick = deleteAllSoal;
-  document.getElementById('modal-delete-log').classList.add('open');
-}
-async function deleteAllSoal(){
-  closeModal('modal-delete-log');
-  const btnHapus = document.getElementById('btn-hapus-semua-soal');
-  if(btnHapus){ btnHapus.disabled=true; btnHapus.innerHTML='<span class="spinner"></span> Menghapus...'; }
-  const{data:existing}=await sb.from('soal_tambahan').select('id').limit(1);
-  if(!existing||existing.length===0){
-    if(btnHapus){ btnHapus.disabled=false; btnHapus.innerHTML='<i class="fi fi-rr-trash"></i> Hapus Semua'; }
-    return showToast('Tidak ada soal untuk dihapus','error');
-  }
-  const{error}=await sb.from('soal_tambahan').delete().neq('id','00000000-0000-0000-0000-000000000000');
-  if(btnHapus){ btnHapus.disabled=false; btnHapus.innerHTML='<i class="fi fi-rr-trash"></i> Hapus Semua'; }
-  if(error) return showToast('Gagal: '+error.message,'error');
-  showToast('Semua soal berhasil dihapus dari database','success');
-  loadSoalList(); await renderDashboard();
-}
-
-/* ══════════════════════════════════════
-   IMPORT SOAL — JS & DOCX
-══════════════════════════════════════ */
-let importedSoalList = [];
-let currentImportFmt = 'js';
-
-function switchImportFmt(fmt) {
-  currentImportFmt = fmt;
-  document.getElementById('fmt-btn-js').classList.toggle('active', fmt === 'js');
-  document.getElementById('fmt-btn-docx').classList.toggle('active', fmt === 'docx');
-  document.getElementById('import-info-js').style.display = fmt === 'js' ? 'block' : 'none';
-  document.getElementById('import-info-docx').style.display = fmt === 'docx' ? 'block' : 'none';
-  document.getElementById('import-file-input').accept = fmt === 'js' ? '.js' : '.docx';
-  resetImport();
-}
-
-function resetImport() {
-  importedSoalList = [];
-  document.getElementById('import-preview-wrap').style.display = 'none';
-  document.getElementById('import-result-wrap').style.display = 'none';
-  document.getElementById('import-file-input').value = '';
-  document.getElementById('import-drop-label').textContent = 'Mendukung .js dan .docx';
-}
+async function loadSoalList(){}
 
 // FIX: Gunakan DOMContentLoaded agar boot tidak bergantung pada CDN eksternal.
 // window 'load' bisa stuck selamanya jika satu resource (font/CDN/icon) timeout.
 function _initPageReady() {
   if (window._pageLoaded) return; // jangan double-init
-  // Init drag-drop for import zone
-  const zone = document.getElementById('import-drop-zone');
-  if (zone) {
-    zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-    zone.addEventListener('drop', e => {
-      e.preventDefault(); zone.classList.remove('drag-over');
-      const f = e.dataTransfer.files[0];
-      if (f) handleImportFile(f);
-    });
-  }
   window._pageLoaded = true;
   window.tryBoot();
 }
@@ -2338,221 +2208,6 @@ window._doBoot = function(){
   init();
 }
 
-function handleImportFile(file) {
-  if (!file) return;
-  const ext = file.name.split('.').pop().toLowerCase();
-  document.getElementById('import-drop-label').textContent = `📄 ${file.name}`;
-  if (ext === 'js') {
-    parseJsFile(file);
-  } else if (ext === 'docx') {
-    parseDocxFile(file);
-  } else {
-    showToast('Format tidak didukung. Gunakan .js atau .docx', 'error');
-  }
-}
-
-/* ── Parser: JS file ── */
-function parseJsFile(file) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const text = e.target.result;
-      // Extract the PAKETS array safely
-      const match = text.match(/(?:const|let|var)\s+PAKETS\s*=\s*(\[[\s\S]*?\]);?\s*$/m) ||
-                    text.match(/(?:const|let|var)\s+PAKETS\s*=\s*(\[[\s\S]*\])/);
-      if (!match) throw new Error('Variabel PAKETS tidak ditemukan dalam file.');
-      // Safe eval via Function
-      const pakets = Function('"use strict"; return ' + match[1])();
-      if (!Array.isArray(pakets)) throw new Error('PAKETS bukan array.');
-
-      const soalList = [];
-      for (const p of pakets) {
-        if (!p.id) continue;
-        // PG questions
-        if (Array.isArray(p.pg)) {
-          for (const s of p.pg) {
-            soalList.push({
-              type: 'pg',
-              paket_id: parseInt(p.id),
-              paket_title: p.title || `Paket ${p.id}`,
-              paket_topic: p.topic || 'Campuran',
-              question: s.q,
-              options: JSON.stringify(s.options || []),
-              answer: s.answer,
-              rubrik: null,
-            });
-          }
-        }
-        // Essay
-        if (p.essay && p.essay.q) {
-          soalList.push({
-            type: 'essay',
-            paket_id: parseInt(p.id),
-            paket_title: p.title || `Paket ${p.id}`,
-            paket_topic: p.topic || 'Campuran',
-            question: p.essay.q,
-            options: null,
-            answer: null,
-            rubrik: p.essay.rubrik || '',
-          });
-        }
-      }
-      if (!soalList.length) throw new Error('Tidak ada soal yang dapat diparsing dari file.');
-      showImportPreview(soalList);
-    } catch (err) {
-      showToast('Gagal parsing JS: ' + err.message, 'error');
-      resetImport();
-    }
-  };
-  reader.readAsText(file);
-}
-
-/* ── Parser: DOCX file ── */
-function parseDocxFile(file) {
-  if (typeof mammoth === 'undefined') {
-    showToast('Library mammoth.js belum termuat. Coba refresh halaman.', 'error');
-    return;
-  }
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    mammoth.extractRawText({ arrayBuffer: e.target.result })
-      .then(result => {
-        try {
-          const text = result.value;
-          const soalList = parseDocxText(text);
-          if (!soalList.length) throw new Error('Tidak ada soal yang berhasil diparsing. Periksa format file.');
-          showImportPreview(soalList);
-        } catch (err) {
-          showToast('Gagal parsing DOCX: ' + err.message, 'error');
-          resetImport();
-        }
-      })
-      .catch(err => {
-        showToast('Gagal membaca DOCX: ' + err.message, 'error');
-        resetImport();
-      });
-  };
-  reader.readAsArrayBuffer(file);
-}
-
-function parseDocxText(text) {
-  // Split into blocks by blank lines
-  const blocks = text.split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
-  const soalList = [];
-
-  for (const block of blocks) {
-    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
-    if (!lines.length) continue;
-
-    const get = (key) => {
-      const re = new RegExp(`^${key}\\s*:\\s*(.+)$`, 'i');
-      for (const l of lines) { const m = l.match(re); if (m) return m[1].trim(); }
-      return null;
-    };
-
-    const paketRaw = get('PAKET');
-    const tipe = (get('TIPE') || '').toLowerCase();
-    const pertanyaan = get('PERTANYAAN');
-
-    if (!paketRaw || !pertanyaan || !tipe) continue;
-    const paketId = parseInt(paketRaw);
-    if (isNaN(paketId)) continue;
-
-    if (tipe === 'pg') {
-      const optA = lines.find(l => /^A\./i.test(l));
-      const optB = lines.find(l => /^B\./i.test(l));
-      const optC = lines.find(l => /^C\./i.test(l));
-      const optD = lines.find(l => /^D\./i.test(l));
-      const jawaban = (get('JAWABAN') || '').toUpperCase();
-      if (!optA || !optB || !optC || !optD || !jawaban) continue;
-      soalList.push({
-        type: 'pg', paket_id: paketId, paket_title: `Paket ${paketId}`,
-        question: pertanyaan,
-        options: JSON.stringify([optA, optB, optC, optD]),
-        answer: jawaban, rubrik: null,
-      });
-    } else if (tipe === 'essay') {
-      const rubrik = get('RUBRIK') || '';
-      soalList.push({
-        type: 'essay', paket_id: paketId, paket_title: `Paket ${paketId}`,
-        question: pertanyaan, options: null, answer: null, rubrik,
-      });
-    }
-  }
-  return soalList;
-}
-
-/* ── Preview & Insert ── */
-function showImportPreview(soalList) {
-  importedSoalList = soalList;
-  const tbody = document.getElementById('import-preview-body');
-  const count = document.getElementById('import-preview-count');
-  count.textContent = `${soalList.length} soal siap diimport`;
-
-  tbody.innerHTML = soalList.map((s, i) => {
-    let detail = '';
-    if (s.type === 'pg') {
-      const opts = JSON.parse(s.options || '[]');
-      detail = `<div class="import-row-detail">
-        ${opts.map(o => `<div class="opt">${o}</div>`).join('')}
-        <div style="margin-top:4px;color:var(--green);font-weight:700">✓ ${s.answer}</div>
-      </div>`;
-    } else {
-      detail = `<div class="import-row-detail">${(s.rubrik||'').slice(0,80)}${s.rubrik?.length>80?'…':''}</div>`;
-    }
-    return `<tr>
-      <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${s.paket_id}</span>
-          <div style="font-size:10px;color:var(--text2)">${s.paket_title}</div>
-      </td>
-      <td><span class="question-type-badge ${s.type==='pg'?'type-pg':'type-essay'}" style="font-size:10px;padding:2px 7px">${s.type.toUpperCase()}</span></td>
-      <td style="font-size:13px;max-width:240px;color:var(--text2)">${(s.question||'').slice(0,80)}${s.question?.length>80?'…':''}</td>
-      <td>${detail}</td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('import-preview-wrap').style.display = 'block';
-  document.getElementById('import-result-wrap').style.display = 'none';
-  document.getElementById('import-preview-wrap').scrollIntoView({ behavior:'smooth', block:'start' });
-}
-
-async function doImportSoal() {
-  if (!importedSoalList.length) return;
-  const btn = document.getElementById('btn-do-import');
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fi fi-rr-loading"></i> Menyimpan...';
-
-  const payload = importedSoalList.map(s => ({
-    type: s.type,
-    paket_id: s.paket_id,
-    paket_title: s.paket_title || `Paket ${s.paket_id}`,
-    paket_topic: s.paket_topic || 'Campuran',
-    question: s.question,
-    options: s.options || null,
-    answer: s.answer || null,
-    rubrik: s.rubrik || null,
-    created_by: currentUser?.id,
-  }));
-
-  const { error } = await sb.from('soal_tambahan').insert(payload);
-  btn.disabled = false;
-  btn.innerHTML = '<i class="fi fi-rr-disk"></i> Import Semua';
-
-  if (error) {
-    showToast('Gagal import: ' + error.message, 'error');
-    return;
-  }
-
-  const importedCount = importedSoalList.length;
-  importedSoalList = [];
-
-  document.getElementById('import-preview-wrap').style.display = 'none';
-  document.getElementById('import-result-wrap').style.display = 'block';
-  document.getElementById('import-result-msg').textContent =
-    `${importedCount} soal berhasil diimport ke database!`;
-
-  // Refresh window._allPakets agar dashboard langsung up-to-date
-  await renderDashboard();
-}
 
 /* ── Toast ── */
 function showToast(msg,type='success'){
