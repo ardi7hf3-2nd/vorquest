@@ -1207,10 +1207,8 @@ tr:hover td { background:rgba(75,130,245,.03) }
         <span style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase">Kelola Soal</span>
         <div style="flex:1;height:1px;background:var(--border)"></div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="admin-tabs-row2">
+      <div style="display:grid;grid-template-columns:1fr;gap:8px" id="admin-tabs-row2">
         <div class="admin-tab" onclick="switchAdminTab('addsoal')"><i class="fi fi-rr-plus-small"></i> Tambah Soal</div>
-        <div class="admin-tab" onclick="switchAdminTab('importsoal')"><i class="fi fi-rr-upload"></i> Import Soal</div>
-        <div class="admin-tab" onclick="switchAdminTab('soallist')"><i class="fi fi-rr-list-check"></i> Daftar Soal</div>
       </div>
     </div>
 
@@ -1388,137 +1386,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
       </div>
     </div>
 
-    <!-- Tab: Import Soal -->
-    <div class="admin-panel" id="panel-importsoal">
-      <div class="panel-toolbar" style="margin-bottom:18px">
-        <div class="panel-title"><i class="fi fi-rr-upload"></i> Import Soal dari File</div>
-      </div>
-      <div class="add-question-wrap">
-        <!-- Format selector -->
-        <div class="card" style="margin-bottom:16px">
-          <div class="import-format-tabs">
-            <button class="import-fmt-btn active" id="fmt-btn-js" onclick="switchImportFmt('js')">
-              <i class="fi fi-rr-code-simple"></i> File JS
-            </button>
-            <button class="import-fmt-btn" id="fmt-btn-docx" onclick="switchImportFmt('docx')">
-              <i class="fi fi-rr-file-word"></i> File DOCX
-            </button>
-          </div>
-
-          <!-- JS format info -->
-          <div id="import-info-js" class="import-info-box">
-            <div class="import-info-title"><i class="fi fi-rr-info"></i> Format File JS</div>
-            <div class="import-info-body">Upload file <code>.js</code> dengan variabel <code>PAKETS</code> mengikuti struktur <code>questions.js</code> yang sudah ada. File baru akan di-merge dengan soal yang ada.
-            <br><br><strong>Contoh minimal:</strong>
-<pre class="import-code-preview">const PAKETS = [
-  {
-    id: 11,
-    title: 'Paket 11 – Judul Paket',
-    topic: 'Pancasila',
-    pg: [
-      {
-        q: 'Teks pertanyaan PG?',
-        options: ['A. Pilihan A','B. Pilihan B','C. Pilihan C','D. Pilihan D'],
-        answer: 'A',
-      },
-    ],
-    essay: {
-      q: 'Teks pertanyaan essay?',
-      rubrik: 'Rubrik penilaian...',
-    },
-  },
-];</pre>
-            </div>
-          </div>
-
-          <!-- DOCX format info -->
-          <div id="import-info-docx" class="import-info-box" style="display:none">
-            <div class="import-info-title"><i class="fi fi-rr-info"></i> Format File DOCX</div>
-            <div class="import-info-body">Buat file Word dengan format berikut untuk setiap soal. Pisahkan antar soal dengan baris kosong.
-<pre class="import-code-preview">PAKET: 1
-TIPE: PG
-PERTANYAAN: Teks pertanyaan di sini?
-A. Pilihan pertama
-B. Pilihan kedua
-C. Pilihan ketiga
-D. Pilihan keempat
-JAWABAN: B
-
-PAKET: 2
-TIPE: ESSAY
-PERTANYAAN: Teks pertanyaan essay?
-RUBRIK: Kriteria penilaian jawaban essay...</pre>
-            </div>
-          </div>
-
-          <!-- File input -->
-          <div class="import-drop-zone" id="import-drop-zone" onclick="document.getElementById('import-file-input').click()">
-            <i class="fi fi-rr-cloud-upload-alt" style="font-size:28px;color:var(--accent)"></i>
-            <div style="font-weight:600;margin-top:8px">Klik atau drag & drop file di sini</div>
-            <div id="import-drop-label" style="color:var(--text2);font-size:13px;margin-top:4px">Mendukung .js dan .docx</div>
-          </div>
-          <input type="file" id="import-file-input" accept=".js,.docx" style="display:none" onchange="handleImportFile(this.files[0])">
-        </div>
-
-        <!-- Preview area -->
-        <div id="import-preview-wrap" style="display:none">
-          <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
-              <div>
-                <div style="font-weight:700;font-size:15px" id="import-preview-title">Preview Soal</div>
-                <div style="font-size:12px;color:var(--text2)" id="import-preview-count"></div>
-              </div>
-              <div style="display:flex;gap:8px">
-                <button class="btn btn-ghost btn-sm" onclick="resetImport()"><i class="fi fi-rr-rotate-left"></i> Reset</button>
-                <button class="btn btn-primary btn-sm" id="btn-do-import" onclick="doImportSoal()"><i class="fi fi-rr-disk"></i> Import Semua</button>
-              </div>
-            </div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Paket</th><th>Tipe</th><th>Pertanyaan</th><th>Detail</th></tr></thead>
-                <tbody id="import-preview-body"></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Import result -->
-        <div id="import-result-wrap" style="display:none" class="card">
-          <div style="text-align:center;padding:20px 0">
-            <i class="fi fi-sr-check-circle" style="font-size:36px;color:var(--green)"></i>
-            <div style="font-size:17px;font-weight:700;margin-top:10px" id="import-result-msg"></div>
-            <div style="margin-top:14px;display:flex;gap:8px;justify-content:center">
-              <button class="btn btn-ghost btn-sm" onclick="resetImport()"><i class="fi fi-rr-upload"></i> Import Lagi</button>
-              <button class="btn btn-secondary btn-sm" onclick="switchAdminTab('soallist');loadSoalList()"><i class="fi fi-rr-list-check"></i> Lihat Soal</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tab: Daftar Soal -->
-    <div class="admin-panel" id="panel-soallist">
-      <div class="panel-toolbar">
-        <div class="panel-toolbar-left">
-          <div class="panel-title"><i class="fi fi-rr-list-check"></i> Soal dari Database</div>
-          <span id="soal-count-badge" style="display:none;font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 9px;border-radius:6px;background:rgba(75,130,245,.1);color:var(--accent);border:1px solid rgba(75,130,245,.2)"></span>
-        </div>
-        <div style="display:flex;gap:8px;align-items:center">
-          <button class="btn btn-ghost btn-sm" onclick="loadSoalList()"><i class="fi fi-rr-refresh"></i> Refresh</button>
-          <button class="btn btn-danger btn-sm" id="btn-hapus-semua-soal" onclick="confirmDeleteAllSoal()" style="display:none"><i class="fi fi-rr-trash"></i> Hapus Semua</button>
-        </div>
-      </div>
-      <div class="log-info-box" id="soal-delete-warning" style="display:none">
-        <i class="fi fi-rr-triangle-warning"></i>
-        <span>Menghapus semua soal akan menghapus seluruh paket yang diimport dari database secara permanen dan tidak dapat dikembalikan.</span>
-      </div>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Paket</th><th>Topik</th><th>Tipe</th><th>Pertanyaan</th><th>Aksi</th></tr></thead>
-        <tbody id="soal-table-body"><tr><td colspan="5"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
-      </table></div>
-    </div>
-  </div>
-</div>
+    
 
 <!-- ═══════════════════ MODALS ═══════════════════ -->
 <div class="modal-overlay" id="modal-exit">
@@ -1902,7 +1770,7 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function exitQuiz(){ clearInterval(quizState.timerInterval); closeModal('modal-exit'); goTo('dashboard'); }
 
 function switchAdminTab(tab){
-  const tabs=['essay','logs','users','addsoal','importsoal','soallist'];
+  const tabs=['essay','logs','users','addsoal'];
   document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
   document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+tab)?.classList.add('active');
