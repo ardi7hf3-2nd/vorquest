@@ -385,12 +385,13 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
   .auth-card  { max-width:440px; border-radius:22px }
   .auth-form  { padding:38px 28px }
 
-  /* Keyboard fix: halaman bisa di-scroll sehingga input tidak tertutup keyboard */
+  /* Tetap di tengah, tapi bisa di-scroll jika keyboard HP muncul */
   #page-auth {
-    align-items:flex-start;
+    align-items:center;
+    justify-content:center;
     overflow-y:auto;
     -webkit-overflow-scrolling:touch;
-    padding:24px 16px 40px;
+    padding:24px 16px;
     min-height:100dvh;
     min-height:-webkit-fill-available;
   }
@@ -605,6 +606,10 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 }
 .quiz-timer-wrap i { font-size:14px; color:var(--accent) }
 #quiz-timer { color:var(--text) }
+/* Animasi denyut saat waktu kritis */
+@keyframes timer-pulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+.quiz-timer-wrap.timer-critical { animation:timer-pulse .9s ease-in-out infinite }
+.quiz-timer-wrap.timer-warn { animation:timer-pulse 1.4s ease-in-out infinite }
 .quiz-header { margin-bottom:18px }
 .quiz-paket-info { display:flex; align-items:center; gap:9px; margin-bottom:14px }
 .quiz-paket-chip {
@@ -708,9 +713,9 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .feedback-box.essay   { background:rgba(245,192,48,.07);  border:1px solid rgba(245,192,48,.25);  color:var(--gold)  }
 .quiz-nav-btns { display:flex; justify-content:space-between; align-items:center; margin-top:10px }
 
-/* ══════════════════════════════════ SOAL NAVIGATOR (SIMULASI) ══════════════════════════════════ */
+/* ══════════════════════════════════ SOAL NAVIGATOR (POPUP) ══════════════════════════════════ */
 .soal-nav-toggle {
-  display:none; /* hanya muncul di mode simulasi via JS */
+  display:inline-flex;
   align-items:center; gap:6px;
   padding:7px 13px; border-radius:9px;
   background:var(--surface2); border:1.5px solid var(--border);
@@ -718,8 +723,8 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
   cursor:pointer; transition:all .18s; font-family:var(--font);
   position:relative;
 }
-.soal-nav-toggle:hover { border-color:rgba(245,192,48,.5); color:var(--gold) }
-.soal-nav-toggle.open  { border-color:rgba(245,192,48,.5); color:var(--gold); background:rgba(245,192,48,.07) }
+.soal-nav-toggle:hover { border-color:rgba(75,130,245,.4); color:var(--accent) }
+.soal-nav-toggle.open  { border-color:rgba(75,130,245,.5); color:var(--accent); background:rgba(75,130,245,.08) }
 .soal-nav-toggle i { font-size:13px }
 .soal-nav-badge {
   position:absolute; top:-6px; right:-6px;
@@ -729,19 +734,35 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 }
 .soal-nav-badge.show { display:block }
 
-/* Panel overlay */
-.soal-navigator {
-  position:fixed; top:62px; right:0; bottom:0; width:300px;
-  background:var(--surface); border-left:1px solid var(--border);
-  z-index:200; display:flex; flex-direction:column;
-  transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1);
-  box-shadow:-8px 0 32px rgba(0,0,0,.4);
+/* Backdrop */
+.soal-nav-backdrop {
+  display:none; position:fixed; inset:0; z-index:299;
+  background:rgba(0,0,0,.55); backdrop-filter:blur(3px);
+  opacity:0; transition:opacity .22s ease;
 }
-.soal-navigator.open { transform:translateX(0) }
+.soal-nav-backdrop.open { display:block; opacity:1 }
+
+/* Popup modal melayang di tengah */
+.soal-navigator {
+  position:fixed; z-index:300;
+  top:50%; left:50%; transform:translate(-50%,-50%) scale(.94);
+  width:min(480px, 92vw);
+  max-height:min(560px, 85vh);
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:18px; display:flex; flex-direction:column;
+  box-shadow:0 24px 64px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+  opacity:0; pointer-events:none;
+  transition:opacity .22s ease, transform .22s cubic-bezier(.34,1.56,.64,1);
+}
+.soal-navigator.open {
+  opacity:1; pointer-events:auto;
+  transform:translate(-50%,-50%) scale(1);
+}
 
 .soal-nav-header {
-  padding:16px 18px 12px; border-bottom:1px solid var(--border);
+  padding:14px 18px 12px; border-bottom:1px solid var(--border);
   display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+  border-radius:18px 18px 0 0;
 }
 .soal-nav-header h4 { font-size:13px; font-weight:700; color:var(--text) }
 .soal-nav-close {
@@ -753,7 +774,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .soal-nav-close i { font-size:12px }
 
 .soal-nav-legend {
-  padding:10px 18px; border-bottom:1px solid var(--border);
+  padding:9px 18px; border-bottom:1px solid var(--border);
   display:flex; gap:12px; flex-wrap:wrap; flex-shrink:0;
 }
 .soal-nav-legend-item {
@@ -761,63 +782,59 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
   font-size:10.5px; color:var(--text2);
 }
 .legend-dot {
-  width:10px; height:10px; border-radius:3px; flex-shrink:0;
+  width:9px; height:9px; border-radius:3px; flex-shrink:0;
 }
 .legend-dot.unanswered { background:var(--surface3); border:1px solid var(--border2) }
 .legend-dot.current    { background:var(--accent) }
 .legend-dot.correct    { background:var(--green) }
 .legend-dot.wrong      { background:var(--red) }
 
+/* Grid tombol nomor soal */
 .soal-nav-grid {
-  flex:1; overflow-y:auto; padding:14px 18px;
-  display:grid; grid-template-columns:repeat(10,1fr); gap:6px;
+  flex:1; overflow-y:auto; padding:12px 16px;
+  display:grid; grid-template-columns:repeat(10,1fr); gap:5px;
 }
 .soal-nav-grid::-webkit-scrollbar { width:4px }
 .soal-nav-grid::-webkit-scrollbar-track { background:transparent }
 .soal-nav-grid::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px }
 
+/* Tombol nomor — lebih kecil & compact */
 .soal-num-btn {
-  aspect-ratio:1; border-radius:7px; border:1.5px solid var(--border);
+  aspect-ratio:1; border-radius:6px; border:1.5px solid var(--border);
   background:var(--surface2); color:var(--text2);
-  font-size:10px; font-weight:700; font-family:var(--mono);
-  cursor:pointer; transition:all .14s; display:grid; place-items:center;
+  font-size:9.5px; font-weight:700; font-family:var(--mono);
+  cursor:pointer; transition:all .12s; display:grid; place-items:center;
+  min-width:0;
 }
-.soal-num-btn:hover        { border-color:rgba(75,130,245,.5); color:var(--accent); transform:scale(1.1) }
-.soal-num-btn.sn-current   { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 2px 10px rgba(75,130,245,.5) }
+.soal-num-btn:hover        { border-color:rgba(75,130,245,.5); color:var(--accent); transform:scale(1.12) }
+.soal-num-btn.sn-current   { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 2px 8px rgba(75,130,245,.45) }
 .soal-num-btn.sn-correct   { background:rgba(45,212,191,.15);  border-color:rgba(45,212,191,.5);  color:var(--green) }
 .soal-num-btn.sn-wrong     { background:rgba(248,113,113,.15); border-color:rgba(248,113,113,.5); color:var(--red) }
 .soal-num-btn.sn-skipped   { background:rgba(245,192,48,.1);   border-color:rgba(245,192,48,.35); color:var(--gold) }
 
 .soal-nav-footer {
-  padding:14px 18px; border-top:1px solid var(--border); flex-shrink:0;
+  padding:12px 16px; border-top:1px solid var(--border); flex-shrink:0;
+  border-radius:0 0 18px 18px;
 }
 .soal-nav-stats {
-  display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px;
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; margin-bottom:10px;
 }
 .soal-nav-stat {
   background:var(--surface2); border:1px solid var(--border);
-  border-radius:9px; padding:8px 10px; text-align:center;
+  border-radius:8px; padding:7px 10px; text-align:center;
 }
-.soal-nav-stat-num { font-size:16px; font-weight:800; font-family:var(--mono) }
-.soal-nav-stat-label { font-size:9.5px; color:var(--text2); margin-top:2px }
+.soal-nav-stat-num { font-size:15px; font-weight:800; font-family:var(--mono) }
+.soal-nav-stat-label { font-size:9px; color:var(--text2); margin-top:1px }
 
-/* Overlay backdrop on mobile */
-.soal-nav-backdrop {
-  display:none; position:fixed; inset:0; z-index:199;
-  background:rgba(0,0,0,.5); backdrop-filter:blur(2px);
+/* Responsive popup */
+@media(max-width:480px){
+  .soal-navigator { width:96vw; max-height:80vh; border-radius:14px }
+  .soal-nav-grid { grid-template-columns:repeat(8,1fr); gap:5px; padding:10px 12px }
+  .soal-nav-header, .soal-nav-footer { padding:12px 14px }
+  .soal-nav-legend { padding:8px 14px }
 }
-.soal-nav-backdrop.open { display:block }
-
-/* Shift quiz-content when nav open on desktop */
-@media(min-width:900px){
-  #page-quiz.nav-open .quiz-content { margin-right:300px; transition:margin .28s cubic-bezier(.4,0,.2,1) }
-}
-@media(max-width:899px){
-  .soal-navigator { width:260px }
-}
-@media(max-width:640px){
-  .soal-navigator { width:100%; top:62px; border-left:none; border-top:1px solid var(--border) }
-  .soal-nav-grid  { grid-template-columns:repeat(10,1fr) }
+@media(max-width:360px){
+  .soal-nav-grid { grid-template-columns:repeat(7,1fr) }
 }
 
 /* ══════════════════════════════════ RESULT ══════════════════════════════════ */
@@ -1448,9 +1465,11 @@ tr:hover td { background:rgba(75,130,245,.03) }
         <div class="simulasi-hero-icon"><i class="fi fi-sr-diploma"></i></div>
         <div class="simulasi-hero-info">
           <h3>Simulasi Ujian 4 Pilar MPR RI</h3>
-          <p>Satu sesi ujian dengan <strong>100 soal pilihan ganda</strong> yang diambil secara acak dari seluruh topik (Pancasila, UUD 1945, NKRI, DPD, Wawasan Nusantara, dan lainnya). Tidak ada soal essay. Waktu berjalan sejak soal pertama ditampilkan.</p>
+          <p>Satu sesi ujian dengan <strong>100 soal pilihan ganda</strong> yang diambil secara acak dari seluruh topik (Pancasila, UUD 1945, NKRI, DPD, Wawasan Nusantara, dan lainnya). Tidak ada soal essay. <strong>Waktu ujian 90 menit</strong> — timer akan mundur otomatis dan ujian diselesaikan saat waktu habis.</p>
           <div class="simulasi-meta-row">
             <div class="simulasi-meta-item"><i class="fi fi-rr-list"></i> 100 Soal PG</div>
+            <div class="simulasi-meta-sep">·</div>
+            <div class="simulasi-meta-item"><i class="fi fi-rr-clock"></i> 90 Menit</div>
             <div class="simulasi-meta-sep">·</div>
             <div class="simulasi-meta-item"><i class="fi fi-rr-layers"></i> Semua Topik</div>
             <div class="simulasi-meta-sep">·</div>
@@ -1512,18 +1531,18 @@ tr:hover td { background:rgba(75,130,245,.03) }
     <div class="quiz-nav-btns">
       <button class="btn btn-ghost" id="btn-prev" onclick="prevQuestion()"><i class="fi fi-rr-arrow-left"></i> Sebelumnya</button>
       <button class="soal-nav-toggle" id="btn-soal-nav" onclick="toggleSoalNavigator()">
-        <i class="fi fi-sr-apps"></i> Nomor Soal
+        <i class="fi fi-sr-apps"></i> Navigasi
         <span class="soal-nav-badge" id="soal-nav-skipped-badge">0</span>
       </button>
       <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Berikutnya <i class="fi fi-rr-arrow-right"></i></button>
     </div>
   </div>
 
-  <!-- Soal Navigator Panel (Simulasi only) -->
+  <!-- Soal Navigator Popup (Tryout & Simulasi) -->
   <div class="soal-nav-backdrop" id="soal-nav-backdrop" onclick="closeSoalNavigator()"></div>
   <div class="soal-navigator" id="soal-navigator">
     <div class="soal-nav-header">
-      <h4><i class="fi fi-sr-apps" style="margin-right:6px;color:var(--gold)"></i>Navigasi Soal</h4>
+      <h4 id="soal-nav-title"><i class="fi fi-sr-apps" style="margin-right:6px;color:var(--accent)"></i>Navigasi Soal</h4>
       <button class="soal-nav-close" onclick="closeSoalNavigator()"><i class="fi fi-rr-cross-small"></i></button>
     </div>
     <div class="soal-nav-legend">
@@ -2067,7 +2086,7 @@ function startSimulasi(){
   document.getElementById('q-total').textContent = questions.length;
   // Tampilkan tombol navigator, sembunyikan dots kecil
   document.getElementById('btn-soal-nav').style.display = 'inline-flex';
-  document.getElementById('question-dots').style.display = 'none';
+  document.getElementById('question-dots').style.display = 'none'; // simulasi: pakai popup nav
   closeSoalNavigator();
   renderDots(); renderQuestion(); startTimer(); goTo('quiz');
 }
@@ -2089,8 +2108,8 @@ function startPaket(paketId){
   document.getElementById('quiz-paket-title').textContent=paket.title.replace(/Paket \d+ – /,'');
   document.getElementById('q-total').textContent=questions.length;
   // Sembunyikan navigator, tampilkan dots kecil
-  document.getElementById('btn-soal-nav').style.display = 'none';
-  document.getElementById('question-dots').style.display = '';
+  document.getElementById('btn-soal-nav').style.display = 'inline-flex';
+  document.getElementById('question-dots').style.display = ''; // tryout: tetap tampilkan dots
   closeSoalNavigator();
   renderDots(); renderQuestion(); startTimer(); goTo('quiz');
 }
@@ -2171,10 +2190,67 @@ function saveEssayIfNeeded(){
 }
 function startTimer(){
   clearInterval(quizState.timerInterval);
-  quizState.timerInterval=setInterval(()=>{
-    const e=Math.floor((Date.now()-quizState.startTime)/1000);
-    document.getElementById('quiz-timer').textContent=`${String(Math.floor(e/60)).padStart(2,'0')}:${String(e%60).padStart(2,'0')}`;
-  },1000);
+  const isSimulasi = quizState.mode === 'simulasi';
+  const SIMULASI_DURATION = 90 * 60; // 90 menit dalam detik
+  const timerEl = document.getElementById('quiz-timer');
+  const timerWrap = document.querySelector('.quiz-timer-wrap');
+
+  // Reset warna dan animasi timer
+  timerWrap.style.borderColor = '';
+  timerWrap.style.background = '';
+  timerEl.style.color = '';
+  timerWrap.querySelector('i').style.color = '';
+  timerWrap.classList.remove('timer-warn','timer-critical');
+
+  // Tampilkan sisa waktu awal langsung (sebelum interval pertama)
+  if(isSimulasi){
+    const mm = String(Math.floor(SIMULASI_DURATION / 60)).padStart(2,'0');
+    const ss = String(SIMULASI_DURATION % 60).padStart(2,'0');
+    timerEl.textContent = mm + ':' + ss;
+  }
+
+  quizState.timerInterval = setInterval(()=>{
+    if(isSimulasi){
+      const elapsed = Math.floor((Date.now() - quizState.startTime) / 1000);
+      const remaining = Math.max(0, SIMULASI_DURATION - elapsed);
+      const mm = String(Math.floor(remaining / 60)).padStart(2,'0');
+      const ss = String(remaining % 60).padStart(2,'0');
+      timerEl.textContent = mm + ':' + ss;
+
+      // Peringatan warna: kuning < 10 menit, merah < 5 menit
+      if(remaining <= 300){
+        timerWrap.style.borderColor = 'rgba(248,113,113,.5)';
+        timerWrap.style.background = 'rgba(248,113,113,.1)';
+        timerEl.style.color = 'var(--red)';
+        timerWrap.querySelector('i').style.color = 'var(--red)';
+        timerWrap.classList.remove('timer-warn');
+        timerWrap.classList.add('timer-critical');
+      } else if(remaining <= 600){
+        timerWrap.style.borderColor = 'rgba(245,192,48,.5)';
+        timerWrap.style.background = 'rgba(245,192,48,.08)';
+        timerEl.style.color = 'var(--gold)';
+        timerWrap.querySelector('i').style.color = 'var(--gold)';
+        timerWrap.classList.remove('timer-critical');
+        timerWrap.classList.add('timer-warn');
+      }
+
+      // Waktu habis -> selesaikan otomatis
+      if(remaining <= 0){
+        clearInterval(quizState.timerInterval);
+        const notif = document.createElement('div');
+        notif.style.cssText = 'position:fixed;top:70px;left:50%;transform:translateX(-50%);background:rgba(248,113,113,.95);color:#fff;padding:10px 22px;border-radius:10px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.4);display:flex;align-items:center;gap:8px';
+        notif.innerHTML = '<i class="fi fi-rr-alarm-clock"></i> Waktu habis! Ujian diselesaikan otomatis.';
+        document.body.appendChild(notif);
+        setTimeout(()=>{ notif.remove(); finishQuiz(); }, 2000);
+      }
+    } else {
+      // Mode tryout: hitung naik (count-up)
+      const e = Math.floor((Date.now() - quizState.startTime) / 1000);
+      const mm = String(Math.floor(e/60)).padStart(2,'0');
+      const ss = String(e%60).padStart(2,'0');
+      timerEl.textContent = mm + ':' + ss;
+    }
+  }, 1000);
 }
 async function finishQuiz(){
   saveEssayIfNeeded(); clearInterval(quizState.timerInterval);
@@ -2294,19 +2370,26 @@ function openSoalNavigator(){
   document.getElementById('soal-navigator').classList.add('open');
   document.getElementById('soal-nav-backdrop').classList.add('open');
   document.getElementById('btn-soal-nav').classList.add('open');
-  document.getElementById('page-quiz').classList.add('nav-open');
 }
 
 function closeSoalNavigator(){
   document.getElementById('soal-navigator').classList.remove('open');
   document.getElementById('soal-nav-backdrop').classList.remove('open');
   document.getElementById('btn-soal-nav').classList.remove('open');
-  document.getElementById('page-quiz').classList.remove('nav-open');
 }
 
 function renderSoalNavigatorGrid(){
   const grid = document.getElementById('soal-nav-grid'); grid.innerHTML='';
-  const { questions, answers, answered, current } = quizState;
+  const { questions, answers, answered, current, mode } = quizState;
+  // Update judul popup
+  const titleEl = document.getElementById('soal-nav-title');
+  if(titleEl){
+    const icon = mode === 'simulasi'
+      ? '<i class="fi fi-sr-diploma" style="margin-right:6px;color:var(--gold)"></i>'
+      : '<i class="fi fi-sr-apps" style="margin-right:6px;color:var(--accent)"></i>';
+    const label = mode === 'simulasi' ? 'Navigasi Simulasi' : 'Navigasi Soal';
+    titleEl.innerHTML = icon + label + ' <span style="font-size:10px;font-weight:600;color:var(--text3);margin-left:4px">(' + questions.length + ' soal)</span>';
+  }
   let countAnswered=0, countSkipped=0, countLeft=0;
 
   questions.forEach((q, i) => {
@@ -2335,7 +2418,7 @@ function renderSoalNavigatorGrid(){
     btn.onclick = () => {
       jumpToQuestion(i);
       // Auto-tutup di mobile
-      if(window.innerWidth < 900) closeSoalNavigator();
+      closeSoalNavigator();
     };
     grid.appendChild(btn);
   });
@@ -2356,7 +2439,7 @@ function renderSoalNavigatorGrid(){
 }
 
 function updateSoalNavBadge(){
-  if(quizState?.mode !== 'simulasi') return;
+  if(!quizState) return;
   const { questions, answered, current } = quizState;
   let skipped = 0;
   questions.forEach((q,i) => { if(i < current && !answered.has(i)) skipped++; });
