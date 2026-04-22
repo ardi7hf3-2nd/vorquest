@@ -1111,33 +1111,154 @@ tr:hover td { background:rgba(75,130,245,.03) }
 @keyframes dot-pulse { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
 
 /* ══════════════════════════════════ RESPONSIVE ══════════════════════════════════ */
+
+/* ── Large desktop (1280px+) ── */
+@media(min-width:1280px) {
+  .dash-content,.admin-content { padding:32px 48px }
+  .quiz-content { max-width:800px }
+  .question-text { font-size:16.5px }
+  .option-btn { font-size:14.5px; padding:15px 18px }
+}
+
+/* ── Desktop / Laptop (900px – 1279px) ── */
+@media(max-width:1279px) and (min-width:901px) {
+  .dash-content,.admin-content { padding:28px 32px }
+}
+
+/* ── Tablet landscape + small laptop (769px – 900px) ── */
 @media(max-width:900px) {
   .auth-side { display:none }
   .auth-card { max-width:460px; border-radius:22px }
   .stats-row { grid-template-columns:repeat(2,1fr) }
+  .quiz-content { padding:20px 18px }
+  .question-card { padding:22px }
 }
-@media(max-width:640px) {
-  nav,.quiz-nav-bar { padding:0 14px }
-  .dash-content,.quiz-content,.admin-content,.result-content { padding:18px 14px }
-  .dash-hero { flex-direction:column; align-items:flex-start; padding:22px }
-  .result-breakdown { grid-template-columns:1fr 1fr }
-  .result-breakdown .breakdown-item:last-child { grid-column:span 2 }
+
+/* ── Tablet portrait (641px – 768px) ── */
+@media(max-width:768px) and (min-width:641px) {
+  nav,.quiz-nav-bar { padding:0 20px }
+  .dash-content,.quiz-content,.admin-content,.result-content { padding:22px 18px }
+  .dash-hero { padding:26px 28px }
+  .question-text { font-size:15px }
+  .option-btn { font-size:13px; padding:12px 14px }
+  .result-circle-wrap { width:148px; height:148px }
+  .result-circle { width:148px; height:148px }
+  .result-circle::before { width:110px; height:110px }
   .admin-tabs { grid-template-columns: repeat(3, 1fr) }
-  /* Navbar mobile: sembunyikan username agar tombol tidak terpotong */
+}
+
+/* ── Mobile landscape + small tablet (481px – 640px) ── */
+@media(max-width:640px) {
+  nav,.quiz-nav-bar { padding:0 14px; height:56px }
+  .nav-logo { width:30px; height:30px }
+  .nav-logo i { font-size:15px }
+  .nav-brand-text { font-size:15px }
   .nav-username { display:none }
   .nav-user { padding:4px 8px; gap:6px }
   .nav-right { gap:6px }
-  /* Mode tabs mobile */
+  .quiz-timer-wrap { padding:5px 10px; font-size:13px }
+
+  .dash-content,.quiz-content,.admin-content,.result-content { padding:16px 14px }
+  .dash-hero { flex-direction:column; align-items:flex-start; padding:20px }
+  .dash-hero-right { display:none }
+  .stats-row { grid-template-columns:repeat(2,1fr); gap:10px }
+
+  .question-card { padding:18px 16px; border-radius:14px }
+  .question-text { font-size:14.5px; line-height:1.65; margin-bottom:18px }
+  .option-btn { padding:11px 13px; font-size:13px; gap:11px; border-radius:10px }
+  .option-letter { width:26px; height:26px; font-size:10.5px; border-radius:6px }
+  .options-list { gap:8px }
+  .feedback-box { font-size:12.5px; padding:10px 13px }
+
+  .quiz-dots-row { flex-direction:column; align-items:flex-start; gap:10px }
+  .quiz-progress-wrap { margin-right:0; width:100% }
+  .question-dots { max-height:44px }
+  .quiz-paket-info { flex-wrap:wrap; gap:6px }
+  .btn.btn-sm { padding:7px 10px; font-size:12px }
+
   .mode-tabs { gap:8px }
   .mode-tab { padding:11px 14px; gap:10px }
   .mode-tab-title { font-size:13px }
-  /* Simulasi hero mobile */
   .simulasi-hero { flex-direction:column; padding:20px }
   .simulasi-hero-icon { width:48px; height:48px; border-radius:12px }
   .simulasi-hero-icon i { font-size:22px }
-  /* Quiz mode badge mobile */
-  .quiz-paket-info { flex-wrap:wrap; gap:6px }
-  .btn.btn-sm { padding:7px 10px; font-size:12px }
+
+  .result-breakdown { grid-template-columns:1fr 1fr }
+  .result-breakdown .breakdown-item:last-child { grid-column:span 2 }
+  .result-circle-wrap { width:140px; height:140px }
+  .result-circle { width:140px; height:140px }
+  .result-circle::before { width:104px; height:104px }
+  .score-num { font-size:32px }
+  .result-title { font-size:18px }
+  .result-actions { flex-direction:column; align-items:stretch }
+  .result-actions .btn { justify-content:center }
+
+  .admin-tabs { grid-template-columns: repeat(3, 1fr) }
+  .admin-content { padding:16px 14px }
+}
+
+/* ── Small mobile (≤ 480px) — iPhone SE, Android compact ── */
+@media(max-width:480px) {
+  nav,.quiz-nav-bar { padding:0 12px; height:54px }
+  .nav-brand-text { font-size:14px }
+  .quiz-timer-wrap { padding:4px 9px; font-size:12px; gap:5px }
+  .quiz-timer-wrap i { font-size:12px }
+
+  .dash-content,.quiz-content,.admin-content,.result-content { padding:14px 12px }
+  .question-card { padding:16px 14px; border-radius:12px }
+  .question-text { font-size:14px; margin-bottom:16px }
+  .question-num { font-size:9.5px }
+  .question-type-badge { font-size:9.5px; padding:3px 8px }
+
+  .option-btn { padding:10px 12px; font-size:12.5px; gap:10px; border-radius:9px }
+  .option-letter { width:24px; height:24px; font-size:10px }
+  .options-list { gap:7px }
+
+  .stats-row { grid-template-columns:1fr 1fr; gap:9px }
+  .stat-card { padding:16px 14px }
+  .stat-num { font-size:24px }
+
+  .result-breakdown { grid-template-columns:1fr }
+  .result-breakdown .breakdown-item:last-child { grid-column:auto }
+  .b-num { font-size:20px }
+  .result-title { font-size:17px }
+  .result-subtitle { font-size:13px }
+
+  .btn { padding:9px 14px; font-size:13px }
+  .btn.btn-sm { padding:7px 10px; font-size:11.5px }
+
+  .mode-tab { padding:10px 12px; border-radius:12px }
+  .mode-tab-icon { width:38px; height:38px; border-radius:10px }
+  .mode-tab-icon i { font-size:16px }
+  .mode-tab-title { font-size:12.5px }
+
+  .soal-navigator { width:100%; top:54px; border-left:none; border-top:1px solid var(--border) }
+  .soal-nav-grid { grid-template-columns:repeat(10,1fr) }
+
+  .auth-form { padding:28px 18px }
+}
+
+/* ── Extra small mobile (≤ 360px) — Galaxy A series, iPhone mini ── */
+@media(max-width:360px) {
+  nav,.quiz-nav-bar { padding:0 10px }
+  .nav-brand-text { font-size:13.5px }
+  .quiz-timer-wrap { padding:4px 8px; font-size:11.5px }
+
+  .question-card { padding:14px 12px }
+  .question-text { font-size:13.5px }
+  .option-btn { padding:9px 11px; font-size:12px; gap:9px }
+  .option-letter { width:22px; height:22px; font-size:9.5px }
+
+  .stats-row { grid-template-columns:1fr }
+  .soal-nav-grid { grid-template-columns:repeat(8,1fr) }
+  .auth-form { padding:24px 14px }
+}
+
+/* ── Touch device: disable hover transforms (prevent sticky hover on tap) ── */
+@media(hover:none) and (pointer:coarse) {
+  .option-btn:hover:not(:disabled) { transform:none; border-color:var(--border); background:var(--surface2) }
+  .question-dot:hover { transform:none }
+  .btn:hover { opacity:1 }
 }
 </style>
 </head>
