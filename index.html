@@ -512,6 +512,83 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .paket-score-text { font-size:11.5px; color:var(--text2) }
 .paket-score-text strong { color:var(--green); font-family:var(--mono) }
 
+/* ══════════════════════════════════ MODE TABS ══════════════════════════════════ */
+.mode-tabs {
+  display:flex; gap:10px; margin-bottom:22px; flex-wrap:wrap;
+}
+.mode-tab {
+  display:flex; align-items:center; gap:12px;
+  background:var(--surface); border:1.5px solid var(--border);
+  border-radius:var(--radius-lg); padding:14px 20px;
+  cursor:pointer; transition:all .2s; flex:1; min-width:200px;
+  text-align:left; color:var(--text2);
+}
+.mode-tab i { font-size:20px; flex-shrink:0; transition:color .2s }
+.mode-tab-content { display:flex; flex-direction:column; gap:2px }
+.mode-tab-title { font-size:14px; font-weight:700; color:var(--text); transition:color .2s }
+.mode-tab-desc  { font-size:11.5px; color:var(--text2) }
+.mode-tab:hover {
+  border-color:rgba(75,130,245,.4);
+  transform:translateY(-2px);
+  box-shadow:0 8px 28px rgba(0,0,0,.3);
+}
+.mode-tab.active {
+  background:linear-gradient(135deg, rgba(75,130,245,.12) 0%, rgba(52,198,244,.07) 100%);
+  border-color:rgba(75,130,245,.5);
+  color:var(--accent);
+}
+.mode-tab.active i { color:var(--accent) }
+.mode-tab.active .mode-tab-title { color:var(--accent) }
+/* simulasi mode: gold accent */
+#tab-simulasi.active {
+  background:linear-gradient(135deg, rgba(245,192,48,.12) 0%, rgba(245,158,11,.07) 100%);
+  border-color:rgba(245,192,48,.45);
+}
+#tab-simulasi.active i,
+#tab-simulasi.active .mode-tab-title { color:var(--gold) }
+
+/* ══════════════════════════════════ SIMULASI HERO ══════════════════════════════════ */
+.simulasi-hero {
+  display:flex; gap:24px; align-items:flex-start;
+  background:linear-gradient(135deg, rgba(245,192,48,.07) 0%, rgba(245,158,11,.04) 50%, transparent 100%);
+  border:1px solid rgba(245,192,48,.2); border-radius:var(--radius-xl);
+  padding:28px 32px; margin-bottom:24px;
+}
+.simulasi-hero-icon {
+  width:64px; height:64px; border-radius:16px; flex-shrink:0;
+  background:rgba(245,192,48,.12); border:1px solid rgba(245,192,48,.2);
+  display:grid; place-items:center;
+}
+.simulasi-hero-icon i { font-size:28px; color:var(--gold) }
+.simulasi-hero-info h3 { font-size:18px; font-weight:800; margin-bottom:8px }
+.simulasi-hero-info p  { font-size:13px; color:var(--text2); line-height:1.7; max-width:580px }
+.simulasi-hero-info strong { color:var(--gold) }
+.simulasi-meta-row { display:flex; align-items:center; gap:6px; margin-top:12px; flex-wrap:wrap }
+.simulasi-meta-item { display:flex; align-items:center; gap:5px; font-size:11.5px; color:var(--text3) }
+.simulasi-meta-item i { font-size:11px }
+.simulasi-meta-sep  { color:var(--border2) }
+
+/* Simulasi history table */
+.simulasi-history-card {
+  background:var(--surface); border:1px solid var(--border);
+  border-radius:var(--radius-lg); padding:20px 22px;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px; flex-wrap:wrap; margin-bottom:10px;
+}
+.sim-hist-score { font-family:var(--mono); font-size:22px; font-weight:800; color:var(--gold); min-width:56px }
+.sim-hist-info { flex:1 }
+.sim-hist-title { font-size:13px; font-weight:700 }
+.sim-hist-meta  { font-size:11.5px; color:var(--text2); margin-top:3px }
+
+/* Quiz mode badge in quiz header */
+.quiz-mode-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:10px; font-weight:700; letter-spacing:.8px; text-transform:uppercase;
+  padding:3px 9px; border-radius:5px;
+}
+.quiz-mode-badge.tryout  { background:rgba(75,130,245,.12); color:var(--accent); border:1px solid rgba(75,130,245,.25) }
+.quiz-mode-badge.simulasi{ background:rgba(245,192,48,.12);  color:var(--gold);   border:1px solid rgba(245,192,48,.25) }
+
 /* ══════════════════════════════════ QUIZ ══════════════════════════════════ */
 #page-quiz { padding:0; background:var(--bg) }
 .quiz-nav-bar {
@@ -549,7 +626,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
   transition:width .4s cubic-bezier(.4,0,.2,1);
   box-shadow:0 0 8px rgba(75,130,245,.5);
 }
-.question-dots { display:flex; gap:4px; flex-wrap:wrap }
+.question-dots { display:flex; gap:4px; flex-wrap:wrap; max-height:60px; overflow-y:auto }
 .question-dot {
   width:8px; height:8px; border-radius:2.5px;
   background:var(--border); transition:all .18s; cursor:pointer;
@@ -559,6 +636,8 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .question-dot.answered-pg    { background:var(--green) }
 .question-dot.answered-essay { background:var(--gold) }
 .question-dot.wrong          { background:var(--red) }
+/* Simulasi: dot lebih kecil karena 100 soal */
+.simulasi-dots .question-dot { width:6px; height:6px; border-radius:2px; gap:3px }
 
 /* Question card */
 .question-card {
@@ -668,6 +747,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .breakdown-icon.green  { background:rgba(45,212,191,.1);  color:var(--green)  }
 .breakdown-icon.red    { background:rgba(248,113,113,.1); color:var(--red)    }
 .breakdown-icon.gold   { background:rgba(245,192,48,.1);  color:var(--gold)   }
+.breakdown-icon.blue   { background:rgba(75,130,245,.1);  color:var(--accent) }
 .b-num   { font-size:22px; font-weight:800; font-family:var(--mono) }
 .b-label { font-size:11px; color:var(--text2); margin-top:2px }
 .result-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap }
@@ -935,6 +1015,16 @@ tr:hover td { background:rgba(75,130,245,.03) }
   .nav-username { display:none }
   .nav-user { padding:4px 8px; gap:6px }
   .nav-right { gap:6px }
+  /* Mode tabs mobile */
+  .mode-tabs { gap:8px }
+  .mode-tab { padding:11px 14px; gap:10px }
+  .mode-tab-title { font-size:13px }
+  /* Simulasi hero mobile */
+  .simulasi-hero { flex-direction:column; padding:20px }
+  .simulasi-hero-icon { width:48px; height:48px; border-radius:12px }
+  .simulasi-hero-icon i { font-size:22px }
+  /* Quiz mode badge mobile */
+  .quiz-paket-info { flex-wrap:wrap; gap:6px }
   .btn.btn-sm { padding:7px 10px; font-size:12px }
 }
 </style>
@@ -1081,17 +1171,71 @@ tr:hover td { background:rgba(75,130,245,.03) }
       <div>
         <div class="dash-hero-label"><i class="fi fi-sr-star"></i> Platform Tryout 4 Pilar MPR RI</div>
         <h2>Halo, <span id="dash-name">—</span>!</h2>
-        <p>Uji pemahamanmu tentang Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika melalui 10 paket soal yang komprehensif.</p>
+        <p>Uji pemahamanmu tentang Pancasila, UUD 1945, NKRI, dan Bhinneka Tunggal Ika. Pilih mode latihan sesuai kebutuhanmu.</p>
       </div>
-      <button class="btn btn-primary" onclick="startRandomPaket()" style="flex-shrink:0">
-        <i class="fi fi-rr-shuffle"></i> Mulai Acak
+      <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+        <button class="btn btn-secondary" onclick="startRandomPaket()" id="btn-random-paket">
+          <i class="fi fi-rr-shuffle"></i> Acak Paket
+        </button>
+        <button class="btn btn-primary" onclick="startSimulasi()" id="btn-start-simulasi" style="display:none">
+          <i class="fi fi-rr-play"></i> Mulai Simulasi
+        </button>
+      </div>
+    </div>
+
+    <!-- Mode Tabs -->
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tab-tryout" onclick="switchMode('tryout')">
+        <i class="fi fi-sr-layers"></i>
+        <div class="mode-tab-content">
+          <span class="mode-tab-title">Tryout</span>
+          <span class="mode-tab-desc">Paket soal PG + Essay</span>
+        </div>
+      </button>
+      <button class="mode-tab" id="tab-simulasi" onclick="switchMode('simulasi')">
+        <i class="fi fi-sr-diploma"></i>
+        <div class="mode-tab-content">
+          <span class="mode-tab-title">Simulasi Ujian</span>
+          <span class="mode-tab-desc">100 soal PG campuran</span>
+        </div>
       </button>
     </div>
 
-    <div class="section-header">
-      <div class="section-title"><i class="fi fi-sr-layers"></i> Pilih Paket Soal</div>
+    <!-- TRYOUT content -->
+    <div id="mode-tryout">
+      <div class="section-header">
+        <div class="section-title"><i class="fi fi-sr-layers"></i> Pilih Paket Soal Tryout</div>
+      </div>
+      <div class="paket-grid" id="paket-grid"></div>
     </div>
-    <div class="paket-grid" id="paket-grid"></div>
+
+    <!-- SIMULASI content -->
+    <div id="mode-simulasi" style="display:none">
+      <div class="simulasi-hero">
+        <div class="simulasi-hero-icon"><i class="fi fi-sr-diploma"></i></div>
+        <div class="simulasi-hero-info">
+          <h3>Simulasi Ujian 4 Pilar MPR RI</h3>
+          <p>Satu sesi ujian dengan <strong>100 soal pilihan ganda</strong> yang diambil secara acak dari seluruh topik (Pancasila, UUD 1945, NKRI, DPD, Wawasan Nusantara, dan lainnya). Tidak ada soal essay. Waktu berjalan sejak soal pertama ditampilkan.</p>
+          <div class="simulasi-meta-row">
+            <div class="simulasi-meta-item"><i class="fi fi-rr-list"></i> 100 Soal PG</div>
+            <div class="simulasi-meta-sep">·</div>
+            <div class="simulasi-meta-item"><i class="fi fi-rr-layers"></i> Semua Topik</div>
+            <div class="simulasi-meta-sep">·</div>
+            <div class="simulasi-meta-item"><i class="fi fi-rr-shuffle"></i> Acak Setiap Sesi</div>
+          </div>
+          <button class="btn btn-primary" style="margin-top:18px;width:fit-content" onclick="startSimulasi()">
+            <i class="fi fi-rr-play"></i> Mulai Simulasi Sekarang
+          </button>
+        </div>
+      </div>
+
+      <div class="section-header" style="margin-top:24px">
+        <div class="section-title"><i class="fi fi-sr-list-timeline"></i> Riwayat Simulasi</div>
+      </div>
+      <div id="simulasi-history">
+        <div class="empty-state" style="padding:32px 0"><div class="empty-icon"><i class="fi fi-rr-diploma"></i></div><div>Belum ada riwayat simulasi.</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1112,6 +1256,7 @@ tr:hover td { background:rgba(75,130,245,.03) }
       <div class="quiz-paket-info">
         <div class="quiz-paket-chip" id="quiz-paket-chip">PAKET —</div>
         <div class="quiz-paket-title" id="quiz-paket-title">—</div>
+        <div class="quiz-mode-badge tryout" id="quiz-mode-badge"><i class="fi fi-sr-layers"></i> Tryout</div>
       </div>
       <div class="quiz-dots-row">
         <div class="quiz-progress-wrap">
@@ -1167,11 +1312,12 @@ tr:hover td { background:rgba(75,130,245,.03) }
     <div class="result-breakdown">
       <div class="breakdown-item"><div class="breakdown-icon green"><i class="fi fi-sr-check-circle"></i></div><div class="b-num" id="rb-correct" style="color:var(--green)">0</div><div class="b-label">Jawaban Benar</div></div>
       <div class="breakdown-item"><div class="breakdown-icon red"><i class="fi fi-sr-cross-circle"></i></div><div class="b-num" id="rb-wrong" style="color:var(--red)">0</div><div class="b-label">Jawaban Salah</div></div>
-      <div class="breakdown-item"><div class="breakdown-icon gold"><i class="fi fi-sr-pen-field"></i></div><div class="b-num" id="rb-essay" style="color:var(--gold)">—</div><div class="b-label" id="rb-essay-label">Nilai Essay</div></div>
+      <div class="breakdown-item" id="rb-essay-wrap"><div class="breakdown-icon gold"><i class="fi fi-sr-pen-field"></i></div><div class="b-num" id="rb-essay" style="color:var(--gold)">—</div><div class="b-label" id="rb-essay-label">Nilai Essay</div></div>
+      <div class="breakdown-item" id="rb-pct-wrap" style="display:none"><div class="breakdown-icon blue"><i class="fi fi-sr-stats"></i></div><div class="b-num" id="rb-pct" style="color:var(--accent)">0%</div><div class="b-label">Persentase</div></div>
     </div>
     <div class="result-actions">
       <button class="btn btn-ghost" onclick="goTo('dashboard')"><i class="fi fi-rr-arrow-left"></i> Kembali</button>
-      <button class="btn btn-primary" onclick="replayCurrentPaket()"><i class="fi fi-rr-refresh"></i> Ulangi Paket</button>
+      <button class="btn btn-primary" id="btn-replay" onclick="replayCurrentPaket()"><i class="fi fi-rr-refresh"></i> Ulangi Paket</button>
     </div>
   </div>
 </div>
@@ -1518,11 +1664,52 @@ async function handleLogout(){ await sb.auth.signOut(); currentUser=null; userPr
 function goTo(page){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+page)?.classList.add('active');
-  if(page==='dashboard') renderDashboard();
+  if(page==='dashboard'){
+    renderDashboard();
+    // Kembalikan ke tab mode yang sesuai dengan sesi terakhir
+    if(currentPaketId==='simulasi') switchMode('simulasi');
+    else switchMode(currentMode||'tryout');
+  }
   if(page==='admin'){
     if(userProfile?.role!=='admin'){ goTo('dashboard'); return; }
     loadEssayAnswers(); loadUsers(); loadTryoutLogs();
   }
+}
+
+/* ══ MODE MANAGEMENT ══ */
+let currentMode = 'tryout'; // 'tryout' | 'simulasi'
+
+function switchMode(mode){
+  currentMode = mode;
+  document.getElementById('tab-tryout').classList.toggle('active', mode==='tryout');
+  document.getElementById('tab-simulasi').classList.toggle('active', mode==='simulasi');
+  document.getElementById('mode-tryout').style.display   = mode==='tryout'   ? '' : 'none';
+  document.getElementById('mode-simulasi').style.display = mode==='simulasi' ? '' : 'none';
+  document.getElementById('btn-random-paket').style.display   = mode==='tryout'   ? '' : 'none';
+  document.getElementById('btn-start-simulasi').style.display = mode==='simulasi' ? '' : 'none';
+  if(mode==='simulasi') renderSimulasiHistory();
+}
+
+async function renderSimulasiHistory(){
+  const wrap = document.getElementById('simulasi-history'); wrap.innerHTML='';
+  if(!currentUser){ wrap.innerHTML='<div class="empty-state" style="padding:32px 0"><div class="empty-icon"><i class="fi fi-rr-diploma"></i></div><div>Login untuk melihat riwayat.</div></div>'; return; }
+  const{data}=await sb.from('simulasi_results').select('*').eq('user_id',currentUser.id).order('completed_at',{ascending:false}).limit(10);
+  if(!data||!data.length){ wrap.innerHTML='<div class="empty-state" style="padding:32px 0"><div class="empty-icon"><i class="fi fi-rr-diploma"></i></div><div>Belum ada riwayat simulasi.</div></div>'; return; }
+  wrap.innerHTML = data.map(r=>{
+    const pct=Math.round(r.score/r.total*100);
+    const date=new Date(r.completed_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    const color=pct>=80?'var(--green)':pct>=60?'var(--gold)':'var(--red)';
+    const label=pct>=80?'Lulus':pct>=60?'Cukup':'Perlu Latihan';
+    const labelBg=pct>=80?'rgba(45,212,191,.12)':pct>=60?'rgba(245,192,48,.12)':'rgba(248,113,113,.1)';
+    return `<div class="simulasi-history-card">
+      <div class="sim-hist-score" style="color:${color}">${r.score}<span style="font-size:12px;color:var(--text2)">/${r.total}</span></div>
+      <div class="sim-hist-info">
+        <div class="sim-hist-title">Simulasi Ujian 4 Pilar MPR RI</div>
+        <div class="sim-hist-meta">${pct}% benar &nbsp;·&nbsp; Durasi: ${Math.floor(r.duration/60)}m ${r.duration%60}s &nbsp;·&nbsp; ${date}</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;padding:5px 12px;border-radius:8px;background:${labelBg};color:${color}">${label}</div>
+    </div>`;
+  }).join('');
 }
 
 async function renderDashboard(){
@@ -1534,14 +1721,11 @@ async function renderDashboard(){
     if(essayData) essayData.forEach(e=>{ essayGrades[e.paket_id]=e.grade; });
   }
 
-  // Ambil soal dari PAKETS statis saja
   let allPakets=[...PAKETS];
-
   allPakets.sort((a,b)=>a.id-b.id);
   window._allPakets = allPakets;
-  const done=Object.keys(results).length;
 
-  const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix'};
+  const topicMap={'Pancasila':'topic-pancasila','UUD NRI 1945':'topic-uud','NKRI':'topic-nkri','Bhinneka Tunggal Ika':'topic-bti','Campuran':'topic-mix','DPD':'topic-uud','Wawasan Nusantara':'topic-nkri'};
   const grid=document.getElementById('paket-grid'); grid.innerHTML='';
   allPakets.forEach(p=>{
     const res=results[p.id];
@@ -1581,12 +1765,46 @@ function startRandomPaket(){
   if(rnd) startPaket(rnd.id);
 }
 
+/* ── SIMULASI: 100 soal PG acak dari semua paket, tanpa essay ── */
+function buildSimulasiQuestions(){
+  // Kumpulkan semua soal PG dari semua paket
+  const allPG = [];
+  (window._allPakets || PAKETS).forEach(p=>{
+    (p.pg||[]).forEach(q=>{ allPG.push({...q, _topic: p.topic}); });
+  });
+  // Acak & ambil 100 soal
+  const shuffled = allPG.sort(()=>Math.random()-0.5);
+  return shuffled.slice(0, Math.min(100, shuffled.length));
+}
+
+function startSimulasi(){
+  const pgs = buildSimulasiQuestions();
+  if(!pgs.length){ showToast('Tidak ada soal tersedia.','error'); return; }
+  const questions = pgs.map((q,i)=>({...q, type:'pg', num:i+1}));
+  currentPaketId = 'simulasi';
+  quizState = {
+    paketId:'simulasi', mode:'simulasi',
+    questions, current:0, answers:{}, answered:new Set(),
+    startTime:Date.now(), timerInterval:null
+  };
+  const badge = document.getElementById('quiz-mode-badge');
+  badge.className = 'quiz-mode-badge simulasi';
+  badge.innerHTML = '<i class="fi fi-sr-diploma"></i> Simulasi';
+  document.getElementById('quiz-paket-chip').textContent = 'SIMULASI';
+  document.getElementById('quiz-paket-title').textContent = '100 Soal PG Campuran 4 Pilar MPR RI';
+  document.getElementById('q-total').textContent = questions.length;
+  renderDots(); renderQuestion(); startTimer(); goTo('quiz');
+}
+
 function startPaket(paketId){
   const paket=window._allPakets ? window._allPakets.find(p=>p.id===paketId) : PAKETS.find(p=>p.id===paketId);
   if(!paket)return;
   currentPaketId=paketId;
   const questions=[...paket.pg.map((q,i)=>({...q,type:'pg',num:i+1})),{...paket.essay,type:'essay',num:paket.pg.length+1}];
-  quizState={paketId,questions,current:0,answers:{},answered:new Set(),startTime:Date.now(),timerInterval:null};
+  quizState={paketId,mode:'tryout',questions,current:0,answers:{},answered:new Set(),startTime:Date.now(),timerInterval:null};
+  const badge = document.getElementById('quiz-mode-badge');
+  badge.className = 'quiz-mode-badge tryout';
+  badge.innerHTML = '<i class="fi fi-sr-layers"></i> Tryout';
   document.getElementById('quiz-paket-chip').textContent=`PAKET ${String(paketId).padStart(2,'0')}`;
   document.getElementById('quiz-paket-title').textContent=paket.title.replace(/Paket \d+ – /,'');
   document.getElementById('q-total').textContent=questions.length;
@@ -1594,6 +1812,8 @@ function startPaket(paketId){
 }
 function renderDots(){
   const wrap=document.getElementById('question-dots'); wrap.innerHTML='';
+  // Kelas khusus untuk simulasi agar dot lebih kecil
+  wrap.className = 'question-dots' + (quizState.mode==='simulasi' ? ' simulasi-dots' : '');
   quizState.questions.forEach((q,i)=>{
     const d=document.createElement('div');
     d.className='question-dot'+(i===quizState.current?' current':'');
@@ -1672,8 +1892,21 @@ function startTimer(){
 }
 async function finishQuiz(){
   saveEssayIfNeeded(); clearInterval(quizState.timerInterval);
-  const{questions,answers}=quizState; let correct=0,wrong=0,essayText=null;
+  const{questions,answers,mode}=quizState; let correct=0,wrong=0,essayText=null;
   questions.forEach((q,i)=>{ if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; } else { essayText=answers[i]?.text||''; } });
+
+  if(mode==='simulasi'){
+    // Simpan hasil simulasi
+    const totalPG=questions.length;
+    const dur=Math.floor((Date.now()-quizState.startTime)/1000);
+    if(currentUser){
+      await sb.from('simulasi_results').insert({user_id:currentUser.id,score:correct,correct,wrong,total:totalPG,duration:dur,completed_at:new Date().toISOString()}).catch(()=>{});
+    }
+    await showResultSimulasi(correct,wrong,totalPG,dur);
+    return;
+  }
+
+  // Tryout mode (lama)
   if(currentUser){
     await sb.from('quiz_results').upsert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
     if(essayText){
@@ -1684,6 +1917,12 @@ async function finishQuiz(){
   await showResult(correct,wrong,questions.filter(q=>q.type==='pg').length,quizState.paketId);
 }
 async function showResult(correct,wrong,totalPG,paketId){
+  // Set mode visual: tryout
+  document.getElementById('rb-essay-wrap').style.display = '';
+  document.getElementById('rb-pct-wrap').style.display   = 'none';
+  document.getElementById('btn-replay').innerHTML = '<i class="fi fi-rr-refresh"></i> Ulangi Paket';
+  document.getElementById('btn-replay').onclick = replayCurrentPaket;
+
   const pct=Math.round(correct/totalPG*100);
   document.getElementById('result-circle').style.setProperty('--pct',pct+'%');
   document.getElementById('result-score').textContent=correct;
@@ -1707,28 +1946,66 @@ async function showResult(correct,wrong,totalPG,paketId){
     essayEl.textContent='-'; essayEl.style.color='var(--text3)';
     if(essayLabelEl) essayLabelEl.textContent='Essay (menunggu admin)';
   }
+  _applyResultBadge(pct);
+  goTo('result');
+}
+
+async function showResultSimulasi(correct,wrong,totalPG,dur){
+  // Set mode visual: simulasi — sembunyikan essay, tampilkan persentase
+  document.getElementById('rb-essay-wrap').style.display = 'none';
+  document.getElementById('rb-pct-wrap').style.display   = '';
+  const pct=Math.round(correct/totalPG*100);
+  document.getElementById('rb-pct').textContent = pct+'%';
+  document.getElementById('btn-replay').innerHTML = '<i class="fi fi-rr-refresh"></i> Ulangi Simulasi';
+  document.getElementById('btn-replay').onclick = startSimulasi;
+
+  document.getElementById('result-circle').style.setProperty('--pct',pct+'%');
+  document.getElementById('result-score').textContent=correct;
+  document.getElementById('result-total').textContent=`/${totalPG}`;
+  document.getElementById('rb-correct').textContent=correct;
+  document.getElementById('rb-wrong').textContent=wrong;
+  _applyResultBadge(pct, true);
+  goTo('result');
+}
+
+function _applyResultBadge(pct, isSimulasi=false){
   const badge=document.getElementById('result-badge');
   let title,sub,badgeClass,badgeText,iconClass;
-  if(pct>=80){ title='Luar Biasa!'; sub='Kamu menguasai materi ini dengan sangat baik. Pertahankan!'; badgeClass='great'; badgeText='Nilai Tinggi'; iconClass='fi-sr-trophy-star'; }
-  else if(pct>=60){ title='Bagus!'; sub='Hampir sempurna! Perkuat bagian yang masih kurang.'; badgeClass='good'; badgeText='Nilai Cukup'; iconClass='fi-sr-thumbs-up'; }
-  else { title='Terus Berlatih!'; sub='Jangan menyerah! Pelajari kembali materinya dan coba lagi.'; badgeClass='keep'; badgeText='Perlu Latihan'; iconClass='fi-sr-book-open-cover'; }
+  if(pct>=80){
+    title='Luar Biasa!';
+    sub=isSimulasi?'Skor simulasimu sangat tinggi! Kamu siap menghadapi ujian sebenarnya.':'Kamu menguasai materi ini dengan sangat baik. Pertahankan!';
+    badgeClass='great'; badgeText='Nilai Tinggi'; iconClass='fi-sr-trophy-star';
+  } else if(pct>=60){
+    title='Bagus!';
+    sub=isSimulasi?'Skor cukup baik. Perkuat materi yang masih lemah dan coba lagi!':'Hampir sempurna! Perkuat bagian yang masih kurang.';
+    badgeClass='good'; badgeText='Nilai Cukup'; iconClass='fi-sr-thumbs-up';
+  } else {
+    title='Terus Berlatih!';
+    sub=isSimulasi?'Jangan menyerah! Kerjakan lebih banyak tryout paket dan ulangi simulasi.':'Jangan menyerah! Pelajari kembali materinya dan coba lagi.';
+    badgeClass='keep'; badgeText='Perlu Latihan'; iconClass='fi-sr-book-open-cover';
+  }
   badge.className=`result-badge ${badgeClass}`;
   badge.querySelector('span').textContent=badgeText;
   document.getElementById('result-badge-icon').className=`fi ${iconClass}`;
   document.getElementById('result-title').textContent=title;
   document.getElementById('result-sub').textContent=sub;
-  goTo('result');
 }
-function replayCurrentPaket(){ if(currentPaketId) startPaket(currentPaketId); }
+
+function replayCurrentPaket(){
+  if(currentPaketId && currentPaketId!=='simulasi') startPaket(currentPaketId);
+}
 function confirmExitQuiz(){ document.getElementById('modal-exit').classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 function exitQuiz(){
+  const wasSimulasi = quizState?.mode === 'simulasi';
   clearInterval(quizState.timerInterval);
   closeModal('modal-exit');
-  // Pindah halaman langsung tanpa tunggu renderDashboard
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-dashboard')?.classList.add('active');
   renderDashboard().catch(()=>{});
+  // Kembalikan ke tab yang sesuai
+  if(wasSimulasi) switchMode('simulasi');
+  else switchMode('tryout');
 }
 
 function switchAdminTab(tab){
