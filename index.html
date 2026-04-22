@@ -708,6 +708,118 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 .feedback-box.essay   { background:rgba(245,192,48,.07);  border:1px solid rgba(245,192,48,.25);  color:var(--gold)  }
 .quiz-nav-btns { display:flex; justify-content:space-between; align-items:center; margin-top:10px }
 
+/* ══════════════════════════════════ SOAL NAVIGATOR (SIMULASI) ══════════════════════════════════ */
+.soal-nav-toggle {
+  display:none; /* hanya muncul di mode simulasi via JS */
+  align-items:center; gap:6px;
+  padding:7px 13px; border-radius:9px;
+  background:var(--surface2); border:1.5px solid var(--border);
+  color:var(--text2); font-size:12px; font-weight:600;
+  cursor:pointer; transition:all .18s; font-family:var(--font);
+  position:relative;
+}
+.soal-nav-toggle:hover { border-color:rgba(245,192,48,.5); color:var(--gold) }
+.soal-nav-toggle.open  { border-color:rgba(245,192,48,.5); color:var(--gold); background:rgba(245,192,48,.07) }
+.soal-nav-toggle i { font-size:13px }
+.soal-nav-badge {
+  position:absolute; top:-6px; right:-6px;
+  background:var(--gold); color:#000; font-size:9px; font-weight:800;
+  border-radius:10px; padding:1px 5px; font-family:var(--mono);
+  display:none;
+}
+.soal-nav-badge.show { display:block }
+
+/* Panel overlay */
+.soal-navigator {
+  position:fixed; top:62px; right:0; bottom:0; width:300px;
+  background:var(--surface); border-left:1px solid var(--border);
+  z-index:200; display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform .28s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 32px rgba(0,0,0,.4);
+}
+.soal-navigator.open { transform:translateX(0) }
+
+.soal-nav-header {
+  padding:16px 18px 12px; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
+}
+.soal-nav-header h4 { font-size:13px; font-weight:700; color:var(--text) }
+.soal-nav-close {
+  width:28px; height:28px; border-radius:7px; border:1px solid var(--border);
+  background:var(--surface2); color:var(--text2); cursor:pointer;
+  display:grid; place-items:center; transition:all .15s;
+}
+.soal-nav-close:hover { border-color:var(--red); color:var(--red) }
+.soal-nav-close i { font-size:12px }
+
+.soal-nav-legend {
+  padding:10px 18px; border-bottom:1px solid var(--border);
+  display:flex; gap:12px; flex-wrap:wrap; flex-shrink:0;
+}
+.soal-nav-legend-item {
+  display:flex; align-items:center; gap:5px;
+  font-size:10.5px; color:var(--text2);
+}
+.legend-dot {
+  width:10px; height:10px; border-radius:3px; flex-shrink:0;
+}
+.legend-dot.unanswered { background:var(--surface3); border:1px solid var(--border2) }
+.legend-dot.current    { background:var(--accent) }
+.legend-dot.correct    { background:var(--green) }
+.legend-dot.wrong      { background:var(--red) }
+
+.soal-nav-grid {
+  flex:1; overflow-y:auto; padding:14px 18px;
+  display:grid; grid-template-columns:repeat(10,1fr); gap:6px;
+}
+.soal-nav-grid::-webkit-scrollbar { width:4px }
+.soal-nav-grid::-webkit-scrollbar-track { background:transparent }
+.soal-nav-grid::-webkit-scrollbar-thumb { background:var(--border2); border-radius:4px }
+
+.soal-num-btn {
+  aspect-ratio:1; border-radius:7px; border:1.5px solid var(--border);
+  background:var(--surface2); color:var(--text2);
+  font-size:10px; font-weight:700; font-family:var(--mono);
+  cursor:pointer; transition:all .14s; display:grid; place-items:center;
+}
+.soal-num-btn:hover        { border-color:rgba(75,130,245,.5); color:var(--accent); transform:scale(1.1) }
+.soal-num-btn.sn-current   { background:var(--accent); border-color:var(--accent); color:#fff; box-shadow:0 2px 10px rgba(75,130,245,.5) }
+.soal-num-btn.sn-correct   { background:rgba(45,212,191,.15);  border-color:rgba(45,212,191,.5);  color:var(--green) }
+.soal-num-btn.sn-wrong     { background:rgba(248,113,113,.15); border-color:rgba(248,113,113,.5); color:var(--red) }
+.soal-num-btn.sn-skipped   { background:rgba(245,192,48,.1);   border-color:rgba(245,192,48,.35); color:var(--gold) }
+
+.soal-nav-footer {
+  padding:14px 18px; border-top:1px solid var(--border); flex-shrink:0;
+}
+.soal-nav-stats {
+  display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:12px;
+}
+.soal-nav-stat {
+  background:var(--surface2); border:1px solid var(--border);
+  border-radius:9px; padding:8px 10px; text-align:center;
+}
+.soal-nav-stat-num { font-size:16px; font-weight:800; font-family:var(--mono) }
+.soal-nav-stat-label { font-size:9.5px; color:var(--text2); margin-top:2px }
+
+/* Overlay backdrop on mobile */
+.soal-nav-backdrop {
+  display:none; position:fixed; inset:0; z-index:199;
+  background:rgba(0,0,0,.5); backdrop-filter:blur(2px);
+}
+.soal-nav-backdrop.open { display:block }
+
+/* Shift quiz-content when nav open on desktop */
+@media(min-width:900px){
+  #page-quiz.nav-open .quiz-content { margin-right:300px; transition:margin .28s cubic-bezier(.4,0,.2,1) }
+}
+@media(max-width:899px){
+  .soal-navigator { width:260px }
+}
+@media(max-width:640px){
+  .soal-navigator { width:100%; top:62px; border-left:none; border-top:1px solid var(--border) }
+  .soal-nav-grid  { grid-template-columns:repeat(10,1fr) }
+}
+
 /* ══════════════════════════════════ RESULT ══════════════════════════════════ */
 #page-result { padding:0 }
 .result-content { flex:1; max-width:600px; margin:0 auto; padding:44px 20px; text-align:center }
@@ -1278,7 +1390,46 @@ tr:hover td { background:rgba(75,130,245,.03) }
     </div>
     <div class="quiz-nav-btns">
       <button class="btn btn-ghost" id="btn-prev" onclick="prevQuestion()"><i class="fi fi-rr-arrow-left"></i> Sebelumnya</button>
+      <button class="soal-nav-toggle" id="btn-soal-nav" onclick="toggleSoalNavigator()">
+        <i class="fi fi-sr-apps"></i> Nomor Soal
+        <span class="soal-nav-badge" id="soal-nav-skipped-badge">0</span>
+      </button>
       <button class="btn btn-primary" id="btn-next" onclick="nextQuestion()">Berikutnya <i class="fi fi-rr-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <!-- Soal Navigator Panel (Simulasi only) -->
+  <div class="soal-nav-backdrop" id="soal-nav-backdrop" onclick="closeSoalNavigator()"></div>
+  <div class="soal-navigator" id="soal-navigator">
+    <div class="soal-nav-header">
+      <h4><i class="fi fi-sr-apps" style="margin-right:6px;color:var(--gold)"></i>Navigasi Soal</h4>
+      <button class="soal-nav-close" onclick="closeSoalNavigator()"><i class="fi fi-rr-cross-small"></i></button>
+    </div>
+    <div class="soal-nav-legend">
+      <div class="soal-nav-legend-item"><div class="legend-dot current"></div> Sekarang</div>
+      <div class="soal-nav-legend-item"><div class="legend-dot correct"></div> Dijawab</div>
+      <div class="soal-nav-legend-item"><div class="legend-dot wrong"></div> Salah</div>
+      <div class="soal-nav-legend-item"><div class="legend-dot unanswered"></div> Belum</div>
+    </div>
+    <div class="soal-nav-grid" id="soal-nav-grid"></div>
+    <div class="soal-nav-footer">
+      <div class="soal-nav-stats">
+        <div class="soal-nav-stat">
+          <div class="soal-nav-stat-num" id="sn-stat-answered" style="color:var(--green)">0</div>
+          <div class="soal-nav-stat-label">Dijawab</div>
+        </div>
+        <div class="soal-nav-stat">
+          <div class="soal-nav-stat-num" id="sn-stat-skipped" style="color:var(--gold)">0</div>
+          <div class="soal-nav-stat-label">Dilewati</div>
+        </div>
+        <div class="soal-nav-stat">
+          <div class="soal-nav-stat-num" id="sn-stat-left" style="color:var(--text2)">0</div>
+          <div class="soal-nav-stat-label">Belum</div>
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="closeSoalNavigator()">
+        <i class="fi fi-rr-arrow-left"></i> Kembali ke Soal
+      </button>
     </div>
   </div>
 </div>
@@ -1740,7 +1891,7 @@ async function renderDashboard(){
         essayBadge=`<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(148,163,184,.1);color:var(--text3);border:1px solid rgba(148,163,184,.2);border-radius:6px;padding:2px 8px;font-size:11px;font-family:var(--mono);"><i class="fi fi-rr-clock" style="font-size:10px"></i>Essay: -</span>`;
       }
     }
-    const footer=res?`<div class="paket-card-footer"><i class="fi fi-sr-star"></i><div class="paket-score-text" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">Nilai PG: <strong>${res.score}/9</strong> &nbsp;·&nbsp; ${Math.round(res.score/9*100)}% &nbsp; ${essayBadge}</div></div>`:'';
+    const footer=res?`<div class="paket-card-footer"><i class="fi fi-sr-star"></i><div class="paket-score-text" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">Nilai PG: <strong>${res.score}/${res.total_pg||p.pg.length}</strong> &nbsp;·&nbsp; ${Math.round(res.score/(res.total_pg||p.pg.length)*100)}% &nbsp; ${essayBadge}</div></div>`:'';
     grid.innerHTML+=`<div class="paket-card ${res?'done':''}" onclick="startPaket(${p.id})">
       <div class="paket-card-accent"></div>
       <div class="paket-card-body">
@@ -1749,9 +1900,9 @@ async function renderDashboard(){
         </div>
         <h3>${p.title.replace(/Paket \d+ – /,'')}</h3>
         <div class="paket-card-meta">
-          <div class="paket-meta-item"><i class="fi fi-rr-list"></i> 9 PG</div>
+          <div class="paket-meta-item"><i class="fi fi-rr-list"></i> ${p.pg.length} PG</div>
           <div class="paket-meta-sep">·</div>
-          <div class="paket-meta-item"><i class="fi fi-rr-pen-field"></i> 1 Essay</div>
+          <div class="paket-meta-item"><i class="fi fi-rr-pen-field"></i> ${(p.essays||[p.essay]).filter(Boolean).length} Essay</div>
         </div>
         <span class="topic-badge ${tc}">${p.topic}</span>
       </div>
@@ -1793,6 +1944,10 @@ function startSimulasi(){
   document.getElementById('quiz-paket-chip').textContent = 'SIMULASI';
   document.getElementById('quiz-paket-title').textContent = '100 Soal PG Campuran 4 Pilar MPR RI';
   document.getElementById('q-total').textContent = questions.length;
+  // Tampilkan tombol navigator, sembunyikan dots kecil
+  document.getElementById('btn-soal-nav').style.display = 'inline-flex';
+  document.getElementById('question-dots').style.display = 'none';
+  closeSoalNavigator();
   renderDots(); renderQuestion(); startTimer(); goTo('quiz');
 }
 
@@ -1800,7 +1955,11 @@ function startPaket(paketId){
   const paket=window._allPakets ? window._allPakets.find(p=>p.id===paketId) : PAKETS.find(p=>p.id===paketId);
   if(!paket)return;
   currentPaketId=paketId;
-  const questions=[...paket.pg.map((q,i)=>({...q,type:'pg',num:i+1})),{...paket.essay,type:'essay',num:paket.pg.length+1}];
+  const essayList = paket.essays || (paket.essay ? [paket.essay] : []);
+  const questions=[
+    ...paket.pg.map((q,i)=>({...q,type:'pg',num:i+1})),
+    ...essayList.map((e,i)=>({...e,type:'essay',num:paket.pg.length+i+1}))
+  ];
   quizState={paketId,mode:'tryout',questions,current:0,answers:{},answered:new Set(),startTime:Date.now(),timerInterval:null};
   const badge = document.getElementById('quiz-mode-badge');
   badge.className = 'quiz-mode-badge tryout';
@@ -1808,6 +1967,10 @@ function startPaket(paketId){
   document.getElementById('quiz-paket-chip').textContent=`PAKET ${String(paketId).padStart(2,'0')}`;
   document.getElementById('quiz-paket-title').textContent=paket.title.replace(/Paket \d+ – /,'');
   document.getElementById('q-total').textContent=questions.length;
+  // Sembunyikan navigator, tampilkan dots kecil
+  document.getElementById('btn-soal-nav').style.display = 'none';
+  document.getElementById('question-dots').style.display = '';
+  closeSoalNavigator();
   renderDots(); renderQuestion(); startTimer(); goTo('quiz');
 }
 function renderDots(){
@@ -1867,6 +2030,8 @@ function renderQuestion(){
   if(isLast){ btnNext.innerHTML='<i class="fi fi-sr-flag-checkered"></i> Selesai'; btnNext.onclick=finishQuiz; }
   else { btnNext.innerHTML='Berikutnya <i class="fi fi-rr-arrow-right"></i>'; btnNext.onclick=nextQuestion; }
   renderDots();
+  // Update badge navigator soal (simulasi only)
+  if(quizState.mode==='simulasi') updateSoalNavBadge();
 }
 function selectOption(selected,correct){
   if(quizState.answered.has(quizState.current))return;
@@ -1907,14 +2072,19 @@ async function finishQuiz(){
   }
 
   // Tryout mode (lama)
+  const totalPGCount = questions.filter(q=>q.type==='pg').length;
   if(currentUser){
-    await sb.from('quiz_results').upsert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
-    if(essayText){
-      const essayQ=questions.find(q=>q.type==='essay');
-      await sb.from('essay_answers').upsert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question:essayQ?.q||'',answer:essayText,rubrik:essayQ?.rubrik||'',grade:null,submitted_at:new Date().toISOString()},{onConflict:'user_id,paket_id'});
+    await sb.from('quiz_results').upsert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
+    // Simpan semua essay (bisa lebih dari 1)
+    const essayQuestions = questions.filter(q=>q.type==='essay');
+    for(const essayQ of essayQuestions){
+      const essayAns = answers[questions.indexOf(essayQ)];
+      if(essayAns?.text){
+        await sb.from('essay_answers').upsert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()},{onConflict:'user_id,paket_id,question_id'});
+      }
     }
   }
-  await showResult(correct,wrong,questions.filter(q=>q.type==='pg').length,quizState.paketId);
+  await showResult(correct,wrong,totalPGCount,quizState.paketId);
 }
 async function showResult(correct,wrong,totalPG,paketId){
   // Set mode visual: tryout
@@ -1989,6 +2159,91 @@ function _applyResultBadge(pct, isSimulasi=false){
   document.getElementById('result-badge-icon').className=`fi ${iconClass}`;
   document.getElementById('result-title').textContent=title;
   document.getElementById('result-sub').textContent=sub;
+}
+
+/* ══ SOAL NAVIGATOR (Simulasi) ══════════════════════════════════ */
+function toggleSoalNavigator(){
+  const nav = document.getElementById('soal-navigator');
+  if(nav.classList.contains('open')) closeSoalNavigator();
+  else openSoalNavigator();
+}
+
+function openSoalNavigator(){
+  renderSoalNavigatorGrid();
+  document.getElementById('soal-navigator').classList.add('open');
+  document.getElementById('soal-nav-backdrop').classList.add('open');
+  document.getElementById('btn-soal-nav').classList.add('open');
+  document.getElementById('page-quiz').classList.add('nav-open');
+}
+
+function closeSoalNavigator(){
+  document.getElementById('soal-navigator').classList.remove('open');
+  document.getElementById('soal-nav-backdrop').classList.remove('open');
+  document.getElementById('btn-soal-nav').classList.remove('open');
+  document.getElementById('page-quiz').classList.remove('nav-open');
+}
+
+function renderSoalNavigatorGrid(){
+  const grid = document.getElementById('soal-nav-grid'); grid.innerHTML='';
+  const { questions, answers, answered, current } = quizState;
+  let countAnswered=0, countSkipped=0, countLeft=0;
+
+  questions.forEach((q, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'soal-num-btn';
+    btn.textContent = i + 1;
+    btn.title = 'Soal ' + (i+1);
+
+    if(i === current){
+      btn.classList.add('sn-current');
+    } else if(answered.has(i)){
+      if(q.type === 'pg'){
+        btn.classList.add(answers[i]?.correct ? 'sn-correct' : 'sn-wrong');
+      } else {
+        btn.classList.add('sn-correct');
+      }
+      countAnswered++;
+    } else if(i < current){
+      // sudah dilewati (current sudah maju tapi belum dijawab)
+      btn.classList.add('sn-skipped');
+      countSkipped++;
+    } else {
+      countLeft++;
+    }
+
+    btn.onclick = () => {
+      jumpToQuestion(i);
+      // Auto-tutup di mobile
+      if(window.innerWidth < 900) closeSoalNavigator();
+    };
+    grid.appendChild(btn);
+  });
+
+  // Update stats
+  document.getElementById('sn-stat-answered').textContent = countAnswered;
+  document.getElementById('sn-stat-skipped').textContent  = countSkipped;
+  document.getElementById('sn-stat-left').textContent     = countLeft;
+
+  // Update badge on toggle button
+  const skippedBadge = document.getElementById('soal-nav-skipped-badge');
+  if(countSkipped > 0){
+    skippedBadge.textContent = countSkipped;
+    skippedBadge.classList.add('show');
+  } else {
+    skippedBadge.classList.remove('show');
+  }
+}
+
+function updateSoalNavBadge(){
+  if(quizState?.mode !== 'simulasi') return;
+  const { questions, answered, current } = quizState;
+  let skipped = 0;
+  questions.forEach((q,i) => { if(i < current && !answered.has(i)) skipped++; });
+  const badge = document.getElementById('soal-nav-skipped-badge');
+  if(skipped > 0){ badge.textContent = skipped; badge.classList.add('show'); }
+  else badge.classList.remove('show');
+  // Jika panel terbuka, refresh grid juga
+  if(document.getElementById('soal-navigator').classList.contains('open')) renderSoalNavigatorGrid();
 }
 
 function replayCurrentPaket(){
