@@ -1884,14 +1884,19 @@ async function init(){
 }
 async function loadProfile(){
   const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
-  if(data){ userProfile=data; }
-  else {
-    // User baru selesai konfirmasi email, profile belum ada → buat sekarang
+  if(data){
+    userProfile=data;
+  } else {
+    // Profile belum ada → buat baru dengan role peserta (hanya jika betul-betul belum ada)
     const meta=currentUser.user_metadata||{};
     const name=meta.name||currentUser.email.split('@')[0];
     const email=currentUser.email;
-    await sb.from('profiles').upsert({id:currentUser.id,name,email,role:'peserta'});
-    userProfile={name,email,role:'peserta'};
+    // Gunakan INSERT ... ON CONFLICT DO NOTHING agar tidak overwrite role existing
+    const{data:inserted}=await sb.from('profiles')
+      .upsert({id:currentUser.id,name,email,role:'peserta'},{onConflict:'id',ignoreDuplicates:true});
+    // Baca ulang dari DB untuk pastikan dapat role yang benar
+    const{data:refetched}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+    userProfile=refetched||{name,email,role:'peserta'};
   }
   updateNavUser();
 }
@@ -1957,8 +1962,11 @@ async function handleRegister(){
     return;
   }
   // Jika email confirmation dimatikan di Supabase → langsung login
-  await sb.from('profiles').upsert({id:data.user.id,name,email,role:'peserta'});
-  currentUser=data.user; userProfile={name,email,role:'peserta'};
+  // Insert profile baru — jika sudah ada (misal admin register ulang) jangan overwrite role
+  await sb.from('profiles').upsert({id:data.user.id,name,email,role:'peserta'},{onConflict:'id',ignoreDuplicates:true});
+  // Ambil profile dari DB (bukan hardcode peserta) agar role admin tetap terjaga
+  const{data:prof}=await sb.from('profiles').select('*').eq('id',data.user.id).single();
+  currentUser=data.user; userProfile=prof||{name,email,role:'peserta'};
   updateNavUser(); goTo('dashboard'); showToast('Akun berhasil dibuat! Selamat datang','success');
 }
 function showRegisterSuccess(email){
