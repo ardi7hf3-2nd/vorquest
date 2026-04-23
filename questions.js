@@ -1,6 +1,7 @@
 // VorQuest — Bank Soal 4 Pilar MPR RI (GABUNGAN + TAMBAHAN)
 // Sumber: questions.js (37 paket asli) + Soal_Cerdas_Cermat_UUD_1945_UNTAN.docx + SOAL_WAWASAN_NUSANTARA.docx
-// Total: 8 paket (per topik digabung)
+//          + LATIHAN_SOAL_LCC_MPR.pdf + SOAL_baru_LCC_PKN.docx + soal_lcc_uud_dan_pancasila.docx + soal_SUMPAH_PEMUDA.docx
+// Total: 10 paket (Paket 9: LCC Benar/Salah UUD & TAP MPR | Paket 10: LCC Sumpah Pemuda & Sejarah Kebangsaan)
 // Format: pg[] (semua soal PG dari topik tersebut) + essays[] (semua soal essay)
 
 const PAKETS = [
@@ -581,3 +582,163 @@ const PAKETS = [
   }
 
 ];
+
+// ══════════════════════════════════════════════════════════════════
+// PAKET 9 & 10 — TAMBAHAN LCC (dari file: LATIHAN_SOAL_LCC_MPR, SOAL_baru_LCC_PKN, soal_lcc_uud_dan_pancasila, soal_SUMPAH_PEMUDA)
+// Ditambahkan berdasarkan soal yang BELUM ada di paket 1–8
+// ══════════════════════════════════════════════════════════════════
+
+PAKETS.push({
+  id: 9,
+  title: "Paket 9 – LCC Benar/Salah – UUD 1945 & Ketetapan MPR",
+  topic: "UUD NRI 1945",
+  pg: [
+    // Format: soal pernyataan → opsi Benar/Salah → jawaban sesuai sumber LCC
+    {id:"9-1",q:"Setelah perubahan UUD 1945, MPR masih tetap memiliki kewenangan menetapkan garis-garis besar daripada haluan negara.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-2",q:"Penempatan UUD NRI Tahun 1945 dalam Lembaran Negara Republik Indonesia merupakan dasar pemberlakuannya.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-3",q:"Penempatan UUD NRI Tahun 1945 dalam Lembaran Negara Republik Indonesia TIDAK merupakan dasar pemberlakuannya.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-4",q:"Setelah perubahan UUD 1945, MPR merupakan lembaga tertinggi negara pemegang dan pelaksana sepenuhnya kedaulatan rakyat.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-5",q:"Setelah perubahan UUD 1945, MPR merupakan lembaga negara yang berkedudukan setara dengan lembaga negara lainnya.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-6",q:"Jika Presiden mangkat, diberhentikan, atau tidak dapat melakukan kewajibannya, maka MPR mengadakan sidang untuk memilih Presiden.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-7",q:"DPD HARUS mengajukan kepada DPR rancangan undang-undang yang berkaitan dengan otonomi daerah, hubungan pusat dan daerah, dan perimbangan keuangan.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-8",q:"Prajurit TNI tunduk kepada kekuasaan peradilan militer dalam hal pelanggaran hukum militer maupun hukum pidana umum (sesuai TAP MPR VII/2000).",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-9",q:"Sesuai TAP MPR VII/2000, TNI dipimpin oleh seorang Panglima yang diangkat dan diberhentikan oleh Presiden setelah mendapat persetujuan DPR.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-10",q:"Sebelum dilakukan perubahan UUD 1945, MPR berwenang menguji undang-undang terhadap UUD 1945 dan Ketetapan MPR (sesuai TAP MPR III/2000).",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-11",q:"MPR wajib memberhentikan Presiden dan/atau Wakil Presiden jika MK sudah terbukti memutus bahwa Presiden/Wapres telah melakukan pelanggaran hukum.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-12",q:"Jika Peraturan Pemerintah Pengganti UU tidak mendapat persetujuan DPR, dan Presiden tetap menilai perlu, maka Perpu tersebut dinyatakan tetap berlaku.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-13",q:"Salah satu persyaratan calon Presiden dan Wakil Presiden adalah mendapat dukungan rakyat yang dibuktikan dengan fotokopi KTP dan tanda tangan.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-14",q:"Setelah perubahan UUD 1945, MPR hanya dapat mengeluarkan Ketetapan MPR yang bersifat penetapan (beschikking).",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-15",q:"Setelah perubahan UUD 1945, MPR masih dapat mengeluarkan Ketetapan MPR yang bersifat mengatur (regeling).",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-16",q:"TNI memberikan bantuan kepada Polri dalam rangka tugas keamanan atas permintaan yang diatur dalam undang-undang (sesuai TAP MPR VII/2000).",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-17",q:"Fakir miskin dan anak-anak terlantar dipelihara oleh negara (bukan pemerintah).",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-18",q:"Fakir miskin dan anak-anak terlantar dipelihara oleh pemerintah.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-19",q:"Pajak dan pungutan lain yang bersifat memaksa untuk keperluan negara diatur dengan Peraturan Pemerintah.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-20",q:"Pembentukan, pengubahan, dan pembubaran kementerian negara diatur dengan Undang-Undang (bukan Perpres).",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-21",q:"Hasil pemeriksaan BPK diserahkan kepada MPR, DPR, DPD, dan DPRD sesuai dengan kewenangannya.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-22",q:"Calon hakim agung diusulkan oleh Komisi Yudisial kepada DPR untuk mendapat persetujuan dan ditetapkan oleh Presiden.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-23",q:"Calon hakim agung diusulkan oleh Ketua Mahkamah Agung kepada DPR.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-24",q:"Anggota Komisi Yudisial diangkat dan diberhentikan oleh Presiden dengan memperhatikan pertimbangan DPR.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-25",q:"Kuorum rapat MPR untuk mengambil keputusan atas usul pemberhentian Presiden/Wapres adalah sekurang-kurangnya 3/4 dari jumlah anggota MPR.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-26",q:"Keputusan MPR atas usul pemberhentian Presiden/Wapres harus disetujui sekurang-kurangnya 2/3 dari jumlah anggota yang hadir.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-27",q:"Menteri Luar Negeri, Menteri Dalam Negeri, dan Menteri Keuangan adalah pelaksana tugas kepresidenan jika Presiden dan Wapres berhalangan bersamaan.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-28",q:"Menteri Luar Negeri, Menteri Dalam Negeri, dan Menteri Pertahanan adalah pelaksana tugas kepresidenan jika Presiden dan Wapres berhalangan bersamaan.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-29",q:"MPR terdiri dari anggota DPR dan anggota DPD, serta sebagian anggota yang diangkat oleh Presiden.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-30",q:"Rapat MPR dinyatakan sah walaupun hanya dihadiri oleh anggota MPR yang berasal dari anggota DPR, sepanjang kuorum rapat telah terpenuhi.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-31",q:"Presiden menyatakan keadaan bahaya. Syarat-syarat dan akibatnya keadaan bahaya ditetapkan dengan Peraturan Pemerintah.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-32",q:"Putusan untuk mengubah pasal-pasal UUD dilakukan dengan persetujuan sekurang-kurangnya 50%+1 dari jumlah anggota MPR yang hadir.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-33",q:"Pemberlakuan kembali UUD 1945 ditetapkan melalui Dekrit Presiden 5 Juli 1959 dan dikukuhkan secara aklamasi tanggal 22 Juli 1959 oleh DPR.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-34",q:"Pemilihan umum diselenggarakan untuk memilih anggota DPR, DPD, Presiden dan Wakil Presiden, Gubernur, Bupati, Walikota, dan DPRD.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-35",q:"Peserta pemilihan umum untuk memilih anggota DPR dan anggota DPRD adalah partai politik.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-36",q:"Pembentukan sebuah provinsi dapat dilakukan dengan memiliki paling sedikit 5 (lima) kabupaten/kota.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-37",q:"Salah satu kesepakatan dasar dalam perubahan UUD 1945 adalah memasukkan Penjelasan UUD 1945 yang memuat hal-hal normatif ke dalam pasal-pasal.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-38",q:"Salah satu latar belakang perubahan UUD 1945 adalah karena Presiden memiliki wewenang yang sangat terbatas untuk mengatur hal penting dengan undang-undang.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-39",q:"Salah satu latar belakang perubahan UUD 1945 adalah karena kekuasaan tertinggi berada di tangan MPR.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-40",q:"Sebelum perubahan, UUD 1945 terdiri dari Pembukaan, Batang Tubuh, dan Penjelasan. Setelah perubahan, terdiri dari Pembukaan dan Pasal-pasal.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-41",q:"UUD NRI Tahun 1945 untuk pertama kali disahkan pada tanggal 17 Agustus 1945 bersamaan dengan Proklamasi Kemerdekaan.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-42",q:"UUD NRI Tahun 1945 yang diberlakukan kembali melalui Dekrit Presiden 5 Juli 1959 dicantumkan dalam Lembaran Negara Nomor 75 Tahun 1959.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-43",q:"Ketetapan MPR RI Nomor XI/MPR/1998 tentang Penyelenggara Negara yang Bersih dan Bebas KKN sudah tidak berlaku karena sudah ada UU Pemberantasan Tipikor.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-44",q:"Walaupun sudah ada UU Pemberantasan Tipikor, TAP MPR RI Nomor XI/MPR/1998 masih tetap berlaku karena belum seluruh amanatnya dilaksanakan.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-45",q:"Ketetapan MPR RI Nomor XVII/MPR/1998 tentang HAM adalah contoh TAP MPR yang dicabut karena telah diatur dalam UUD NRI Tahun 1945.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-46",q:"Kata PEMBUKAAN merupakan penyebutan resmi untuk Pembukaan UUD 1945. Istilah lain yang dipakai adalah PREAMBULE sebagaimana tercantum dalam naskah asli UUD 1945.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-47",q:"Kata PEMBUKAAN merupakan penyebutan resmi untuk Pembukaan UUD 1945. Istilah lain yang dipakai adalah MUKADIMAH sebagaimana tercantum dalam naskah asli UUD 1945.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-48",q:"Setelah perubahan UUD 1945, MPR tidak akan pernah lagi memilih Presiden dan/atau Wakil Presiden.",options:["A. Benar","B. Salah"],answer:"B"},
+    {id:"9-49",q:"Substansi Pasal 6 TAP MPR RI Nomor I/MPR/2003 adalah Ketetapan MPRS dan TAP MPR RI yang dinyatakan tidak perlu dilakukan tindakan hukum lebih lanjut karena bersifat final.",options:["A. Benar","B. Salah"],answer:"A"},
+    {id:"9-50",q:"Usaha pertahanan dan keamanan negara dilaksanakan melalui sistem pertahanan rakyat semesta, dengan TNI dan Polri sebagai kekuatan utama dan rakyat sebagai kekuatan pendukung.",options:["A. Benar","B. Salah"],answer:"B"},
+  ],
+  essays: [
+    {id:"9-e1",q:"Jelaskan latar belakang pergeseran kekuasaan membentuk undang-undang yang semula di tangan Presiden menjadi kewenangan DPR!",rubrik:"Penjabaran sistem presidensial: DPR sebagai lembaga pembentuk UU (kekuasaan legislatif), Presiden sebagai pelaksana UU (kekuasaan eksekutif). Praktek masa lalu membuka peluang penyelewengan karena UU lebih banyak memperkuat kedudukan Presiden."},
+    {id:"9-e2",q:"Jelaskan apa yang dimaksud dengan amnesti dan abolisi serta mengapa dalam memberikannya Presiden harus memperhatikan pertimbangan DPR!",rubrik:"Amnesti: pengampunan kepada seseorang/kelompok yang diduga melanggar hukum sebelum diproses peradilan. Abolisi: penghentian proses peradilan yang sedang berjalan. Alasan DPR: sifatnya lebih politis, DPR merepresentasikan lembaga perwakilan/politik. Merupakan penjabaran prinsip checks and balances."},
+    {id:"9-e3",q:"Jelaskan makna yang terkandung dalam rumusan Pasal 1 ayat (2) UUD NRI Tahun 1945: 'kedaulatan berada di tangan rakyat dan dilaksanakan menurut undang-undang dasar'!",rubrik:"Penjabaran paham kedaulatan rakyat dari Pembukaan UUD 1945 alinea IV. Kedaulatan dijalankan melalui lembaga-lembaga yang ditentukan UUD 1945, bukan hanya satu lembaga (MPR). Mengubah sistem dari supremasi MPR ke sistem kedaulatan rakyat. Lembaga negara melaksanakan bagian-bagian kedaulatan sesuai aturan UUD 1945."},
+  ],
+});
+
+PAKETS.push({
+  id: 10,
+  title: "Paket 10 – LCC Sumpah Pemuda & Sejarah Kebangsaan",
+  topic: "Bhinneka Tunggal Ika",
+  pg: [
+    {id:"10-1",q:"Sumpah Pemuda diikrarkan pada tanggal...",options:["A. 17 Agustus 1945","B. 28 Oktober 1928","C. 20 Mei 1908","D. 22 Juni 1945"],answer:"B"},
+    {id:"10-2",q:"Sumpah Pemuda diresmikan di kota...",options:["A. Surabaya","B. Bandung","C. Batavia (Jakarta)","D. Yogyakarta"],answer:"C"},
+    {id:"10-3",q:"Gedung tempat Kongres Pemuda II yang menghasilkan Sumpah Pemuda berlangsung dikenal sebagai...",options:["A. Gedung Sumpah Pemuda","B. Gedung Oost Java Bioscoop","C. Gedung Volksraad","D. Gedung DPR"],answer:"B"},
+    {id:"10-4",q:"Lagu kebangsaan 'Indonesia Raya' pertama kali dikumandangkan pada...",options:["A. Kongres Pemuda I (1926)","B. Kongres Pemuda II (1928)","C. Proklamasi Kemerdekaan (1945)","D. Sidang PPKI (1945)"],answer:"B"},
+    {id:"10-5",q:"Pencipta lagu 'Indonesia Raya' yang dikumandangkan pada penutupan Kongres Pemuda adalah...",options:["A. Ismail Marzuki","B. Wage Rudolf Supratman","C. L. Manik","D. Cornel Simanjuntak"],answer:"B"},
+    {id:"10-6",q:"Negara Kesatuan Republik Indonesia lahir karena dipertegas oleh sikap dan komitmen pemuda untuk bertanah air, berbangsa, dan berbahasa satu Indonesia yang diikrarkan pada tanggal...",options:["A. 17 Agustus 1945","B. 1 Juni 1945","C. 28 Oktober 1928","D. 20 Mei 1908"],answer:"C"},
+    {id:"10-7",q:"Budi Utomo sebagai organisasi pergerakan nasional pertama didirikan pada tanggal...",options:["A. 20 Mei 1906","B. 20 Mei 1907","C. 20 Mei 1908","D. 20 Mei 1909"],answer:"C"},
+    {id:"10-8",q:"Hari Kebangkitan Nasional diperingati setiap tanggal...",options:["A. 20 Mei","B. 28 Oktober","C. 17 Agustus","D. 2 Mei"],answer:"A"},
+    {id:"10-9",q:"Butir pertama Sumpah Pemuda menyatakan bertumpah darah satu, yaitu...",options:["A. Bangsa Indonesia","B. Tanah Air Indonesia","C. Bahasa Indonesia","D. Negara Indonesia"],answer:"B"},
+    {id:"10-10",q:"Butir ketiga Sumpah Pemuda menyatakan menjunjung bahasa persatuan, yaitu...",options:["A. Bahasa Melayu","B. Bahasa Jawa","C. Bahasa Indonesia","D. Bahasa Nusantara"],answer:"C"},
+    {id:"10-11",q:"Ideologi Pancasila bersumberkan pada...",options:["A. Nilai-nilai budaya Jawa","B. Nilai-nilai luhur bangsa Indonesia","C. Nilai-nilai liberalisme Barat","D. Nilai-nilai agama Islam"],answer:"B"},
+    {id:"10-12",q:"Tempat pertama dan utama untuk menanamkan nilai-nilai Pancasila adalah...",options:["A. Sekolah","B. Masyarakat","C. Lingkungan keluarga","D. Pemerintah"],answer:"C"},
+    {id:"10-13",q:"Salah satu bentuk penyelewengan ideologi Pancasila dalam tata kehidupan bermasyarakat adalah...",options:["A. Gotong royong","B. Musyawarah mufakat","C. Korupsi, Kolusi, dan Nepotisme","D. Toleransi antar umat beragama"],answer:"C"},
+    {id:"10-14",q:"Kesadaran akan sikap nasionalisme bangsa Indonesia dimulai semenjak...",options:["A. Proklamasi Kemerdekaan","B. Berdirinya Budi Utomo","C. Sumpah Pemuda","D. Kongres Pemuda I"],answer:"B"},
+    {id:"10-15",q:"Rakyat yang telah mempunyai kesatuan tekad untuk membangun masa depan bersama disebut...",options:["A. Negara","B. Warga negara","C. Bangsa","D. Masyarakat"],answer:"C"},
+    {id:"10-16",q:"Setiap negara mempunyai ideologi nasional yang umumnya tercantum dalam...",options:["A. Undang-undang","B. Konstitusi","C. Peraturan Pemerintah","D. Keputusan Presiden"],answer:"B"},
+    {id:"10-17",q:"Pancasila memberikan keyakinan kepada rakyat dan bangsa Indonesia bahwa kebahagiaan hidup akan tercapai apabila...",options:["A. Mengejar kemajuan ekonomi sebesar-besarnya","B. Didasarkan pada keselarasan dan keseimbangan","C. Mengikuti perkembangan teknologi dunia","D. Memperkuat kekuatan militer"],answer:"B"},
+    {id:"10-18",q:"Fungsi Pancasila dalam hubungannya dengan pengaruh budaya asing dan kemajuan IPTEK adalah sebagai...",options:["A. Penolak semua budaya asing","B. Pemicu modernisasi","C. Penyaring/filter","D. Landasan hukum"],answer:"C"},
+    {id:"10-19",q:"Indonesia pernah menerapkan bentuk negara serikat, yaitu pada masa berlakunya...",options:["A. UUD 1945 sebelum amandemen","B. UUDS 1950","C. Konstitusi RIS","D. Dekrit Presiden 1959"],answer:"C"},
+    {id:"10-20",q:"Sistem demokrasi dengan referendum masih diterapkan di negara...",options:["A. Amerika Serikat","B. Inggris","C. Swiss","D. Jerman"],answer:"C"},
+    {id:"10-21",q:"Di era kepemimpinan Soeharto, pemilihan umum pertama dilaksanakan pada tahun...",options:["A. 1966","B. 1969","C. 1971","D. 1977"],answer:"C"},
+    {id:"10-22",q:"Presiden pertama Republik Indonesia adalah...",options:["A. Drs. Mohammad Hatta","B. Ir. Soekarno","C. Soeharto","D. B.J. Habibie"],answer:"B"},
+    {id:"10-23",q:"Setelah dinasionalisasi, De Javasche Bank berubah menjadi...",options:["A. Bank Rakyat Indonesia","B. Bank Mandiri","C. Bank Indonesia","D. Bank Negara Indonesia"],answer:"C"},
+    {id:"10-24",q:"Pasukan perdamaian Indonesia di bawah komando PBB yang pernah menjaga perdamaian ke Mesir, Kongo, Vietnam, Bosnia, dan Libanon adalah...",options:["A. Pasukan Dharma","B. Pasukan Garuda","C. Pasukan Nusantara","D. Pasukan Bhayangkara"],answer:"B"},
+    {id:"10-25",q:"Bangsa Indonesia disebut sebagai bangsa yang cinta agama karena...",options:["A. Memiliki UUD yang menjamin kebebasan beragama","B. Ketaatannya dalam menjalankan ajaran agama","C. Mayoritas penduduknya beragama Islam","D. Memiliki banyak tempat ibadah"],answer:"B"},
+    {id:"10-26",q:"Contoh tindakan untuk memperkuat persatuan dan kesatuan dalam lingkungan masyarakat adalah...",options:["A. Mengunggulkan suku sendiri","B. Menggunakan bahasa daerah saja","C. Membiasakan diri bertegur sapa dengan tetangga","D. Menolak adat budaya lain"],answer:"C"},
+    {id:"10-27",q:"Potensi ancaman dari luar negeri terhadap kedaulatan Indonesia sangat tinggi karena...",options:["A. Jumlah penduduk Indonesia yang besar","B. Letak Indonesia yang sangat strategis","C. Kekayaan alam Indonesia yang melimpah","D. Sistem pertahanan Indonesia yang lemah"],answer:"B"},
+    {id:"10-28",q:"Keuntungan bagi bangsa Indonesia di era globalisasi adalah...",options:["A. Meningkatnya pengangguran","B. Lunturnya budaya lokal","C. Memicu pengusaha nasional bersaing dengan produk dari luar","D. Berkurangnya investasi asing"],answer:"C"},
+    {id:"10-29",q:"Di dalam sistem kerajaan, raja berfungsi sebagai...",options:["A. Pemimpin tertinggi tanpa batas","B. Wakil rakyat","C. Simbol (pemersatu) bangsa","D. Kepala pemerintahan"],answer:"C"},
+    {id:"10-30",q:"Salah satu kunci pokok sistem pemerintahan menurut UUD 1945 (sebelum amandemen) adalah...",options:["A. Presiden sebagai pemegang kekuasaan tertinggi","B. MPR sebagai pemegang dan pelaksana kedaulatan rakyat","C. MA sebagai lembaga tertinggi","D. DPR sebagai pusat kekuasaan"],answer:"B"},
+  ],
+  essays: [
+    {id:"10-e1",q:"Jelaskan latar belakang terbentuknya Sumpah Pemuda dan mengapa hari Sumpah Pemuda harus diperingati!",rubrik:"Latar belakang: para pemuda Indonesia ingin mewujudkan persatuan antar organisasi pemuda, namun belum ada landasan pemikiran bersama. Kegagalan menghalau penjajah karena sifat kedaerahan. Diselenggarakan 2 kali Kongres Pemuda. Mengapa diperingati: sebagai hari bersejarah di mana putra-putri Indonesia bersumpah bertanah air, berbangsa, dan berbahasa satu Indonesia, menjadi tonggak persatuan dan kesatuan bangsa."},
+    {id:"10-e2",q:"Sebutkan dan jelaskan isi Sumpah Pemuda serta makna dari masing-masing butir sumpah tersebut!",rubrik:"Isi: (1) Kami putra dan putri Indonesia mengaku bertumpah darah yang satu, tanah air Indonesia. (2) Kami putra dan putri Indonesia mengaku berbangsa yang satu, bangsa Indonesia. (3) Kami putra dan putri Indonesia menjunjung bahasa persatuan, bahasa Indonesia. Makna: Alinea 1 – tekad perjuangan hingga titik darah penghabisan. Alinea 2 – persatuan dan toleransi walaupun berbeda suku. Alinea 3 – bahasa Indonesia sebagai identitas bangsa yang harus dijunjung tinggi."},
+    {id:"10-e3",q:"Jelaskan peran Budi Utomo dalam kebangkitan nasional Indonesia dan kaitannya dengan kesadaran nasionalisme bangsa!",rubrik:"Budi Utomo (20 Mei 1908) adalah organisasi pergerakan nasional pertama. Menandai awal kesadaran nasionalisme bangsa Indonesia. Menjadi inspirasi lahirnya organisasi pergerakan lainnya. Pelopor pendidikan dan kemajuan bangsa dalam menghadapi penjajahan. Hari berdirinya diperingati sebagai Hari Kebangkitan Nasional setiap 20 Mei."},
+  ],
+});
+
+// ── Paket 11: Soal Tambahan LCC – Sejarah Kemerdekaan & Pengetahuan Ketatanegaraan ──
+PAKETS.push({
+  id: 11,
+  title: "Paket 11 – LCC Sejarah Kemerdekaan & Ketatanegaraan",
+  topic: "Pancasila",
+  pg: [
+    {id:"11-1",q:"Yang mengibarkan bendera Merah Putih setelah pembacaan teks proklamasi pada 17 Agustus 1945 adalah...",options:["A. Soehoed dan Latief Hendraningrat","B. Chairul Saleh dan Wikana","C. Darwis dan Ahmad Subardjo","D. Kunto dan Achmad Soebardjo"],answer:"A"},
+    {id:"11-2",q:"Bendera Merah Putih yang digunakan pada pembacaan proklamasi kemerdekaan dijahit oleh...",options:["A. Ibu Inggit Garnasih","B. Fatmawati","C. Ibu Rahmi","D. Cut Nyak Dien"],answer:"B"},
+    {id:"11-3",q:"Di rumah siapakah perumusan teks proklamasi dilakukan?",options:["A. Ir. Soekarno","B. Drs. Mohammad Hatta","C. Laksamana Maeda","D. Ahmad Subardjo"],answer:"C"},
+    {id:"11-4",q:"Jumlah anggota PPKI adalah...",options:["A. 17 orang","B. 19 orang","C. 21 orang","D. 23 orang"],answer:"C"},
+    {id:"11-5",q:"Setelah merdeka, jumlah provinsi Indonesia adalah...",options:["A. 6 provinsi","B. 7 provinsi","C. 8 provinsi","D. 9 provinsi"],answer:"C"},
+    {id:"11-6",q:"Yang membawa Soekarno-Hatta dari Rengasdengklok ke Jakarta adalah...",options:["A. Darwis dan Wikana","B. Kunto dan Achmad Soebardjo","C. Chairul Saleh dan Sukarni","D. Chaerul Saleh dan Yusuf Kunto"],answer:"B"},
+    {id:"11-7",q:"Kalimat pertama pada teks proklamasi diusulkan oleh...",options:["A. Ir. Soekarno","B. Drs. Mohammad Hatta","C. Ahmad Subardjo","D. Mr. Soepomo"],answer:"C"},
+    {id:"11-8",q:"Kalimat kedua pada teks proklamasi diusulkan oleh...",options:["A. Ahmad Subardjo","B. Ir. Soekarno","C. Mohammad Hatta","D. Chairul Saleh"],answer:"B"},
+    {id:"11-9",q:"Yang menyempurnakan kedua kalimat teks Proklamasi kemerdekaan sehingga berbunyi seperti sekarang adalah...",options:["A. Ir. Soekarno","B. Ahmad Subardjo","C. Mohammad Hatta","D. Mr. Soepomo"],answer:"C"},
+    {id:"11-10",q:"PPKI dibentuk pada tanggal...",options:["A. 1 Maret 1945","B. 29 April 1945","C. 7 Agustus 1945","D. 18 Agustus 1945"],answer:"C"},
+    {id:"11-11",q:"BPUPKI dibubarkan pada tanggal...",options:["A. 1 Juni 1945","B. 22 Juni 1945","C. 7 Agustus 1945","D. 17 Agustus 1945"],answer:"C"},
+    {id:"11-12",q:"Orang yang pertama kali mendengar berita penyerahan Jepang kepada Sekutu melalui siaran radio di Jakarta adalah...",options:["A. Ir. Soekarno","B. Sultan Syahrir","C. Drs. Mohammad Hatta","D. Ahmad Subardjo"],answer:"B"},
+    {id:"11-13",q:"Lagu Kebangsaan Indonesia Raya terdapat di dalam UUD 1945 pasal...",options:["A. Pasal 35","B. Pasal 36","C. Pasal 36A","D. Pasal 36B"],answer:"D"},
+    {id:"11-14",q:"Negara Indonesia ialah Negara Kesatuan yang berbentuk Republik. Pernyataan tersebut isi dari UUD 1945 pasal...",options:["A. Pasal 1 ayat (1)","B. Pasal 1 ayat (2)","C. Pasal 1 ayat (3)","D. Pasal 2 ayat (1)"],answer:"A"},
+    {id:"11-15",q:"Tercapainya persetujuan Roem-Royen pada tanggal...",options:["A. 17 Januari 1948","B. 8 Desember 1947","C. 7 Mei 1949","D. 23 Agustus 1949"],answer:"C"},
+    {id:"11-16",q:"Negara sahabat yang pertama kali mengakui kemerdekaan Indonesia adalah...",options:["A. India","B. Arab Saudi","C. Mesir","D. Pakistan"],answer:"C"},
+    {id:"11-17",q:"Perlawanan rakyat Batak kepada penjajah Belanda pada tahun 1883-1907 dipimpin oleh...",options:["A. Tuanku Imam Bonjol","B. Sisingamangaraja XII","C. Pangeran Diponegoro","D. Sultan Hasanuddin"],answer:"B"},
+    {id:"11-18",q:"Hari Kartini diperingati setiap tanggal...",options:["A. 17 Agustus","B. 28 Oktober","C. 20 Mei","D. 21 April"],answer:"D"},
+    {id:"11-19",q:"Kepanjangan dari TRITURA adalah...",options:["A. Tiga Tuntutan Rakyat","B. Tri Tuntutan Rakyat","C. Tiga Tuntunan Bersama","D. Tri Tuntutan Bangsa"],answer:"B"},
+    {id:"11-20",q:"Pahlawan dari Aceh yang melanjutkan perjuangan bersama suami keduanya, Pang Nanggroe adalah...",options:["A. Cut Nyak Dien","B. Cut Nyak Meutia","C. Laksamana Malahayati","D. Pocut Meurah Intan"],answer:"B"},
+    {id:"11-21",q:"Welfare state adalah istilah yang berarti...",options:["A. Negara yang memprioritaskan kekuatan militer","B. Negara yang mengutamakan peningkatan kesejahteraan masyarakat dalam berbagai bidang","C. Negara yang kuat secara ekonomi","D. Negara yang bebas dari korupsi"],answer:"B"},
+    {id:"11-22",q:"Perubahan Kedua UUD 1945 ditempatkan dalam Lembaran Negara Republik Indonesia nomor...",options:["A. Nomor 11 Tahun 2006","B. Nomor 12 Tahun 2006","C. Nomor 13 Tahun 2006","D. Nomor 14 Tahun 2006"],answer:"B"},
+    {id:"11-23",q:"Perubahan Keempat UUD 1945 ditempatkan dalam Lembaran Negara Republik Indonesia nomor...",options:["A. Nomor 12 Tahun 2006","B. Nomor 13 Tahun 2006","C. Nomor 14 Tahun 2006","D. Nomor 15 Tahun 2006"],answer:"C"},
+    {id:"11-24",q:"Amanat TAP MPR RI Nomor I/MPR/2003 untuk TAP MPR RI Nomor III/MPR/2000 tentang Sumber Hukum dan Tata Urutan Peraturan Perundang-undangan adalah...",options:["A. Mencabut dan tidak memberlakukan TAP III/MPR/2000","B. Memerintahkan pembentukan undang-undang yang mengatur tentang tata urutan peraturan perundang-undangan","C. Memperkuat kedudukan TAP MPR RI Nomor III/MPR/2000","D. Menyerahkan pengaturan kepada Presiden"],answer:"B"},
+    {id:"11-25",q:"Yang dimaksud dengan due process of law adalah...",options:["A. Semua warga negara bersamaan kedudukannya di dalam hukum","B. Penegakan hukum dengan cara yang tidak bertentangan dengan hukum","C. Hukum yang berlaku di mana-mana dalam segala waktu","D. Kekuasaan tertinggi ada pada hukum"],answer:"B"},
+    {id:"11-26",q:"Yang dimaksud dengan putusan MPR adalah...",options:["A. Ketetapan MPR dan Keputusan MPR","B. Produk hukum MPR yang terdiri atas perubahan dan penetapan UUD, Ketetapan MPR, dan Keputusan MPR","C. Hanya Ketetapan MPR saja","D. Hanya Keputusan MPR saja"],answer:"B"},
+    {id:"11-27",q:"Bentuk negara Indonesia adalah kesatuan, sedangkan bentuk pemerintahannya adalah...",options:["A. Presidensial","B. Parlementer","C. Republik","D. Monarki Konstitusional"],answer:"C"},
+    {id:"11-28",q:"Dalam hal mengangkat duta, Presiden memperhatikan pertimbangan dari...",options:["A. MPR","B. DPR","C. DPD","D. Mahkamah Agung"],answer:"B"},
+    {id:"11-29",q:"Jika rancangan undang-undang tidak mendapat persetujuan bersama, maka rancangan undang-undang itu...",options:["A. Dapat diajukan kembali oleh Presiden","B. Tidak boleh diajukan lagi dalam persidangan DPR masa itu","C. Langsung dinyatakan batal","D. Diserahkan ke MK untuk uji materi"],answer:"B"},
+    {id:"11-30",q:"Sebelum perubahan UUD, yang memegang kekuasaan membentuk undang-undang adalah Presiden. Setelah perubahan, kekuasaan tersebut berada di tangan...",options:["A. MPR","B. DPD","C. DPR","D. Mahkamah Konstitusi"],answer:"C"},
+    {id:"11-31",q:"Dasar hukum perubahan Undang-Undang Dasar adalah...",options:["A. Pasal 2 ayat (1) dan Pasal 37 UUD 1945","B. Pasal 3 ayat (1) dan Pasal 37 UUD 1945","C. Pasal 1 ayat (2) dan Pasal 37 UUD 1945","D. Pasal 4 ayat (1) dan Pasal 37 UUD 1945"],answer:"B"},
+    {id:"11-32",q:"Presiden memberi amnesti dan abolisi dengan memperhatikan pertimbangan DPR. Dalam memberi grasi dan rehabilitasi, Presiden memperhatikan pertimbangan...",options:["A. MPR","B. DPD","C. Komisi Yudisial","D. Mahkamah Agung"],answer:"D"},
+    {id:"11-33",q:"Dalam hal terjadi kekosongan Wakil Presiden, Presiden mengusulkan dua calon Wakil Presiden yang berasal dari...",options:["A. Usulan MPR","B. Usulan DPR","C. Partai Politik atau Gabungan Partai Politik yang mengusulkan pasangan calon Presiden dan Wakil Presiden saat pemilu sebelumnya","D. Kabinet yang sedang berjalan"],answer:"C"},
+    {id:"11-34",q:"Salah satu cara adendum dalam perubahan UUD 1945 berarti...",options:["A. Naskah asli UUD 1945 diubah seluruhnya","B. Naskah asli UUD 1945 dipertahankan, dan naskah perubahan baru dilekatkan pada naskah asli","C. Penjelasan UUD 1945 menjadi bagian resmi UUD","D. Amandemen dilakukan melalui referendum"],answer:"B"},
+    {id:"11-35",q:"Masa jabatan Presiden dan Wakil Presiden yang menggantikan Presiden dan Wapres yang berhalangan tetap adalah...",options:["A. Lima tahun penuh","B. Sampai berakhir masa jabatan Presiden dan Wakil Presiden yang digantikannya","C. Tiga tahun","D. Ditentukan oleh MPR"],answer:"B"},
+  ],
+  essays: [
+    {id:"11-e1",q:"Jelaskan secara singkat kronologi peristiwa Rengasdengklok dan mengapa peristiwa ini penting dalam sejarah kemerdekaan Indonesia!",rubrik:"Kronologi: Perbedaan pendapat antara golongan muda (menginginkan proklamasi segera) dan golongan tua (menunggu keputusan PPKI). Soekarno-Hatta dibawa ke Rengasdengklok oleh pemuda. Ahmad Subardjo datang dan menjamin proklamasi 17 Agustus 1945. Pentingnya: mempercepat proklamasi kemerdekaan tanpa menunggu Jepang."},
+    {id:"11-e2",q:"Jelaskan hasil keputusan sidang PPKI pada tanggal 18 Agustus 1945 dan 19 Agustus 1945!",rubrik:"18 Agustus: Mengesahkan UUD 1945, memilih Ir. Soekarno sebagai Presiden dan Drs. Mohammad Hatta sebagai Wakil Presiden, membentuk Komite Nasional Indonesia Pusat. 19 Agustus: Membagi wilayah Indonesia menjadi 8 provinsi masing-masing dipimpin gubernur, membagi pemerintahan dalam 12 departemen (kementerian), membentuk Komite Nasional Daerah."},
+  ],
+});

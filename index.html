@@ -174,6 +174,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 
 /* ══════════════════════════════════ AUTH ══════════════════════════════════ */
 #page-auth {
+  display:flex; flex-direction:row;
   align-items:center; justify-content:center;
   min-height:100vh; padding:0; position:relative; overflow:hidden;
 }
@@ -387,6 +388,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 
   /* Tetap di tengah, tapi bisa di-scroll jika keyboard HP muncul */
   #page-auth {
+    display:flex; flex-direction:column;
     align-items:center;
     justify-content:center;
     overflow-y:auto;
@@ -395,7 +397,7 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
     min-height:100dvh;
     min-height:-webkit-fill-available;
   }
-  .auth-card { margin:auto; }
+  .auth-card { margin:auto; flex-shrink:0; }
 }
 
 /* ══════════════════════════════════ DASHBOARD ══════════════════════════════════ */
@@ -1635,9 +1637,10 @@ tr:hover td { background:rgba(75,130,245,.03) }
         <span style="font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.6px;text-transform:uppercase">Data &amp; Pengguna</span>
         <div style="flex:1;height:1px;background:var(--border)"></div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="admin-tabs-row1">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px" id="admin-tabs-row1">
         <div class="admin-tab active" onclick="switchAdminTab('essay')"><i class="fi fi-rr-pen-field"></i> Nilai Essay</div>
         <div class="admin-tab" onclick="switchAdminTab('logs')"><i class="fi fi-rr-list-timeline"></i> Log Tryout</div>
+        <div class="admin-tab" onclick="switchAdminTab('simulog')"><i class="fi fi-sr-diploma"></i> Log Simulasi</div>
         <div class="admin-tab" onclick="switchAdminTab('users')"><i class="fi fi-rr-users"></i> Users</div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;margin-top:4px;margin-bottom:2px">
@@ -1679,6 +1682,27 @@ tr:hover td { background:rgba(75,130,245,.03) }
       <div class="table-wrap"><table>
         <thead><tr><th>Peserta</th><th>Paket</th><th>Skor PG</th><th>Benar</th><th>Salah</th><th>Durasi</th><th>Waktu Selesai</th><th>Aksi</th></tr></thead>
         <tbody id="logs-table-body"><tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-time-past"></i></div><div>Memuat data...</div></div></td></tr></tbody>
+      </table></div>
+    </div>
+
+    <!-- Tab: Log Simulasi -->
+    <div class="admin-panel" id="panel-simulog">
+      <div class="panel-toolbar">
+        <div class="panel-toolbar-left">
+          <div class="panel-title"><i class="fi fi-sr-diploma"></i> Log Pengerjaan Simulasi</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn btn-ghost btn-sm" onclick="loadSimulasiLogs()"><i class="fi fi-rr-refresh"></i> Refresh</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDeleteAllSimulasiLogs()"><i class="fi fi-rr-trash"></i> Hapus Semua</button>
+        </div>
+      </div>
+      <div class="log-info-box">
+        <i class="fi fi-rr-triangle-warning"></i>
+        <span>Log simulasi mencatat setiap sesi ujian simulasi. Timer 90 menit dan soal dipilih secara acak dari seluruh bank soal.</span>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Peserta</th><th>Skor</th><th>Benar</th><th>Salah</th><th>Total Soal</th><th>Durasi</th><th>Waktu Selesai</th><th>Aksi</th></tr></thead>
+        <tbody id="simulog-table-body"><tr><td colspan="8"><div class="empty-state"><div class="empty-icon"><i class="fi fi-rr-diploma"></i></div><div>Memuat data...</div></div></td></tr></tbody>
       </table></div>
     </div>
 
@@ -1963,7 +1987,7 @@ function goTo(page){
   }
   if(page==='admin'){
     if(userProfile?.role!=='admin'){ goTo('dashboard'); return; }
-    loadEssayAnswers(); loadUsers(); loadTryoutLogs();
+    loadEssayAnswers(); loadUsers(); loadTryoutLogs(); loadSimulasiLogs();
   }
 }
 
@@ -2271,13 +2295,28 @@ async function finishQuiz(){
   // Tryout mode (lama)
   const totalPGCount = questions.filter(q=>q.type==='pg').length;
   if(currentUser){
-    await sb.from('quiz_results').upsert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
+    const _qResult = await sb.from('quiz_results')
+      .upsert(
+        {user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()},
+        {onConflict:'user_id,paket_id', ignoreDuplicates:false}
+      );
+    if(_qResult.error) {
+      // Fallback: insert baru jika upsert gagal (paket baru belum ada constraint)
+      await sb.from('quiz_results').insert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()}).catch(()=>{});
+    }
     // Simpan semua essay (bisa lebih dari 1)
     const essayQuestions = questions.filter(q=>q.type==='essay');
     for(const essayQ of essayQuestions){
       const essayAns = answers[questions.indexOf(essayQ)];
       if(essayAns?.text){
-        await sb.from('essay_answers').upsert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()},{onConflict:'user_id,paket_id,question_id'});
+        const _eResult = await sb.from('essay_answers').upsert(
+          {user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()},
+          {onConflict:'user_id,paket_id,question_id', ignoreDuplicates:false}
+        );
+        if(_eResult.error){
+          // Fallback: insert baru
+          await sb.from('essay_answers').insert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()}).catch(()=>{});
+        }
       }
     }
   }
@@ -2468,10 +2507,11 @@ function exitQuiz(){
 }
 
 function switchAdminTab(tab){
-  const tabs=['essay','logs','users','addsoal'];
+  const tabs=['essay','logs','simulog','users','addsoal'];
   document.querySelectorAll('.admin-tab').forEach((t,i)=>t.classList.toggle('active',tabs[i]===tab));
   document.querySelectorAll('.admin-panel').forEach(p=>p.classList.remove('active'));
   document.getElementById('panel-'+tab)?.classList.add('active');
+  if(tab==='simulog') loadSimulasiLogs();
 }
 const emptyRow=(cols,msg,icon='fi-rr-inbox')=>`<tr><td colspan="${cols}"><div class="empty-state"><div class="empty-icon"><i class="fi ${icon}"></i></div><div>${msg}</div></div></td></tr>`;
 
@@ -2580,11 +2620,12 @@ async function loadTryoutLogs(){
     const name=prof?.name||prof?.email||row.user_id?.slice(0,8)||'-';
     const dur=row.duration?`${Math.floor(row.duration/60)}m ${row.duration%60}s`:'-';
     const date=row.completed_at?new Date(row.completed_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-';
-    const pct=row.correct!=null&&row.score!=null?Math.round(row.score/9*100):null;
+    const total=row.total_pg||row.total||0;
+    const pct=row.correct!=null&&total>0?Math.round((row.correct/total)*100):null;
     return `<tr>
       <td><div class="user-cell"><div class="user-mini-avatar">${getInitials(name)}</div><strong>${name}</strong></div></td>
       <td><span style="font-family:var(--mono);font-size:12px;color:var(--accent)">P${row.paket_id}</span></td>
-      <td><span class="result-row-score">${row.score??'-'}/9${pct!==null?' · '+pct+'%':''}</span></td>
+      <td><span class="result-row-score">${row.correct??'-'}/${total||'?'}${pct!==null?' · '+pct+'%':''}</span></td>
       <td style="color:var(--green);font-family:var(--mono);font-size:13px;font-weight:600">${row.correct??'-'}</td>
       <td style="color:var(--red);font-family:var(--mono);font-size:13px;font-weight:600">${row.wrong??'-'}</td>
       <td style="color:var(--text2);font-size:12px">${dur}</td>
@@ -2635,6 +2676,54 @@ async function deleteAllLogs(){
 }
 
 /* ── Users ── */
+async function loadSimulasiLogs(){
+  const tbody=document.getElementById('simulog-table-body');
+  if(!tbody) return;
+  tbody.innerHTML=emptyRow(8,'Memuat...','fi-rr-diploma');
+  const{data,error}=await sb.from('simulasi_results')
+    .select('*')
+    .order('completed_at',{ascending:false});
+  if(error||!data?.length){ tbody.innerHTML=emptyRow(8,'Belum ada log simulasi.','fi-sr-diploma'); return; }
+  const userIds=[...new Set(data.map(r=>r.user_id).filter(Boolean))];
+  let profileMap={};
+  if(userIds.length){
+    const{data:profs}=await sb.from('profiles').select('id,name,email').in('id',userIds);
+    if(profs) profs.forEach(p=>{ profileMap[p.id]=p; });
+  }
+  tbody.innerHTML=data.map(row=>{
+    const prof=profileMap[row.user_id];
+    const name=prof?.name||prof?.email||row.user_id?.slice(0,8)||'-';
+    const dur=row.duration?`${Math.floor(row.duration/60)}m ${row.duration%60}s`:'-';
+    const date=row.completed_at?new Date(row.completed_at).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'-';
+    const total=row.total||100;
+    const pct=row.correct!=null&&total>0?Math.round((row.correct/total)*100):null;
+    return `<tr>
+      <td><div class="user-cell"><div class="user-mini-avatar">${getInitials(name)}</div><strong>${name}</strong></div></td>
+      <td><span class="result-row-score">${row.correct??'-'}/${total}${pct!==null?' · '+pct+'%':''}</span></td>
+      <td style="color:var(--green);font-family:var(--mono);font-size:13px;font-weight:600">${row.correct??'-'}</td>
+      <td style="color:var(--red);font-family:var(--mono);font-size:13px;font-weight:600">${row.wrong??'-'}</td>
+      <td style="color:var(--text2);font-family:var(--mono);font-size:12px">${total}</td>
+      <td style="color:var(--text2);font-size:12px">${dur}</td>
+      <td style="color:var(--text2);font-size:12px">${date}</td>
+      <td><button class="btn btn-danger btn-sm" onclick="deleteSimulasiLog('${row.id}')"><i class="fi fi-rr-trash"></i> Hapus</button></td>
+    </tr>`;
+  }).join('');
+}
+
+async function deleteSimulasiLog(id){
+  if(!confirm('Hapus log simulasi ini?')) return;
+  const{error}=await sb.from('simulasi_results').delete().eq('id',id);
+  if(error){ showToast('Gagal menghapus: '+error.message,'error'); return; }
+  showToast('Log simulasi dihapus','success'); loadSimulasiLogs();
+}
+
+async function confirmDeleteAllSimulasiLogs(){
+  if(!confirm('Hapus SEMUA log simulasi? Tindakan ini tidak dapat dibatalkan.')) return;
+  const{error}=await sb.from('simulasi_results').delete().neq('id','00000000-0000-0000-0000-000000000000');
+  if(error){ showToast('Gagal: '+error.message,'error'); return; }
+  showToast('Semua log simulasi dihapus','success'); loadSimulasiLogs();
+}
+
 async function loadUsers(){
   const tbody=document.getElementById('users-table-body');
   tbody.innerHTML=emptyRow(5,'Memuat...','fi-rr-time-past');
