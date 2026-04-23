@@ -2085,31 +2085,6 @@ function startRandomPaket(){
 }
 
 /* ── SIMULASI: 100 soal PG acak dari semua paket, tanpa essay ── */
-/* ══ SHUFFLE OPTIONS ══════════════════════════════════════════════
-   Acak urutan pilihan (A/B/C/D) untuk setiap soal PG, lalu sesuaikan
-   field `answer` agar tetap menunjuk ke teks jawaban yang benar.
-   Ini memastikan jawaban benar tidak selalu ada di posisi yang sama. */
-function shuffleOptions(questions){
-  function fyShuffle(arr){
-    for(let i=arr.length-1;i>0;i--){
-      const j=Math.floor(Math.random()*(i+1));
-      [arr[i],arr[j]]=[arr[j],arr[i]];
-    }
-    return arr;
-  }
-  return questions.map(q=>{
-    if(q.type!=='pg'||!Array.isArray(q.options)||!q.answer) return q;
-    const letters=['A','B','C','D'];
-    const correctIdx=letters.indexOf(q.answer);
-    if(correctIdx<0) return q; // answer field tidak valid, skip
-    const correctText=q.options[correctIdx]; // teks jawaban benar
-    const shuffled=fyShuffle([...q.options]);
-    const newIdx=shuffled.indexOf(correctText);
-    const newAnswer=letters[newIdx]||q.answer;
-    return{...q,options:shuffled,answer:newAnswer};
-  });
-}
-
 function buildSimulasiQuestions(){
   // Kumpulkan semua soal PG dari semua paket
   const allPG = [];
@@ -2124,7 +2099,7 @@ function buildSimulasiQuestions(){
 function startSimulasi(){
   const pgs = buildSimulasiQuestions();
   if(!pgs.length){ showToast('Tidak ada soal tersedia.','error'); return; }
-  const questions = shuffleOptions(pgs.map((q,i)=>({...q, type:'pg', num:i+1})));
+  const questions = pgs.map((q,i)=>({...q, type:'pg', num:i+1}));
   currentPaketId = 'simulasi';
   quizState = {
     paketId:'simulasi', mode:'simulasi',
@@ -2149,10 +2124,10 @@ function startPaket(paketId){
   if(!paket)return;
   currentPaketId=paketId;
   const essayList = paket.essays || (paket.essay ? [paket.essay] : []);
-  const questions=shuffleOptions([
+  const questions=[
     ...paket.pg.map((q,i)=>({...q,type:'pg',num:i+1})),
     ...essayList.map((e,i)=>({...e,type:'essay',num:paket.pg.length+i+1}))
-  ]);
+  ];
   quizState={paketId,mode:'tryout',questions,current:0,answers:{},answered:new Set(),startTime:Date.now(),timerInterval:null};
   const badge = document.getElementById('quiz-mode-badge');
   badge.className = 'quiz-mode-badge tryout';
@@ -2306,7 +2281,6 @@ function startTimer(){
   }, 1000);
 }
 async function finishQuiz(){
-  try {
   saveEssayIfNeeded(); clearInterval(quizState.timerInterval);
   const{questions,answers,mode}=quizState; let correct=0,wrong=0,essayText=null;
   questions.forEach((q,i)=>{ if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; } else { essayText=answers[i]?.text||''; } });
@@ -2316,11 +2290,7 @@ async function finishQuiz(){
     const totalPG=questions.length;
     const dur=Math.floor((Date.now()-quizState.startTime)/1000);
     if(currentUser){
-      // Fire-and-forget: jangan await agar result page langsung tampil
-      // meski Supabase lambat / ada error jaringan
-      sb.from('simulasi_results')
-        .insert({user_id:currentUser.id,score:correct,correct,wrong,total:totalPG,duration:dur,completed_at:new Date().toISOString()})
-        .catch(e=>console.error('simulasi_results insert error:', e?.message));
+      try{ await sb.from('simulasi_results').insert({user_id:currentUser.id,score:correct,correct,wrong,total:totalPG,duration:dur,completed_at:new Date().toISOString()}); }catch(e){ console.error('simulasi_results insert error:',e?.message); }
     }
     await showResultSimulasi(correct,wrong,totalPG,dur);
     return;
@@ -2359,7 +2329,6 @@ async function finishQuiz(){
     }
   }
   await showResult(correct,wrong,totalPGCount,quizState.paketId);
-  } catch(err){ console.error('finishQuiz error:', err); showToast('Terjadi kesalahan: '+err.message,'error'); }
 }
 async function showResult(correct,wrong,totalPG,paketId){
   // Set mode visual: tryout
