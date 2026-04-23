@@ -174,7 +174,10 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 
 /* ══════════════════════════════════ AUTH ══════════════════════════════════ */
 #page-auth {
-  display:flex; flex-direction:row;
+  /* display controlled by .page / .page.active — DO NOT set display here,
+     ID-selector specificity (100) would override .page {display:none} (10)
+     and permanently show the auth card even when user is logged in. */
+  flex-direction:row;
   align-items:center; justify-content:center;
   min-height:100vh; padding:0; position:relative; overflow:hidden;
 }
@@ -388,7 +391,8 @@ textarea.form-input { resize:vertical; min-height:96px; line-height:1.6 }
 
   /* Tetap di tengah, tapi bisa di-scroll jika keyboard HP muncul */
   #page-auth {
-    display:flex; flex-direction:column;
+    /* display intentionally not set here — controlled by .page.active */
+    flex-direction:column;
     align-items:center;
     justify-content:center;
     overflow-y:auto;
@@ -2301,8 +2305,10 @@ async function finishQuiz(){
         {onConflict:'user_id,paket_id', ignoreDuplicates:false}
       );
     if(_qResult.error) {
-      // Fallback: insert baru jika upsert gagal (paket baru belum ada constraint)
-      await sb.from('quiz_results').insert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()}).catch(()=>{});
+      // Fallback: insert baru jika upsert gagal (misal: unique constraint belum dibuat di Supabase)
+      console.warn('quiz_results upsert gagal, mencoba insert:', _qResult.error.message);
+      const _ins = await sb.from('quiz_results').insert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
+      if(_ins.error) console.error('quiz_results insert fallback GAGAL:', _ins.error.message, '— pastikan RLS Supabase mengizinkan INSERT untuk user login.');
     }
     // Simpan semua essay (bisa lebih dari 1)
     const essayQuestions = questions.filter(q=>q.type==='essay');
@@ -2315,7 +2321,9 @@ async function finishQuiz(){
         );
         if(_eResult.error){
           // Fallback: insert baru
-          await sb.from('essay_answers').insert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()}).catch(()=>{});
+          console.warn('essay_answers upsert gagal, mencoba insert:', _eResult.error.message);
+          const _eIns = await sb.from('essay_answers').insert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()});
+          if(_eIns.error) console.error('essay_answers insert fallback GAGAL:', _eIns.error.message, '— pastikan RLS Supabase mengizinkan INSERT untuk user login.');
         }
       }
     }
@@ -2541,7 +2549,8 @@ async function loadEssayAnswers(){
   const tbody=document.getElementById('essay-table-body');
   tbody.innerHTML=emptyRow(7,'Memuat...','fi-rr-time-past');
   const{data,error}=await sb.from('essay_answers').select('*').order('submitted_at',{ascending:false});
-  if(error||!data?.length){ tbody.innerHTML=emptyRow(7,'Belum ada jawaban essay.'); return; }
+  if(error){ tbody.innerHTML=emptyRow(7,`Error DB: ${error.message} — cek RLS Supabase.`,'fi-rr-triangle-warning'); console.error('loadEssayAnswers error:', error); return; }
+  if(!data?.length){ tbody.innerHTML=emptyRow(7,'Belum ada jawaban essay.'); return; }
   tbody.innerHTML=data.map(row=>{
     const ans=row.answer||'-';
     const q=(row.question||'').slice(0,70)+(row.question?.length>70?'…':'');
@@ -2607,7 +2616,8 @@ async function loadTryoutLogs(){
   const{data,error}=await sb.from('quiz_results')
     .select('*')
     .order('completed_at',{ascending:false});
-  if(error||!data?.length){ tbody.innerHTML=emptyRow(8,'Belum ada log pengerjaan.','fi-rr-list-timeline'); return; }
+  if(error){ tbody.innerHTML=emptyRow(8,`Error DB: ${error.message} — cek RLS Supabase.`,'fi-rr-triangle-warning'); console.error('loadTryoutLogs error:', error); return; }
+  if(!data?.length){ tbody.innerHTML=emptyRow(8,'Belum ada log pengerjaan.','fi-rr-list-timeline'); return; }
   // Fetch profiles separately to avoid FK join issues
   const userIds=[...new Set(data.map(r=>r.user_id).filter(Boolean))];
   let profileMap={};
