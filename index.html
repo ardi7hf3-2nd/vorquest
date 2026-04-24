@@ -1883,20 +1883,25 @@ async function init(){
   dismissSplash();
 }
 async function loadProfile(){
-  const{data}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+  const{data,error}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+  if(error) console.error('loadProfile SELECT error:', error.code, error.message);
   if(data){
     userProfile=data;
+    console.log('[loadProfile] role dari DB:', data.role);
   } else {
-    // Profile belum ada → buat baru dengan role peserta (hanya jika betul-betul belum ada)
+    // Profile belum ada → buat baru dengan role peserta
     const meta=currentUser.user_metadata||{};
     const name=meta.name||currentUser.email.split('@')[0];
     const email=currentUser.email;
-    // Gunakan INSERT ... ON CONFLICT DO NOTHING agar tidak overwrite role existing
-    const{data:inserted}=await sb.from('profiles')
+    console.warn('[loadProfile] profile tidak ditemukan, membuat baru untuk:', email);
+    const{error:upsertErr}=await sb.from('profiles')
       .upsert({id:currentUser.id,name,email,role:'peserta'},{onConflict:'id',ignoreDuplicates:true});
-    // Baca ulang dari DB untuk pastikan dapat role yang benar
-    const{data:refetched}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+    if(upsertErr) console.error('[loadProfile] upsert error:', upsertErr.message);
+    // Baca ulang dari DB
+    const{data:refetched,error:refetchErr}=await sb.from('profiles').select('*').eq('id',currentUser.id).single();
+    if(refetchErr) console.error('[loadProfile] refetch error:', refetchErr.message);
     userProfile=refetched||{name,email,role:'peserta'};
+    console.log('[loadProfile] role setelah upsert:', userProfile.role);
   }
   updateNavUser();
 }
@@ -2304,36 +2309,54 @@ async function finishQuiz(){
     return;
   }
 
-  // Tryout mode (lama)
+  // Tryout mode
   const totalPGCount = questions.filter(q=>q.type==='pg').length;
   if(currentUser){
-    const _qResult = await sb.from('quiz_results')
-      .upsert(
-        {user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()},
-        {onConflict:'user_id,paket_id', ignoreDuplicates:false}
-      );
-    if(_qResult.error) {
-      // Fallback: insert baru jika upsert gagal (misal: unique constraint belum dibuat di Supabase)
-      console.warn('quiz_results upsert gagal, mencoba insert:', _qResult.error.message);
-      const _ins = await sb.from('quiz_results').insert({user_id:currentUser.id,paket_id:quizState.paketId,score:correct,correct,wrong,total_pg:totalPGCount,duration:Math.floor((Date.now()-quizState.startTime)/1000),completed_at:new Date().toISOString()});
-      if(_ins.error) console.error('quiz_results insert fallback GAGAL:', _ins.error.message, '— pastikan RLS Supabase mengizinkan INSERT untuk user login.');
-    }
-    // Simpan semua essay (bisa lebih dari 1)
-    const essayQuestions = questions.filter(q=>q.type==='essay');
-    for(const essayQ of essayQuestions){
-      const essayAns = answers[questions.indexOf(essayQ)];
-      if(essayAns?.text){
-        const _eResult = await sb.from('essay_answers').upsert(
-          {user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()},
-          {onConflict:'user_id,paket_id,question_id', ignoreDuplicates:false}
-        );
-        if(_eResult.error){
-          // Fallback: insert baru
-          console.warn('essay_answers upsert gagal, mencoba insert:', _eResult.error.message);
-          const _eIns = await sb.from('essay_answers').insert({user_id:currentUser.id,user_name:userProfile?.name||currentUser.email,paket_id:quizState.paketId,question_id:essayQ.id||essayQ.q?.slice(0,40),question:essayQ.q||'',answer:essayAns.text,rubrik:essayQ.rubrik||'',grade:null,submitted_at:new Date().toISOString()});
-          if(_eIns.error) console.error('essay_answers insert fallback GAGAL:', _eIns.error.message, '— pastikan RLS Supabase mengizinkan INSERT untuk user login.');
-        }
-      }
+    // ── Simpan quiz_results — pakai INSERT always (tidak upsert) ──
+    // Hapus dulu hasil lama untuk paket ini, lalu insert baru
+    await sb.from('quiz_results')
+      .delete()
+      .eq('user_id', currentUser.id)
+      .eq('paket_id', quizState.paketId);
+    const {error: qErr} = await sb.from('quiz_results').insert({
+      user_id: currentUser.id,
+      paket_id: quizState.paketId,
+      score: correct,
+      correct,
+      wrong,
+      total_pg: totalPGCount,
+      duration: Math.floor((Date.now()-quizState.startTime)/1000),
+      completed_at: new Date().toISOString()
+    });
+    if(qErr) console.error('quiz_results insert GAGAL:', qErr.message, qErr.code);
+    else console.log('[finishQuiz] quiz_results saved OK, paket:', quizState.paketId);
+
+    // ── Simpan semua essay — pakai index langsung bukan indexOf ──
+    for(let i=0; i<questions.length; i++){
+      const q = questions[i];
+      if(q.type !== 'essay') continue;
+      const ans = answers[i];
+      if(!ans?.text) continue;
+      const qid = q.id || q.q?.slice(0,40) || ('essay-'+i);
+      // Hapus jawaban lama dulu
+      await sb.from('essay_answers')
+        .delete()
+        .eq('user_id', currentUser.id)
+        .eq('paket_id', quizState.paketId)
+        .eq('question_id', qid);
+      const {error: eErr} = await sb.from('essay_answers').insert({
+        user_id: currentUser.id,
+        user_name: userProfile?.name || currentUser.email,
+        paket_id: quizState.paketId,
+        question_id: qid,
+        question: q.q || '',
+        answer: ans.text,
+        rubrik: q.rubrik || '',
+        grade: null,
+        submitted_at: new Date().toISOString()
+      });
+      if(eErr) console.error('essay_answers insert GAGAL (soal ke-'+i+'):', eErr.message, eErr.code);
+      else console.log('[finishQuiz] essay saved OK, question_id:', qid);
     }
   }
   await showResult(correct,wrong,totalPGCount,quizState.paketId);
