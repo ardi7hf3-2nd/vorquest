@@ -2312,12 +2312,14 @@ async function finishQuiz(){
   // Tryout mode
   const totalPGCount = questions.filter(q=>q.type==='pg').length;
   if(currentUser){
-    // ── Simpan quiz_results — pakai INSERT always (tidak upsert) ──
-    // Hapus dulu hasil lama untuk paket ini, lalu insert baru
-    await sb.from('quiz_results')
+    // ── Simpan quiz_results ──
+    // Coba hapus lama dulu (abaikan error jika tidak ada)
+    const {error: delErr} = await sb.from('quiz_results')
       .delete()
       .eq('user_id', currentUser.id)
       .eq('paket_id', quizState.paketId);
+    if(delErr) console.warn('quiz_results delete (aman diabaikan):', delErr.code, delErr.message);
+
     const {error: qErr} = await sb.from('quiz_results').insert({
       user_id: currentUser.id,
       paket_id: quizState.paketId,
@@ -2328,8 +2330,12 @@ async function finishQuiz(){
       duration: Math.floor((Date.now()-quizState.startTime)/1000),
       completed_at: new Date().toISOString()
     });
-    if(qErr) console.error('quiz_results insert GAGAL:', qErr.message, qErr.code);
-    else console.log('[finishQuiz] quiz_results saved OK, paket:', quizState.paketId);
+    if(qErr){
+      console.error('quiz_results INSERT GAGAL:', qErr.message, '| code:', qErr.code, '| hint:', qErr.hint);
+      showToast('Peringatan: hasil tryout gagal disimpan (' + qErr.code + ')', 'error');
+    } else {
+      console.log('[finishQuiz] quiz_results saved OK, paket:', quizState.paketId);
+    }
 
     // ── Simpan semua essay — pakai index langsung bukan indexOf ──
     for(let i=0; i<questions.length; i++){
