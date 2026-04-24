@@ -2224,9 +2224,13 @@ function nextQuestion(){ saveEssayIfNeeded(); if(quizState.current<quizState.que
 function jumpToQuestion(i){ saveEssayIfNeeded(); quizState.current=i; renderQuestion(); }
 function saveEssayIfNeeded(){
   const q=quizState.questions[quizState.current];
-  if(q.type==='essay'&&!quizState.answered.has(quizState.current)){
+  if(q.type==='essay'){
     const ta=document.getElementById('essay-input');
-    if(ta&&ta.value.trim()){ quizState.answers[quizState.current]={text:ta.value.trim()}; quizState.answered.add(quizState.current); }
+    // Simpan selalu — baik belum maupun sudah dijawab sebelumnya
+    if(ta&&ta.value.trim()){
+      quizState.answers[quizState.current]={text:ta.value.trim()};
+      quizState.answered.add(quizState.current);
+    }
   }
 }
 function startTimer(){
@@ -2294,9 +2298,11 @@ function startTimer(){
   }, 1000);
 }
 async function finishQuiz(){
-  saveEssayIfNeeded(); clearInterval(quizState.timerInterval);
-  const{questions,answers,mode}=quizState; let correct=0,wrong=0,essayText=null;
-  questions.forEach((q,i)=>{ if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; } else { essayText=answers[i]?.text||''; } });
+  // Simpan essay soal yang sedang ditampilkan (jika ada)
+  saveEssayIfNeeded();
+  clearInterval(quizState.timerInterval);
+  const{questions,answers,mode}=quizState; let correct=0,wrong=0;
+  questions.forEach((q,i)=>{ if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; } });
 
   if(mode==='simulasi'){
     // Simpan hasil simulasi
@@ -2338,10 +2344,14 @@ async function finishQuiz(){
     }
 
     // ── Simpan semua essay — pakai index langsung bukan indexOf ──
+    const essayCount = questions.filter(q=>q.type==='essay').length;
+    const essayAnswered = questions.map((q,i)=>q.type==='essay'&&answers[i]?.text).filter(Boolean).length;
+    console.log('[finishQuiz] total essay:', essayCount, '| yang dijawab:', essayAnswered, '| answers:', JSON.stringify(answers.map((a,i)=>({i,type:questions[i]?.type,has:!!a?.text}))));
     for(let i=0; i<questions.length; i++){
       const q = questions[i];
       if(q.type !== 'essay') continue;
       const ans = answers[i];
+      console.log('[finishQuiz] essay soal ke-'+i+':', ans?.text ? 'ADA ('+ans.text.slice(0,30)+'...)' : 'KOSONG');
       if(!ans?.text) continue;
       const qid = q.id || q.q?.slice(0,40) || ('essay-'+i);
       // Hapus jawaban lama dulu
