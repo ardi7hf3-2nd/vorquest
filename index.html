@@ -2298,93 +2298,100 @@ function startTimer(){
   }, 1000);
 }
 async function finishQuiz(){
-  // Simpan essay soal yang sedang ditampilkan (jika ada)
+  // Simpan essay yang sedang ditampilkan
   saveEssayIfNeeded();
   clearInterval(quizState.timerInterval);
-  const{questions,answers,mode}=quizState; let correct=0,wrong=0;
-  questions.forEach((q,i)=>{ if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; } });
 
+  const { questions, answers, mode } = quizState;
+  let correct = 0, wrong = 0;
+  questions.forEach((q,i)=>{
+    if(q.type==='pg'){ if(answers[i]?.correct) correct++; else wrong++; }
+  });
+
+  // ── MODE SIMULASI ──────────────────────────────────────────
   if(mode==='simulasi'){
-    // Simpan hasil simulasi
-    const totalPG=questions.length;
-    const dur=Math.floor((Date.now()-quizState.startTime)/1000);
+    const totalPG = questions.length;
+    const dur = Math.floor((Date.now()-quizState.startTime)/1000);
     if(currentUser){
-      try{ await sb.from('simulasi_results').insert({user_id:currentUser.id,score:correct,correct,wrong,total:totalPG,duration:dur,completed_at:new Date().toISOString()}); }catch(e){ console.error('simulasi_results insert error:',e?.message); }
+      try {
+        await sb.from('simulasi_results').insert({
+          user_id: currentUser.id, score: correct, correct, wrong,
+          total: totalPG, duration: dur, completed_at: new Date().toISOString()
+        });
+      } catch(e){ console.error('simulasi_results insert error:', e?.message); }
     }
-    await showResultSimulasi(correct,wrong,totalPG,dur);
+    await showResultSimulasi(correct, wrong, totalPG, dur);
     return;
   }
 
-  // Tryout mode
+  // ── MODE TRYOUT ────────────────────────────────────────────
   const totalPGCount = questions.filter(q=>q.type==='pg').length;
-  if(currentUser){
-    // ── Simpan quiz_results — langsung INSERT (tidak perlu DELETE dulu) ──
-    const {error: qErr} = await sb.from('quiz_results').insert({
-      user_id: currentUser.id,
-      paket_id: quizState.paketId,
-      score: correct,
-      correct,
-      wrong,
-      total_pg: totalPGCount,
-      duration: Math.floor((Date.now()-quizState.startTime)/1000),
-      completed_at: new Date().toISOString()
-    });
-    if(qErr){
-      console.error('quiz_results INSERT GAGAL:', qErr.message, '| code:', qErr.code);
-      // Jika constraint violation (23505), coba update row yang ada
-      if(qErr.code === '23505'){
-        const {error: upErr} = await sb.from('quiz_results')
-          .update({score:correct, correct, wrong, total_pg:totalPGCount,
-                   duration:Math.floor((Date.now()-quizState.startTime)/1000),
-                   completed_at:new Date().toISOString()})
-          .eq('user_id', currentUser.id)
-          .eq('paket_id', quizState.paketId);
-        if(upErr) console.error('quiz_results UPDATE fallback GAGAL:', upErr.message);
-        else console.log('[finishQuiz] quiz_results updated OK (fallback)');
-      }
-    } else {
-      console.log('[finishQuiz] quiz_results saved OK, paket:', quizState.paketId);
-    }
 
-    // ── Simpan semua essay — pakai index langsung bukan indexOf ──
-    const essayCount = questions.filter(q=>q.type==='essay').length;
-    const essayAnswered = questions.map((q,i)=>q.type==='essay'&&answers[i]?.text).filter(Boolean).length;
-    console.log('[finishQuiz] total essay:', essayCount, '| yang dijawab:', essayAnswered, '| answers:', JSON.stringify(answers.map((a,i)=>({i,type:questions[i]?.type,has:!!a?.text}))));
-    for(let i=0; i<questions.length; i++){
-      const q = questions[i];
-      if(q.type !== 'essay') continue;
-      const ans = answers[i];
-      console.log('[finishQuiz] essay soal ke-'+i+':', ans?.text ? 'ADA ('+ans.text.slice(0,30)+'...)' : 'KOSONG');
-      if(!ans?.text) continue;
-      const qid = q.id || q.q?.slice(0,40) || ('essay-'+i);
-      // Langsung INSERT — jika duplikat, coba UPDATE
-      const {error: eErr} = await sb.from('essay_answers').insert({
-        user_id: currentUser.id,
-        user_name: userProfile?.name || currentUser.email,
-        paket_id: quizState.paketId,
-        question_id: qid,
-        question: q.q || '',
-        answer: ans.text,
-        rubrik: q.rubrik || '',
-        grade: null,
-        submitted_at: new Date().toISOString()
-      });
-      if(eErr){
-        console.error('essay_answers insert GAGAL soal ke-'+i+':', eErr.message, eErr.code);
-        if(eErr.code === '23505'){
-          const {error: euErr} = await sb.from('essay_answers')
-            .update({answer:ans.text, submitted_at:new Date().toISOString()})
-            .eq('user_id', currentUser.id)
-            .eq('paket_id', quizState.paketId)
-            .eq('question_id', qid);
-          if(euErr) console.error('essay UPDATE fallback GAGAL:', euErr.message);
-          else console.log('[finishQuiz] essay updated OK (fallback), qid:', qid);
+  // Simpan ke DB jika login — tidak block navigasi ke hasil
+  if(currentUser){
+    // 1. Simpan quiz_results
+    (async()=>{
+      const payload = {
+        user_id: currentUser.id, paket_id: quizState.paketId,
+        score: correct, correct, wrong, total_pg: totalPGCount,
+        duration: Math.floor((Date.now()-quizState.startTime)/1000),
+        completed_at: new Date().toISOString()
+      };
+      const { error: iErr } = await sb.from('quiz_results').insert(payload);
+      if(iErr){
+        if(iErr.code==='23505'){
+          // Sudah ada → update
+          const { error: uErr } = await sb.from('quiz_results')
+            .update({...payload})
+            .eq('user_id', currentUser.id).eq('paket_id', quizState.paketId);
+          if(uErr) console.error('quiz_results update gagal:', uErr.message);
+        } else {
+          console.error('quiz_results insert gagal:', iErr.message, iErr.code);
         }
-      } else console.log('[finishQuiz] essay saved OK, question_id:', qid);
-    }
+      }
+    })();
+
+    // 2. Simpan semua essay
+    (async()=>{
+      for(let i=0; i<questions.length; i++){
+        const q = questions[i];
+        if(q.type !== 'essay') continue;
+        const ans = answers[i];
+        if(!ans?.text) continue;
+        const qid = q.id || q.q?.slice(0,40) || ('essay-'+i);
+        const payload = {
+          user_id: currentUser.id,
+          user_name: userProfile?.name || currentUser.email,
+          paket_id: quizState.paketId,
+          question_id: qid,
+          question: q.q || '',
+          answer: ans.text,
+          rubrik: q.rubrik || '',
+          grade: null,
+          submitted_at: new Date().toISOString()
+        };
+        const { error: eErr } = await sb.from('essay_answers').insert(payload);
+        if(eErr){
+          if(eErr.code==='23505'){
+            const { error: euErr } = await sb.from('essay_answers')
+              .update({ answer: ans.text, submitted_at: new Date().toISOString() })
+              .eq('user_id', currentUser.id)
+              .eq('paket_id', quizState.paketId)
+              .eq('question_id', qid);
+            if(euErr) console.error('essay update gagal:', euErr.message);
+          } else {
+            console.error('essay insert gagal (soal '+i+'):', eErr.message, eErr.code);
+          }
+        }
+      }
+    })();
   }
-  await showResult(correct,wrong,totalPGCount,quizState.paketId);
+
+  // Langsung tampilkan hasil — tidak menunggu DB
+  await showResult(correct, wrong, totalPGCount, quizState.paketId);
 }
+
+
 async function showResult(correct,wrong,totalPG,paketId){
   // Set mode visual: tryout
   document.getElementById('rb-essay-wrap').style.display = '';
