@@ -2874,10 +2874,10 @@ function _checkQuotaMsg(){
     msgEl.style.cssText='display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px';
     msgEl.innerHTML='<i class="fi fi-rr-cross-circle"></i> Kuota PG sudah penuh (9/9). Tidak bisa menambah PG lagi.';
     document.getElementById('btn-add-to-buffer').disabled=true;
-  } else if(type==='essay' && essay>=1){
+  } else if(type==='essay' && essay>=3){
     msgEl.style.display='flex';
     msgEl.style.cssText='display:flex;align-items:center;gap:8px;background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.25);border-radius:9px;padding:10px 13px;font-size:13px;color:var(--red);margin-bottom:12px';
-    msgEl.innerHTML='<i class="fi fi-rr-cross-circle"></i> Kuota Essay sudah penuh (1/1). Tidak bisa menambah Essay lagi.';
+    msgEl.innerHTML='<i class="fi fi-rr-cross-circle"></i> Kuota Essay sudah penuh (3/3). Tidak bisa menambah Essay lagi.';
     document.getElementById('btn-add-to-buffer').disabled=true;
   } else {
     msgEl.style.display='none';
@@ -2893,7 +2893,7 @@ function addToBuffer(){
 
   const { pg, essay }=_countBuffer();
   if(type==='pg' && pg>=9){ showToast('Kuota PG sudah penuh (9/9)','error'); return; }
-  if(type==='essay' && essay>=1){ showToast('Kuota Essay sudah penuh (1/1)','error'); return; }
+  if(type==='essay' && essay>=3){ showToast('Kuota Essay sudah penuh (3/3)','error'); return; }
 
   let soal={ type, question };
   if(type==='pg'){
