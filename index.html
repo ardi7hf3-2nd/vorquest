@@ -1314,14 +1314,14 @@ tr:hover td { background:rgba(75,130,245,.03) }
         <div class="auth-feature">
           <div class="auth-feature-icon"><i class="fi fi-rr-book-open-cover"></i></div>
           <div class="auth-feature-text">
-            <strong>270+ Soal Lengkap</strong>
+            <strong>580+ Soal Lengkap</strong>
             <span>Pilihan Ganda + Essay per paket</span>
           </div>
         </div>
         <div class="auth-feature">
           <div class="auth-feature-icon"><i class="fi fi-rr-layers"></i></div>
           <div class="auth-feature-text">
-            <strong>27+ Paket Soal</strong>
+            <strong>11 Paket Soal</strong>
             <span>Pancasila, UUD 1945, NKRI, BTI</span>
           </div>
         </div>
@@ -2318,14 +2318,7 @@ async function finishQuiz(){
   // Tryout mode
   const totalPGCount = questions.filter(q=>q.type==='pg').length;
   if(currentUser){
-    // ── Simpan quiz_results ──
-    // Coba hapus lama dulu (abaikan error jika tidak ada)
-    const {error: delErr} = await sb.from('quiz_results')
-      .delete()
-      .eq('user_id', currentUser.id)
-      .eq('paket_id', quizState.paketId);
-    if(delErr) console.warn('quiz_results delete (aman diabaikan):', delErr.code, delErr.message);
-
+    // ── Simpan quiz_results — langsung INSERT (tidak perlu DELETE dulu) ──
     const {error: qErr} = await sb.from('quiz_results').insert({
       user_id: currentUser.id,
       paket_id: quizState.paketId,
@@ -2337,8 +2330,18 @@ async function finishQuiz(){
       completed_at: new Date().toISOString()
     });
     if(qErr){
-      console.error('quiz_results INSERT GAGAL:', qErr.message, '| code:', qErr.code, '| hint:', qErr.hint);
-      showToast('Peringatan: hasil tryout gagal disimpan (' + qErr.code + ')', 'error');
+      console.error('quiz_results INSERT GAGAL:', qErr.message, '| code:', qErr.code);
+      // Jika constraint violation (23505), coba update row yang ada
+      if(qErr.code === '23505'){
+        const {error: upErr} = await sb.from('quiz_results')
+          .update({score:correct, correct, wrong, total_pg:totalPGCount,
+                   duration:Math.floor((Date.now()-quizState.startTime)/1000),
+                   completed_at:new Date().toISOString()})
+          .eq('user_id', currentUser.id)
+          .eq('paket_id', quizState.paketId);
+        if(upErr) console.error('quiz_results UPDATE fallback GAGAL:', upErr.message);
+        else console.log('[finishQuiz] quiz_results updated OK (fallback)');
+      }
     } else {
       console.log('[finishQuiz] quiz_results saved OK, paket:', quizState.paketId);
     }
@@ -2354,12 +2357,7 @@ async function finishQuiz(){
       console.log('[finishQuiz] essay soal ke-'+i+':', ans?.text ? 'ADA ('+ans.text.slice(0,30)+'...)' : 'KOSONG');
       if(!ans?.text) continue;
       const qid = q.id || q.q?.slice(0,40) || ('essay-'+i);
-      // Hapus jawaban lama dulu
-      await sb.from('essay_answers')
-        .delete()
-        .eq('user_id', currentUser.id)
-        .eq('paket_id', quizState.paketId)
-        .eq('question_id', qid);
+      // Langsung INSERT — jika duplikat, coba UPDATE
       const {error: eErr} = await sb.from('essay_answers').insert({
         user_id: currentUser.id,
         user_name: userProfile?.name || currentUser.email,
@@ -2371,8 +2369,18 @@ async function finishQuiz(){
         grade: null,
         submitted_at: new Date().toISOString()
       });
-      if(eErr) console.error('essay_answers insert GAGAL (soal ke-'+i+'):', eErr.message, eErr.code);
-      else console.log('[finishQuiz] essay saved OK, question_id:', qid);
+      if(eErr){
+        console.error('essay_answers insert GAGAL soal ke-'+i+':', eErr.message, eErr.code);
+        if(eErr.code === '23505'){
+          const {error: euErr} = await sb.from('essay_answers')
+            .update({answer:ans.text, submitted_at:new Date().toISOString()})
+            .eq('user_id', currentUser.id)
+            .eq('paket_id', quizState.paketId)
+            .eq('question_id', qid);
+          if(euErr) console.error('essay UPDATE fallback GAGAL:', euErr.message);
+          else console.log('[finishQuiz] essay updated OK (fallback), qid:', qid);
+        }
+      } else console.log('[finishQuiz] essay saved OK, question_id:', qid);
     }
   }
   await showResult(correct,wrong,totalPGCount,quizState.paketId);
